@@ -1,7 +1,10 @@
-.PHONY: test, dev, doc
+.PHONY: test, dev, doc, cargo_publish
 
 build:
 	cargo build
+
+cargo_publish:
+	cargo publish --no-verify
 
 test:
 	cargo test

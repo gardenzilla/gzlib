@@ -52,6 +52,6 @@ message LogRequest {
 message LogResponse {
   int32 turnover = 1;
   int32 balance = 2;
-  repeated TransactionDetails TransactionResponse = 3;
+  repeated TransactionResponse TransactionDetails = 3;
   // 4
 }
