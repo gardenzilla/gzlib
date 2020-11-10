@@ -22,7 +22,7 @@ message TransactionRequest {
 }
 
 message TransactionResponse {
-  string transaction_id = 1;
+  uint32 transaction_id = 1;
   string kind = 2;
   int32 amount = 3;
   string reference = 4;
