@@ -4,27 +4,28 @@ package cash;
 message e {}
 
 service CashService {
-  rpc Transaction(TransactionRequest) returns (TransactionDetails);
+  rpc Transaction(TransactionRequest) returns (TransactionResponse);
   rpc GetBalance(BalanceRequest) returns (Balance);
   rpc Log(LogRequest) returns (LogResponse);
 }
 
 message TransactionRequest {
-  // purchase to/from custoemr
+  // purchase to/from customer
   // cash_in from company
   // cash_out to company
   string kind = 1;
   int32 amount = 2;
-  string created_by = 3;
-  string description = 4;
+  string reference = 3;
+  string created_by = 4;
+  string description = 5;
   // 5
 }
 
-message TransactionDetails {
+message TransactionResponse {
   string transaction_id = 1;
   string kind = 2;
   int32 amount = 3;
-  int32 balance = 4;
+  string reference = 4;
   string created_by = 5;
   string created_at = 6;
   // 7
@@ -51,6 +52,6 @@ message LogRequest {
 message LogResponse {
   int32 turnover = 1;
   int32 balance = 2;
-  repeated TransactionDetails TransactionDetails = 3;
+  repeated TransactionDetails TransactionResponse = 3;
   // 4
 }
