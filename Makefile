@@ -4,6 +4,9 @@ build:
 	cargo build
 
 cargo_publish:
+	git add .
+	git commit -m ".."
+	git push
 	cargo check
 	cargo publish --no-verify
 
