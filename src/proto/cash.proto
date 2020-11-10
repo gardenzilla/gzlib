@@ -49,6 +49,6 @@ message LogRequest {
 }
 
 message LogResponse {
-  repeated TransactionResponse TransactionDetails = 3;
+  repeated TransactionResponse transaction_details = 3;
   // 4
 }
