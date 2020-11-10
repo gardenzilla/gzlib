@@ -1,0 +1,20 @@
+[package]
+authors = ["Peter Mezei <mezeipetister@gmail.com>"]
+description = "Gardenzilla core library"
+edition = "2018"
+homepage = "https://github.com/gardenzilla/gzlib"
+license = "GPL-2.0"
+name = "gzlib"
+repository = "https://github.com/gardenzilla/gzlib"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = "0.3.5"
+prost = "0.6"
+tokio = {version = "0.2", features = ["macros"]}
+tonic = "0.3.1"
+
+[build-dependencies]
+tonic-build = "0.3.1"

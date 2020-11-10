@@ -1,0 +1,8 @@
+syntax = "proto3";
+package prelude;
+
+message FloatValue { float value = 1; }
+
+message DateTime { string rfc_3399 = 1; }
+
+message UserId { string userid = 1; }

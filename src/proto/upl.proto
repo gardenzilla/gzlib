@@ -1,0 +1,74 @@
+syntax = "proto3";
+package upl;
+import "google/protobuf/empty.proto";
+import "prelude.proto";
+
+service UplStore {
+  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
+  rpc GetById(GetUplRequest) returns (GetUplResponse);
+  rpc Move(MoveRequest) returns (MoveResponse);
+  rpc GetByPlace(UplByPlaceRequest) returns (stream Upl);
+}
+
+message e {}
+
+service UplService {
+  rpc CreateNew(e) returns (e);
+  rpc Lock(e) returns (e);
+  rpc UnLock(e) returns (e);
+  rpc UpdateById(e) returns (e);
+  rpc UpdateBySku(e) returns (e);
+  rpc Move(e) returns (e);
+  rpc GetById(e) returns (e);
+  rpc GetAllByLocation(e) returns (e);
+  rpc SetScrapping(e) returns (e);
+  rpc RemoveScrapping(e) returns (e);
+  rpc SetScrapPrice(e) returns (e);
+}
+
+message UplByPlaceRequest {}
+
+message Upl {
+  uint64 id = 1;
+  string sku = 4;
+  // ...
+  repeated UplHistoryItem location_history = 5;
+  string created_by = 2;
+  string date_created = 3;
+}
+
+message UplHistoryItem {
+  string location = 1;
+  string id = 2;
+  string date_created = 3;
+  string created_by = 4;
+}
+
+message CreateNewRequest {
+  uint32 id = 1;
+  // ..
+  string sku = 2;
+  string created_by = 3;
+  string date_created = 4;
+}
+
+message CreateNewResponse { Upl upl = 1; }
+
+message GetUplRequest { uint32 upl_id = 1; }
+message GetUplResponse { Upl upl = 1; }
+
+message MoveRequest {
+  // e.g. stock
+  string from_type = 1;
+  // e.g. 324324
+  string from_id = 2;
+  // e.g. cart
+  string to_type = 3;
+  // e.g. 4367
+  string to_id = 4;
+}
+
+message MoveResponse {
+  string todo = 1;
+  string todo2 = 2;
+}

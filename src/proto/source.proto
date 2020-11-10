@@ -1,0 +1,38 @@
+syntax = "proto3";
+package source;
+
+// import "prelude.proto";
+
+service Source {
+  // Create new source
+  rpc NewSource(Todo) returns (Todo);
+  // Get source by id
+  rpc GetSourceById(Todo) returns (Todo);
+  // Get list of sources
+  rpc GetAllSources(Todo) returns (Todo);
+  // Update source by id
+  rpc UpdateSourceById(Todo) returns (stream Todo);
+  // Add new sku to source
+  rpc AddNewSkuToSource(Todo) returns (Todo);
+  // Get price by SKU
+  rpc GetPriceBySku(Todo) returns (Todo);
+  // Get price history by SKU
+  rpc GetPriceHistoryBySku(Todo) returns (Todo);
+}
+
+message Todo {}
+
+message PriceHistory {
+  string sku = 1;
+  repeated PriceHistoryItem items = 2;
+  // next:
+}
+
+message PriceHistoryItem {
+  string date = 1;
+  string created_by = 2;
+  uint32 net_wholesale_price = 3;
+  string comment = 4;
+  string kind = 5;
+  // next:
+}

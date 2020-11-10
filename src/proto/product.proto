@@ -1,0 +1,58 @@
+syntax = "proto3";
+package product;
+import "google/protobuf/empty.proto";
+
+// Product Service
+// All the methods related to manage Product
+service Product {
+  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
+  rpc GetAll(google.protobuf.Empty) returns (GetAllResponse);
+  rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+  rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
+  rpc isSku(IsSkuRequest) returns (IsSkuResponse);
+}
+
+message IsSkuRequest { string sku = 1; }
+message IsSkuResponse { bool sku_exist = 1; }
+
+message SKU { string sku = 1; }
+
+message ProductObj {
+  string sku = 1;
+  string name = 2;
+  string quantity = 3;
+  string unit = 5;       // impl Into<String> for Unit {} & from_str()
+  string created_by = 9; // Maybe UserId? And impl From<..> for it?
+  string created_at = 10;
+}
+
+message ProductUpdateObj {
+  string sku = 1;
+  string name = 2;
+  string quantity = 3;
+  string unit = 4;
+}
+
+message CreateNewRequest {
+  string name = 1;
+  string quantity = 2;
+  string unit = 3;
+  string created_by = 4;
+}
+
+message CreateNewResponse { ProductObj product = 1; }
+
+message GetAllResponse { repeated ProductObj products = 1; }
+
+message GetByIdRequest { string sku = 1; }
+
+message GetByIdResponse { ProductObj product = 1; }
+
+message UpdateByIdRequest { ProductUpdateObj product = 1; }
+
+message UpdateByIdResponse {
+  // Product Object
+  // After an update call, it will return
+  // the updated object for validation
+  ProductObj product = 1;
+}

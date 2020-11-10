@@ -1,0 +1,56 @@
+syntax = "proto3";
+package cash;
+
+message e {}
+
+service Cash {
+  rpc Transaction(TransactionRequest) returns (TransactionDetails);
+  rpc GetBalance(BalanceRequest) returns (Balance);
+  rpc Log(LogRequest) returns (LogResponse);
+}
+
+message TransactionRequest {
+  // purchase to/from custoemr
+  // cash_in from company
+  // cash_out to company
+  string kind = 1;
+  int32 amount = 2;
+  string created_by = 3;
+  string description = 4;
+  // 5
+}
+
+message TransactionDetails {
+  string transaction_id = 1;
+  string kind = 2;
+  int32 amount = 3;
+  int32 balance = 4;
+  string created_by = 5;
+  string created_at = 6;
+  // 7
+}
+
+// Empty
+message BalanceRequest {}
+
+message Balance {
+  int32 balance = 1;
+  string datetime = 2;
+  // 3
+}
+
+message LogRequest {
+  // rfc3339
+  string from = 1;
+  // rfc3339
+  string till = 2;
+  string kind = 3;
+  // 4
+}
+
+message LogResponse {
+  int32 turnover = 1;
+  int32 balance = 2;
+  repeated TransactionDetails TransactionDetails = 3;
+  // 4
+}

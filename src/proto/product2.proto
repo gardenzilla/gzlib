@@ -1,0 +1,101 @@
+syntax = "proto3";
+package product2;
+
+message StockItem {
+  string stock_id = 1;
+  int32 count = 2;
+}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string created_by = 3;
+  string created_at = 4;
+  repeated string variant_attr = 5;
+  // 11
+}
+
+message SKU {
+  string id = 1;
+  string spu = 2;
+  string subname = 3;
+  string display_name = 4;
+  string packaging = 5;
+  float price_retail_net = 6;
+  float price_retail_gross = 7;
+  string price_vat = 8;
+  repeated StockItem stock = 9;
+  bool managed_by_upl = 10;
+  string created_by = 11;
+  string created_at = 12;
+  Attr attr = 13; 
+  bool can_devide = 14;
+  // 15
+}
+
+// Attr:
+//   - Color
+//   - Dimension
+//   - Material
+//   - Pesticide
+//   - Pot
+//   - Fertilizer
+
+message Attr {
+  Color color = 1;
+  Dimension dimension = 2;
+  Pesticide pesticide = 3;
+}
+
+message Color {
+  repeated string color = 1;
+}
+
+message Dimension {
+  string unit = 1;
+  float width = 2;
+  float height = 3;
+  float length = 4;
+}
+
+message Material {
+  string material = 1;
+  string skin = 2;
+}
+
+// exist, boolean, greater_then, equal
+// query: filter=pesticide:valid_till>DATERFC,chemical_comp=..;color=[red,green]
+// color=is_green_or_yellow
+
+
+message Pesticide {
+  string license_valid_till = 1;
+  string chemical_composition = 2;
+  repeated string allowed_crops = 3;
+  message Evi {
+    string crop = 1;
+    int32 evi = 2;
+  }
+  repeated Evi evi = 4;
+}
+
+service SkuService {}
+service ProductService {}
+
+message Pager {
+  int32 page = 1;
+  int32 size = 2;
+}
+
+message Pages {
+  int32 current = 1;
+  int32 size = 2;
+  int32 len = 3;
+  int32 next = 4;
+  int32 previous = 5;
+}
+
+message ProductList {
+  repeated Product items = 1;
+  Pages pages = 2;
+}

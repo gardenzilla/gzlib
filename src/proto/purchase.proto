@@ -1,0 +1,71 @@
+syntax = "proto3";
+package purchase;
+
+message e {}
+
+message Cart {
+  message Item {
+    string sku = 1;
+    int32 piece = 2;
+    float total_price_net = 3;
+    float total_price_gross = 4;
+    float toal_price_vat = 5;
+  }
+  message Customer {
+    string id = 1;
+    string name = 2;
+    string taxnumber = 3;
+    string zip = 4;
+    string location = 5;
+    string street = 6;
+  }
+  message VatItem {
+    string key = 1;
+    float value = 2;
+  }
+  string id = 1;
+  string owner = 2;
+  Customer customer = 8;
+  int32 discount_percentage = 9;
+  repeated Item cart_item = 3;
+  int32 total_net = 4;
+  int32 total_gross = 5;
+  repeated VatItem total_vats = 6;
+  int32 total_vat = 10;
+  float profit_net = 7;
+  string created_at = 11;
+  string created_by = 12;
+  // 13
+}
+
+service CartService {
+  rpc CreateNew(e) returns (e);
+  rpc GetAllByOwner(e) returns (e);
+  rpc GetById(e) returns (e);
+  rpc GetByCustomer(e) returns (e);
+  rpc AddCustomer(e) returns (e);
+  rpc AddUpl(e) returns (e);
+  rpc AddSku(e) returns (e);
+  rpc RemoveUpl(e) returns (e);
+  rpc RemoveSku(e) returns (e);
+  rpc UpdateSku(e) returns (e);
+  rpc SetDiscount(e) returns (e);
+  rpc RemoveCustomer(e) returns (e);
+  rpc ValidateCart(e) returns (e);
+  rpc SetDocument(e) returns (e);
+  rpc SetPayment(e) returns (e);
+  rpc Purchase(e) returns (e);
+  rpc Remove(e) returns (e);
+  rpc SetDescription(e) returns (e);
+  rpc AssignOwner(e) returns (e);
+}
+service PurchaseService {
+  rpc CreateNew(e) returns (e);
+  rpc GetAllByOwner(e) returns (e);
+  rpc GetById(e) returns (e);
+  rpc GetRecentByOwner(e) returns (e);
+  rpc GetByFilter(e) returns (e);
+  rpc CreateInvoice(e) returns (e);
+  rpc AddPayment(e) returns (e);
+  rpc RemovePayment(e) returns (e);
+}

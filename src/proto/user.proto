@@ -1,0 +1,89 @@
+syntax = "proto3";
+package user;
+import "google/protobuf/empty.proto";
+service User {
+  /*
+   * CreateNewUser
+   * CreateNewRequest -> CreateNewResponse
+   */
+  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
+  /*
+   * Get all users
+   * AllUserRequest -> GerAllResponse
+   */
+  rpc GetAll(google.protobuf.Empty) returns (stream UserObj);
+  /*
+   * Get User By Id
+   * GetByIdRequest -> UserByIdResponse
+   */
+  rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+  /*
+   * Update User By ID
+   * UpdateByIdRequest -> UpdateUserReply
+   */
+  rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
+  // rpc CheckUserExist(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc IsUser(IsUserRequest) returns (IsUserResponse);
+  // ResetPassword -> Email::send(!)
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+  // Set new password
+  rpc SetNewPassword(NewPasswordRequest) returns (NewPasswordResponse);
+  // Validate login request
+  rpc ValidateLogin(LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool is_valid = 1;
+  UserObj user = 3;
+}
+
+message NewPasswordRequest {
+  string userid = 1;
+  string new_password = 2;
+}
+
+message NewPasswordResponse {}
+
+message ResetPasswordRequest { string email = 1; }
+
+message ResetPasswordResponse {}
+
+message IsUserRequest { string userid = 1; }
+message IsUserResponse { bool user_exist = 1; }
+
+message AllUserRequest {}
+
+message UserObj {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  repeated string customers = 5; // This will be Vec<String>
+  string created_by = 6;
+  string created_at = 7; // maybe datetime type?
+}
+
+message CreateNewRequest {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string phone = 4;
+  string created_by = 5;
+}
+
+message CreateNewResponse { UserObj user = 1; }
+
+message GetAllResponse { repeated UserObj users = 1; }
+
+message GetByIdRequest { string userid = 1; }
+
+message GetByIdResponse { UserObj user = 1; }
+
+message UpdateByIdRequest { UserObj user = 1; }
+
+message UpdateByIdResponse { UserObj user = 1; }
