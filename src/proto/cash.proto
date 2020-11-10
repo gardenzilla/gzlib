@@ -36,7 +36,6 @@ message BalanceRequest {}
 
 message Balance {
   int32 balance = 1;
-  string datetime = 2;
   // 3
 }
 

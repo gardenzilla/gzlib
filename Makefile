@@ -4,6 +4,7 @@ build:
 	cargo build
 
 cargo_publish:
+	cargo check
 	cargo publish --no-verify
 
 test:
