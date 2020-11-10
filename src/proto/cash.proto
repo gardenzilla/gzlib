@@ -3,7 +3,7 @@ package cash;
 
 message e {}
 
-service Cash {
+service CashService {
   rpc Transaction(TransactionRequest) returns (TransactionDetails);
   rpc GetBalance(BalanceRequest) returns (Balance);
   rpc Log(LogRequest) returns (LogResponse);
