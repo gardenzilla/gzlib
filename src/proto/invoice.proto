@@ -1,0 +1,71 @@
+syntax = "proto3";
+package invoice;
+
+message e {}
+
+service Invoice {
+  rpc CreateNew(InvoiceForm) returns (NewInvoiceResponse);
+  rpc Delete(DeleteRequest) returns (Invoice);
+  rpc GetById(ByIdRequest) returns (Invoice);
+  rpc GetByPurchaseId(e) returns (e);
+  rpc GetByDateRange(GetByDateRange) returns (Invoices);
+}
+
+message InvoiceForm {
+  message Customer {
+    string id = 1;
+    string name = 2;
+    string tax_number = 3;
+    string zip = 4;
+    string location = 5;
+    string street = 6;
+  }
+  message Item {
+    string name = 1;
+    string quantity = 2;
+    string unit = 3;
+    int32 price_unit_net = 4;
+    string vat = 5;
+    int32 total_price_net = 6;
+    int32 total_price_vat = 7;
+    int32 total_price_gross = 8;
+    string comment = 9;
+    // 10
+  }
+  Customer customer = 1;
+  repeated Item items = 2;
+  string payment_kind = 3; // cash, transfer, card
+  string payment_duedate = 4; // Duedate if there any
+  string date = 5;
+  string completion_date = 6;
+  int32 total_net = 7;
+  int32 total_vat = 8;
+  int32 total_gross = 9;
+  // 10
+}
+
+message NewInvoiceResponse {
+  string id = 1;
+}
+
+message ByIdRequest {
+  string id = 1;
+}
+
+message Invoice {
+  string id = 1;
+  string datablob = 2;
+}
+
+message ByDateRangeRequest {
+  string from = 1;
+  string till = 2;
+}
+
+message Invoices {
+  repeated Invoice invoices = 1;
+}
+
+message DeleteRequest {
+  string invoice_id = 1;
+}
