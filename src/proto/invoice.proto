@@ -5,10 +5,9 @@ message e {}
 
 service Invoice {
   rpc CreateNew(InvoiceForm) returns (NewInvoiceResponse);
-  rpc Delete(DeleteRequest) returns (Invoice);
-  rpc GetById(ByIdRequest) returns (Invoice);
-  rpc GetByPurchaseId(e) returns (e);
-  rpc GetByDateRange(GetByDateRange) returns (Invoices);
+  rpc GetById(ByIdRequest) returns (ByIdResponse);
+  rpc GetByPurchaseId(PurchaseIdBulkRequest) returns (PurchaseIdBulkResponse);
+  rpc Download(DownloadRequest) returns (DownloadResponse);
 }
 
 message InvoiceForm {
@@ -19,6 +18,7 @@ message InvoiceForm {
     string zip = 4;
     string location = 5;
     string street = 6;
+    string email = 7;
   }
   message Item {
     string name = 1;
@@ -35,37 +35,48 @@ message InvoiceForm {
   Customer customer = 1;
   repeated Item items = 2;
   string payment_kind = 3; // cash, transfer, card
-  string payment_duedate = 4; // Duedate if there any
-  string date = 5;
-  string completion_date = 6;
+  string payment_duedate = 4; // Duedate if there any NOT RFC3339! e.g.: 2021-01-01 (NaiveDate)
+  string date = 5; // NaiveDate
+  string completion_date = 6; // NaiveDate
   int32 total_net = 7;
   int32 total_vat = 8;
   int32 total_gross = 9;
   // 10
 }
 
-message NewInvoiceResponse {
+message InvoiceData {
   string id = 1;
+  string purchase_id = 2;
+  string invoice_id = 3;
+  string related_storno = 4;
+  string created_by = 5;
+  string created_at = 6;
+}
+
+message NewInvoiceResponse {
+  InvoiceData invoice = 1;
 }
 
 message ByIdRequest {
   string id = 1;
 }
 
-message Invoice {
-  string id = 1;
-  string datablob = 2;
+message ByIdResponse {
+  InvoiceData invoice = 1;
 }
 
-message ByDateRangeRequest {
-  string from = 1;
-  string till = 2;
+message PurchaseIdBulkRequest {
+  string purchase_id = 1;
 }
 
-message Invoices {
-  repeated Invoice invoices = 1;
+message PurchaseIdBulkResponse {
+  repeated InvoiceData invoices = 1;
 }
 
-message DeleteRequest {
+message DownloadRequest {
   string invoice_id = 1;
+}
+
+message DownloadResponse {
+  string pdf_base64 = 1;
 }
