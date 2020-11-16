@@ -32,16 +32,17 @@ message InvoiceForm {
     string comment = 9;
     // 10
   }
-  Customer customer = 1;
-  repeated Item items = 2;
-  string payment_kind = 3; // cash, transfer, card
-  string payment_duedate = 4; // Duedate if there any NOT RFC3339! e.g.: 2021-01-01 (NaiveDate)
-  string date = 5; // NaiveDate
-  string completion_date = 6; // NaiveDate
-  int32 total_net = 7;
-  int32 total_vat = 8;
-  int32 total_gross = 9;
-  // 10
+  string purchase_id = 1;
+  Customer customer = 2;
+  repeated Item items = 3;
+  string payment_kind = 4; // cash, transfer, card
+  string payment_duedate = 5; // Duedate if there any NOT RFC3339! e.g.: 2021-01-01 (NaiveDate)
+  string date = 6; // NaiveDate
+  string completion_date = 7; // NaiveDate
+  int32 total_net = 8;
+  int32 total_vat = 9;
+  int32 total_gross = 10;
+  // 11
 }
 
 message InvoiceData {
