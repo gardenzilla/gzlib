@@ -42,6 +42,7 @@ message InvoiceForm {
   int32 total_net = 8;
   int32 total_vat = 9;
   int32 total_gross = 10;
+  string created_by = 11;
   // 11
 }
 
