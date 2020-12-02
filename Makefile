@@ -1,9 +1,9 @@
-.PHONY: test, dev, doc, cargo_publish
+.PHONY: test, dev, doc, publish
 
 build:
 	cargo build
 
-cargo_publish:
+publish:
 	# git add .
 	# git commit -m ".."
 	# git push
