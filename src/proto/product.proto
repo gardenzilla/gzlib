@@ -2,12 +2,15 @@ syntax = "proto3";
 package product;
 import "google/protobuf/empty.proto";
 
+message e {}
+
 // Product Service
 // All the methods related to manage Product
 service Product {
   rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
   rpc GetAll(google.protobuf.Empty) returns (GetAllResponse);
   rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+  rpc GetByIds(e) returns (e);
   rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
   rpc isSku(IsSkuRequest) returns (IsSkuResponse);
 }
@@ -18,12 +21,26 @@ message IsSkuResponse { bool sku_exist = 1; }
 message SKU { string sku = 1; }
 
 message ProductObj {
+  message Reservation {
+    string cart_id = 1;
+    string amount = 2;
+  }
+
   string sku = 1;
   string name = 2;
-  string quantity = 3;
-  string unit = 5;       // impl Into<String> for Unit {} & from_str()
-  string created_by = 9; // Maybe UserId? And impl From<..> for it?
-  string created_at = 10;
+  string description = 3;
+  float  latest_wholesale_price = 4;
+  uint32 price_retail_net = 5;
+  string vat = 6;
+  uint32 price_retail_gross = 7;
+  string quantity = 8;
+  string unit = 9;       // impl Into<String> for Unit {} & from_str()
+  float  stock = 10;
+  Reservation reservation = 11;
+  bool can_divide = 12;
+  bool can_divideh = 13;
+  string created_by = 14; // Maybe UserId? And impl From<..> for it?
+  string created_at = 15;
 }
 
 message ProductUpdateObj {
@@ -55,4 +72,17 @@ message UpdateByIdResponse {
   // After an update call, it will return
   // the updated object for validation
   ProductObj product = 1;
+}
+
+service ProductService {
+  rpc NewProduct(e) returns (e);
+  rpc GetById(e) returns (e);
+  rpc GetByIds(e) returns (e);
+  rpc Update(e) returns (e);
+  rpc SetLatestWhPrice(e) returns (e);
+  rpc SetPriceRetail(e) returns (e);
+  rpc SetVAT(e) returns (e);
+  rpc AddStock(e) returns (e);
+  rpc ReservationAdd(e) returns (e);
+  rpc ReservationRemove(e) returns (e);
 }

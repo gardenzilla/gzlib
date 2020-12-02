@@ -1,9 +1,10 @@
 pub mod cash;
 pub mod customer;
+pub mod document;
 pub mod email;
 pub mod invoice;
 pub mod prelude;
+pub mod pricing;
 pub mod product;
-pub mod product2;
 pub mod source;
 pub mod user;

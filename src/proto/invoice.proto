@@ -47,12 +47,12 @@ message InvoiceForm {
 }
 
 message InvoiceData {
-  string id = 1;
-  string purchase_id = 2;
-  string invoice_id = 3;
-  string related_storno = 4;
-  string created_by = 5;
-  string created_at = 6;
+    string id = 1;
+    string purchase_id = 2;
+    string invoice_id = 3;
+    string related_storno = 4;
+    string created_by = 5;
+    string created_at = 6;
 }
 
 message NewInvoiceResponse {

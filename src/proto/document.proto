@@ -1,0 +1,59 @@
+syntax = "proto3";
+package document;
+
+message e {}
+
+service Document {
+  rpc Query(QueryRequest) returns (QueryResponse);
+  rpc GetCashIn(Id) returns (e);
+  rpc NewCashIn(e) returns (e);
+  rpc GetCashOut(Id) returns (e);
+  rpc NewCashOut(e) returns (e);
+  rpc GetInventory(Id) returns (e);
+  rpc NewInventory(e) returns (e);
+  rpc GetProcurement(Id) returns (e);
+  rpc NewProcurement(e) returns (e);
+}
+
+message Id {
+  string id = 1;
+}
+
+message GetQueryRequest {
+  string kind = 1;
+  string id = 2;
+}
+
+message GetQueryResponse {
+  string kind = 1;
+  string id = 2;
+  string pdf_base_64 = 3;
+}
+
+message PostQueryRequest {
+  string kind = 1;
+  string data = 2;
+}
+
+message PostQueryResponse {
+  string id = 1;
+}
+
+message QueryRequest {
+  string method = 1;
+  string kind = 2; // ? Maybe not? Should be the part of the query?
+  string query = 3;
+  // This is the created_by user
+  // but when we have a GET query, we
+  // actually do not create anything
+  // Thats why we renamed it to query_by_userid
+  string query_by_userid = 4;
+  // 5
+}
+
+message QueryResponse {
+  string kind = 1;
+  string id = 2;
+  string document_pdf_base64 = 3;
+  // 4
+}

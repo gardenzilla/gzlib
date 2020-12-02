@@ -1,0 +1,30 @@
+syntax = "proto3";
+package pricing;
+
+service PricingService {
+  rpc SetPrice(SetPriceRequest) returns (PriceResponse);
+  rpc GetPrice(GetPriceRequest) returns (GetPriceResponse);
+}
+
+message SetPriceRequest {
+  string sku = 1;
+  int32  price_net_retail = 2;
+  string vat = 3;
+  int32  price_gross_retail = 4;
+  string created_by = 5;
+}
+
+message PriceResponse {
+  string sku = 1;
+  int32  price_net_retail = 2;
+  string vat = 3;
+  int32  price_gross_retail = 4;
+}
+
+message GetPriceRequest {
+  repeated string skus = 1;
+}
+
+message GetPriceResponse {
+  map<string, PriceResponse> prices = 1;
+}
