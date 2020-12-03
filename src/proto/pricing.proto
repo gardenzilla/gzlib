@@ -21,10 +21,18 @@ message PriceResponse {
   int32  price_gross_retail = 4;
 }
 
+message PriceResponseBulk {
+  string sku = 1;
+  int32  price_net_retail = 2;
+  string vat = 3;
+  int32  price_gross_retail = 4;
+  int32  status_code = 5;
+}
+
 message GetPriceRequest {
   repeated string skus = 1;
 }
 
 message GetPriceResponse {
-  repeated PriceResponse prices = 1;
+  map<string, PriceResponse> result = 1;
 }
