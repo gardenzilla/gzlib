@@ -4,9 +4,9 @@ build:
 	cargo build
 
 publish:
-	# git add .
-	# git commit -m ".."
-	# git push
+	git add .
+	git commit -m ".."
+	git push
 	cargo check
 	cargo publish --no-verify
 

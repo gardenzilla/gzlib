@@ -26,5 +26,5 @@ message GetPriceRequest {
 }
 
 message GetPriceResponse {
-  map<string, PriceResponse> prices = 1;
+  repeated PriceResponse prices = 1;
 }
