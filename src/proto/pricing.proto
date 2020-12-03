@@ -3,7 +3,8 @@ package pricing;
 
 service PricingService {
   rpc SetPrice(SetPriceRequest) returns (PriceResponse);
-  rpc GetPrice(GetPriceRequest) returns (GetPriceResponse);
+  rpc GetPrice(GetPriceRequest) returns (PriceResponse);
+  rpc GetPriceBulk(GetPriceRequestBulk) returns (GetPriceResponse);
 }
 
 message SetPriceRequest {
@@ -30,6 +31,10 @@ message PriceResponseBulk {
 }
 
 message GetPriceRequest {
+  string sku = 1;
+}
+
+message GetPriceRequestBulk {
   repeated string skus = 1;
 }
 
