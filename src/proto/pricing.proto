@@ -34,5 +34,5 @@ message GetPriceRequest {
 }
 
 message GetPriceResponse {
-  map<string, PriceResponse> result = 1;
+  map<string, PriceResponseBulk> result = 1;
 }
