@@ -7,4 +7,5 @@ pub mod prelude;
 pub mod pricing;
 pub mod product;
 pub mod source;
+pub mod upl;
 pub mod user;

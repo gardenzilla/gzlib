@@ -1,74 +1,154 @@
 syntax = "proto3";
 package upl;
-import "google/protobuf/empty.proto";
 import "prelude.proto";
 
-service UplStore {
-  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
-  rpc GetById(GetUplRequest) returns (GetUplResponse);
-  rpc Move(MoveRequest) returns (MoveResponse);
-  rpc GetByPlace(UplByPlaceRequest) returns (stream Upl);
+/*
+1. Létrehozni
+2. Lekérni ID alapján
+3. Lekérni helyszín alapján
+4. Lekérni Lock alapján
+5. Áthelyezni MOVE
+6. Szavidő frissítés
+7. Szétválasztani SPLIT
+8. Kimérni DIVIDE
+9. Egyesíteni MERGE
+*/
+
+service Upl {
+  rpc SetReservation(ReservationRequest) returns (ReservationResponse);
+  // // Create new UPL
+  // // Just from a procurement or inventory service!
+  // // No public API should be implemented!
+  // rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
+  // // Get UPL by ID
+  // rpc GetById(GetUplRequest) returns (GetUplResponse);
+  // // Filters: id, sku, product, location
+  // // Returns only the UPL IDs
+  // rpc GetBulkByFilter(e) returns (e);
+  // // Move a UPL from location A to location B
+  // rpc Move(MoveRequest) returns (MoveResponse);
+  // // Modify best before date
+  // // This should not use at all
+  // // As this info should be correctly provided by
+  // // the procurement process
+  // // The only possible usage to correct a bestbefore date
+  // // error during inventory check.
+  // rpc SetBestBefore(e) returns (e);
+  // rpc Split(e) returns (e);
+  // // Lock a UPL that means its cannot be moved
+  // // and cannot be modified.
+  // // The idea is to use it as a cart lock to
+  // // signal that the upl is in a cart
+  // // Should be private API
+  // rpc Lock(e) returns (e);
+  // // Unlock a UPL that means it can be moved
+  // // to another location and can be modified.
+  // // Should be private API.
+  // rpc Unlock(e) returns (e);
 }
 
 message e {}
 
-service UplService {
-  rpc CreateNew(e) returns (e);
-  rpc Lock(e) returns (e);
-  rpc UnLock(e) returns (e);
-  rpc UpdateById(e) returns (e);
-  rpc UpdateBySku(e) returns (e);
-  rpc Move(e) returns (e);
-  rpc GetById(e) returns (e);
-  rpc GetAllByLocation(e) returns (e);
-  rpc SetScrapping(e) returns (e);
-  rpc RemoveScrapping(e) returns (e);
-  rpc SetScrapPrice(e) returns (e);
+message ReservationRequest {
+  message Local {
+    string cart_id = 1;
+    string stock_id = 2;
+    oneof Subject {
+      uint32 sku = 3;
+      uint32 divided_product = 4;
+    }
+    uint32 reserved_amount = 5;
+  }
+  message Global {
+    string cart_id = 1;
+    oneof Subject {
+      uint32 sku = 2;
+      uint32 divided_product = 3;
+    }
+    uint32 reserved_amount = 4;
+  }
+  oneof reservation {
+    Local local = 1;
+    Global global = 2;
+  }
 }
 
-message UplByPlaceRequest {}
-
-message Upl {
-  uint64 id = 1;
-  string sku = 4;
-  // ...
-  repeated UplHistoryItem location_history = 5;
-  string created_by = 2;
-  string date_created = 3;
+message ReservationResponse {
+  message Local {
+    string cart_id = 1;
+    string stock_id = 2;
+    oneof Subject {
+      uint32 sku = 3;
+      uint32 divided_product = 4;
+    }
+    uint32 reserved_amount = 5;
+    uint32 taken_amount = 6;
+  }
+  message Global {
+    string cart_id = 1;
+    oneof Subject {
+      uint32 sku = 2;
+      uint32 divided_product = 3;
+    }
+    uint32 reserved_amount = 4;
+    uint32 taken_amount = 5;
+  }
+  oneof reservation {
+    Local local = 1;
+    Global global = 2;
+  }
 }
 
-message UplHistoryItem {
-  string location = 1;
-  string id = 2;
-  string date_created = 3;
-  string created_by = 4;
-}
-
-message CreateNewRequest {
-  uint32 id = 1;
-  // ..
-  string sku = 2;
-  string created_by = 3;
-  string date_created = 4;
-}
-
-message CreateNewResponse { Upl upl = 1; }
-
-message GetUplRequest { uint32 upl_id = 1; }
-message GetUplResponse { Upl upl = 1; }
-
-message MoveRequest {
-  // e.g. stock
-  string from_type = 1;
-  // e.g. 324324
-  string from_id = 2;
-  // e.g. cart
-  string to_type = 3;
-  // e.g. 4367
-  string to_id = 4;
-}
-
-message MoveResponse {
-  string todo = 1;
-  string todo2 = 2;
+message UplObject {
+  message KindSku { uint32 sku = 1; }
+  message KindBulkSku {
+    uint32 sku = 1;
+    uint32 upl_pieces = 2;
+  }
+  message KindOpenedSku {
+    uint32 sku = 1;
+    uint32 amount = 2;
+    repeated string successors = 3;
+  }
+  message KindDerivedProduct {
+    uint32 derived_from = 1;
+    uint32 amount = 2;
+  }
+  message Depreciation {
+    string id = 1;
+    string comment = 2;
+    uint32 net_retail_price = 3;
+  }
+  string id = 1;
+  string product_id = 2;
+  oneof kind {
+    KindSku sku = 3;
+    KindBulkSku bulk_sku = 4;
+    KindOpenedSku opened_sku = 5;
+    KindDerivedProduct derived_product = 6;
+  }
+  string procurement_id = 7;
+  uint32 procurement_net_price = 8;
+  oneof location {
+    uint32 stock = 9;
+    uint32 delivery = 10;
+    uint32 cart = 11;
+    uint32 discard = 12;
+  }
+  Depreciation depreciation = 13;
+  string best_before = 14;
+  uint32 divisible_amount = 15;
+  oneof lock {
+    uint32 cart_lock = 16;
+    uint32 delivery_lock = 17;
+    uint32 inventory_lock = 18;
+  }
+  repeated string history = 19;
+  enum Status {
+    Archived = 0;
+    Live = 1;
+  }
+  Status status = 39;
+  string created_at = 40;
+  string created_by = 41;
 }
