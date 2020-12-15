@@ -34,6 +34,6 @@ fn main() {
             )
             .to_hex()
         ),
-        Action::Check => println!("{}", id.to_luhn_object().is_ok()),
+        Action::Check => println!("{}", id.luhn_check().is_ok()),
     }
 }
