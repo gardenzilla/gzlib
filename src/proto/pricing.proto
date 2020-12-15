@@ -9,35 +9,29 @@ service PricingService {
 
 message SetPriceRequest {
   string sku = 1;
-  int32  price_net_retail = 2;
+  int32 price_net_retail = 2;
   string vat = 3;
-  int32  price_gross_retail = 4;
+  int32 price_gross_retail = 4;
   string created_by = 5;
 }
 
 message PriceResponse {
   string sku = 1;
-  int32  price_net_retail = 2;
+  int32 price_net_retail = 2;
   string vat = 3;
-  int32  price_gross_retail = 4;
+  int32 price_gross_retail = 4;
 }
 
 message PriceResponseBulk {
   string sku = 1;
-  int32  price_net_retail = 2;
+  int32 price_net_retail = 2;
   string vat = 3;
-  int32  price_gross_retail = 4;
-  int32  status_code = 5;
+  int32 price_gross_retail = 4;
+  int32 status_code = 5;
 }
 
-message GetPriceRequest {
-  string sku = 1;
-}
+message GetPriceRequest { string sku = 1; }
 
-message GetPriceRequestBulk {
-  repeated string skus = 1;
-}
+message GetPriceRequestBulk { repeated string skus = 1; }
 
-message GetPriceResponse {
-  map<string, PriceResponseBulk> result = 1;
-}
+message GetPriceResponse { map<string, PriceResponseBulk> result = 1; }

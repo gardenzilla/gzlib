@@ -29,13 +29,13 @@ message ProductObj {
   string sku = 1;
   string name = 2;
   string description = 3;
-  float  latest_wholesale_price = 4;
+  float latest_wholesale_price = 4;
   uint32 price_retail_net = 5;
   string vat = 6;
   uint32 price_retail_gross = 7;
   string quantity = 8;
-  string unit = 9;       // impl Into<String> for Unit {} & from_str()
-  float  stock = 10;
+  string unit = 9; // impl Into<String> for Unit {} & from_str()
+  float stock = 10;
   Reservation reservation = 11;
   bool can_divide = 12;
   bool can_divideh = 13;

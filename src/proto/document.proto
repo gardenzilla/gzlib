@@ -15,9 +15,7 @@ service Document {
   rpc NewProcurement(e) returns (e);
 }
 
-message Id {
-  string id = 1;
-}
+message Id { string id = 1; }
 
 message GetQueryRequest {
   string kind = 1;
@@ -35,9 +33,7 @@ message PostQueryRequest {
   string data = 2;
 }
 
-message PostQueryResponse {
-  string id = 1;
-}
+message PostQueryResponse { string id = 1; }
 
 message QueryRequest {
   string method = 1;

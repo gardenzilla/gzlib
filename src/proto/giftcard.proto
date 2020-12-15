@@ -19,9 +19,7 @@ message CardDetails {
   Log log = 4;
 }
 
-message GetCardRequest {
-  string card_id = 1;
-}
+message GetCardRequest { string card_id = 1; }
 
 message PurchaseRequest {
   string card_id = 1;
