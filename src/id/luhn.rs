@@ -44,7 +44,7 @@ pub fn is_valid(n: u64, id_kind: IdKind) -> bool {
         }
         IdKind::LuhnTwo => {
             let check = calc_check(n / 100) as u64;
-            (n % 10) == 9 - check && (n % 100) / 10 == check
+            ((n % 10) == 9 - check) && ((n % 100) / 10 == check)
         }
     }
 }
@@ -86,5 +86,6 @@ mod tests {
         assert_eq!(is_valid(56543, IdKind::LuhnTwo), false);
         assert_eq!(is_valid(56532, IdKind::LuhnTwo), false);
         assert_eq!(is_valid(56609, IdKind::LuhnTwo), true);
+        assert_eq!(is_valid(5, IdKind::LuhnOne), true);
     }
 }
