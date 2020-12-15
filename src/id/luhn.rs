@@ -1,4 +1,12 @@
+use crate::id::{IdError, IdKind};
 use std::{collections::HashSet, hash::Hash};
+
+pub fn make_id(u: u64, id_kind: IdKind) -> u64 {
+    match id_kind {
+        IdKind::LuhnOne => (u * 10 + calc_check(u) as u64),
+        IdKind::LuhnTwo => (u * 10 + calc_check(u) as u64) * 10 + (9 - calc_check(u) as u64),
+    }
+}
 
 // Luhn algorythm
 // based on https://en.wikipedia.org/wiki/Luhn_algorithm
@@ -7,10 +15,6 @@ fn calc_check(u: u64) -> u8 {
         x if x != 10 => x,
         _ => 0,
     }
-}
-
-pub fn make_id(u: u64) -> u64 {
-    (u * 10 + calc_check(u) as u64) * 10 + (9 - calc_check(u) as u64)
 }
 
 fn calc(n: u64, i: u32) -> u8 {
@@ -32,9 +36,17 @@ fn calc(n: u64, i: u32) -> u8 {
     res as u8
 }
 
-pub fn is_valid(n: u64) -> bool {
-    let check = calc_check(n / 100) as u64;
-    (n % 10) == 9 - check && (n % 100) / 10 == check
+pub fn is_valid(n: u64, id_kind: IdKind) -> bool {
+    match id_kind {
+        IdKind::LuhnOne => {
+            let check = calc_check(n / 10) as u64;
+            (n % 10) == check
+        }
+        IdKind::LuhnTwo => {
+            let check = calc_check(n / 100) as u64;
+            (n % 10) == 9 - check && (n % 100) / 10 == check
+        }
+    }
 }
 
 fn has_unique_elements<T>(iter: T) -> bool
@@ -63,16 +75,16 @@ mod tests {
         // are unique
         let d = (1..50_000)
             .into_iter()
-            .map(|i| make_id(i))
+            .map(|i| make_id(i, IdKind::LuhnTwo))
             .collect::<Vec<u64>>();
         assert!(has_unique_elements(d));
     }
 
     #[test]
     fn test_is_valid() {
-        assert_eq!(is_valid(56527), true);
-        assert_eq!(is_valid(56543), false);
-        assert_eq!(is_valid(56532), false);
-        assert_eq!(is_valid(56609), true);
+        assert_eq!(is_valid(56527, IdKind::LuhnTwo), true);
+        assert_eq!(is_valid(56543, IdKind::LuhnTwo), false);
+        assert_eq!(is_valid(56532, IdKind::LuhnTwo), false);
+        assert_eq!(is_valid(56609, IdKind::LuhnTwo), true);
     }
 }

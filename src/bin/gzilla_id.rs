@@ -1,12 +1,10 @@
 use std::env;
 
-use gzlib::id;
+use gzlib::id::*;
 
 enum Action {
     Create,
-    CreateHex,
-    Validate,
-    ValidateHex,
+    Check,
 }
 
 fn main() {
@@ -17,10 +15,8 @@ fn main() {
         ),
         3 => (
             match args[1].as_str() {
-                "--create" => Action::Create,
-                "--create_hex" => Action::CreateHex,
-                "--validate" => Action::Validate,
-                "--validate_hex" => Action::ValidateHex,
+                "create" => Action::Create,
+                "check" => Action::Check,
                 _ => panic!("Hiba! Nem megfelelő action! Vagy create, vagy validate!"),
             },
             &args[2],
@@ -28,18 +24,16 @@ fn main() {
         _ => panic!("Hiba! Túl sok paraméter!"),
     };
 
-    let id = match action {
-        Action::ValidateHex => u64::from_str_radix(&args[2], 16)
-            .expect("A megadott ID nem HEX, vagy nem pozitív egész szám"),
-        _ => args[2]
-            .parse::<u64>()
-            .expect("A megadott ID nem pozitív egész szám!"),
-    };
-
     match action {
-        Action::Create => println!("{}", id::luhn::make_id(id)),
-        Action::CreateHex => println!("{:x}", id::luhn::make_id(id)),
-        Action::Validate => println!("{}", id::luhn::is_valid(id)),
-        Action::ValidateHex => println!("{}", id::luhn::is_valid(id)),
+        Action::Create => println!(
+            "{}",
+            generate_id(
+                id.parse::<u64>()
+                    .expect("A megadott ID nem pozitív egész szám"),
+                IdKind::LuhnTwo
+            )
+            .to_hex()
+        ),
+        Action::Check => println!("{}", id.to_luhn_object().is_ok()),
     }
 }
