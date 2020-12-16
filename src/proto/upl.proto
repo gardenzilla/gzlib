@@ -1,50 +1,70 @@
 syntax = "proto3";
 package upl;
 import "prelude.proto";
+import "google/protobuf/empty.proto";
 
-/*
-1. Létrehozni
-2. Lekérni ID alapján
-3. Lekérni helyszín alapján
-4. Lekérni Lock alapján
-5. Áthelyezni MOVE
-6. Szavidő frissítés
-7. Szétválasztani SPLIT
-8. Kimérni DIVIDE
-9. Egyesíteni MERGE
-*/
+service Reservation {
+  rpc SetReservation(ReservationRequest) returns (ReservationResponse);
+}
 
 service Upl {
-  rpc SetReservation(ReservationRequest) returns (ReservationResponse);
-  // // Create new UPL
-  // // Just from a procurement or inventory service!
-  // // No public API should be implemented!
-  // rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
-  // // Get UPL by ID
-  // rpc GetById(GetUplRequest) returns (GetUplResponse);
-  // // Filters: id, sku, product, location
-  // // Returns only the UPL IDs
-  // rpc GetBulkByFilter(e) returns (e);
-  // // Move a UPL from location A to location B
-  // rpc Move(MoveRequest) returns (MoveResponse);
-  // // Modify best before date
-  // // This should not use at all
-  // // As this info should be correctly provided by
-  // // the procurement process
-  // // The only possible usage to correct a bestbefore date
-  // // error during inventory check.
-  // rpc SetBestBefore(e) returns (e);
-  // rpc Split(e) returns (e);
-  // // Lock a UPL that means its cannot be moved
-  // // and cannot be modified.
-  // // The idea is to use it as a cart lock to
-  // // signal that the upl is in a cart
-  // // Should be private API
-  // rpc Lock(e) returns (e);
-  // // Unlock a UPL that means it can be moved
-  // // to another location and can be modified.
-  // // Should be private API.
-  // rpc Unlock(e) returns (e);
+  // Create new UPL
+  // Just from a procurement or inventory service!
+  // No public API should be implemented!
+  rpc CreateNew(e) returns (UplObj);
+  // Get UPL by ID
+  rpc GetById(e) returns (UplObj);
+  // Get UPLs by Sku
+  rpc GetBySku(e) returns (stream UplObj);
+  // Get UPLs by Sku and Location
+  rpc GetBySkuAndLocation(e) returns (stream UplObj);
+  // Get UPLs by Location
+  rpc GetByLocation(e) returns (stream UplObj);
+  // Restore archived UPL to a given Stock
+  // Should be two reason:
+  //   1) Sold UPL is back for any reason
+  //   2) Discarded(Missing) product is back
+  rpc RestoreToStock(e) returns (UplObj);
+  // Modify best before date
+  // This should not use at all
+  // As this info should be correctly provided by
+  // the procurement process
+  // The only possible usage to correct a bestbefore date
+  // error during inventory check.
+  rpc SetBestBefore(e) returns (UplObj);
+  // Split one UPL from BulkUpl
+  rpc Split(e) returns (UplObj);
+  // Divide divisible Upl or OpenedUpl into a smaller Upl
+  rpc Divide(e) returns (UplObj);
+
+  // TODO! Implement this
+  // Merge an ancestor and a successor UPL into the ancestor
+  // rpc Merge(e) returns (UplObj);
+
+  // Put UPL to a Cart (Apply lock)
+  rpc LockToCart(e) returns (UplObj);
+  // Put UPL to a Delivery (Apply lock)
+  rpc LockToDelivery(e) returns (UplObj);
+  // Put UPL to an Inventory (Apply lock)
+  rpc LockToInventory(e) returns (UplObj);
+  // Checkout delivery UPLs to a given Stock(ID)
+  // Close a cart (transform lock to location)
+  rpc CloseCart(e) returns (e);
+  // Close a delivery (transform lock to location)
+  rpc CloseDelivery(e) returns (e);
+  // Close an inventory (transform lock to location)
+  rpc CloseInventory(e) returns (e);
+  // Put UPLs from Delivery to a given Stock (MOVE)
+  rpc CheckoutDelivery(e) returns (e);
+  // Remove UPL from a Cart (Release lock)
+  rpc ReleaseLockFromCart(e) returns (UplObj);
+  // Remove UPL from a Delivery (Release lock)
+  rpc ReleaseLockFromDelivery(e) returns (UplObj);
+  // Remove UPL from an Inventory (Release lock)
+  rpc ReleaseLockFromInventory(e) returns (UplObj);
+  // Return a UPL history
+  // todo! Implement history!
+  // rpc GetHistory(e) returns (stream HistoryItem);
 }
 
 message e {}
@@ -174,8 +194,6 @@ message UplObj {
   bool is_kind_derived = 26;
   // If upl is archived ? true : false
   bool is_archived = 27;
-  // History vector
-  repeated string history = 28;
   // Created by user
   string created_by = 29;
   // Created at RFC3339

@@ -1,5 +1,4 @@
-use crate::id::{IdError, IdKind};
-use std::{collections::HashSet, hash::Hash};
+use crate::id::IdKind;
 
 pub fn make_id(u: u64, id_kind: IdKind) -> u64 {
     match id_kind {
@@ -49,15 +48,6 @@ pub fn is_valid(n: u64, id_kind: IdKind) -> bool {
     }
 }
 
-fn has_unique_elements<T>(iter: T) -> bool
-where
-    T: IntoIterator,
-    T::Item: Eq + Hash,
-{
-    let mut uniq = HashSet::new();
-    iter.into_iter().all(move |x| uniq.insert(x))
-}
-
 // fn main() {
 //     (14_000..15_000)
 //         .into_iter()
@@ -67,7 +57,18 @@ where
 
 #[cfg(test)]
 mod tests {
+    use std::{collections::HashSet, hash::Hash};
+
     use super::*;
+
+    fn has_unique_elements<T>(iter: T) -> bool
+    where
+        T: IntoIterator,
+        T::Item: Eq + Hash,
+    {
+        let mut uniq = HashSet::new();
+        iter.into_iter().all(move |x| uniq.insert(x))
+    }
 
     #[test]
     fn test_all_unique() {
