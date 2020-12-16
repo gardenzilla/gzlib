@@ -100,56 +100,84 @@ message ReservationResponse {
 }
 
 message UplObj {
+  enum UplKind {
+    Sku = 0;
+    BulkSku = 1;
+    OpenedSku = 2;
+    DerivedProduct = 3;
+  }
+  enum LockKind {
+    CartLock = 0;
+    DeliveryLock = 1;
+    InventoryLock = 2;
+    None = 3;
+  }
+  enum LocationKind {
+    StockLocation = 0;
+    CartLocation = 1;
+    DeliveryLocation = 2;
+    DiscardLocation = 3;
+  }
   // UPL ID
   string id = 1;
   // Related product id
   uint32 product_id = 2;
   // Related SKU if there is any, otherwise 0
   uint32 sku = 3;
+  // Represents how many UPL this unit contains
+  // Can bigger then 1 if UplKind is Bulk
+  // Otherwise always 1
+  uint32 upl_piece = 4;
+  // If UPL is healty: no depreciation, no best_before issue
+  bool is_healty = 5;
+  // If UplKind is DerivedProduct; this shows its ancestor
+  uint32 derived_from = 6;
+  // If UplKind is OpenedSku and there are successors (derived products from it)
+  repeated uint32 upl_successors = 7;
   // Best before date (NaiveDate YYYY-MM-DD) if there is any
-  string best_before = 4;
+  string best_before = 8;
   // If there is any deprecation data
-  bool is_depreciated = 5;
+  bool is_depreciated = 9;
   // Deprecation id; only if depreciated
-  uint32 depreciation_id = 6;
+  uint32 depreciation_id = 10;
   // Deprecation comment; only if depreciated
-  string depreciation_comment = 7;
+  string depreciation_comment = 11;
   // Deprecation net price; only if depreciated
-  uint32 depreciation_net_price = 8;
+  uint32 depreciation_net_price = 12;
   // Procurement id
-  uint32 procurement_id = 9;
+  uint32 procurement_id = 13;
   // Procurement net price
-  uint32 procurement_net_price = 10;
+  uint32 procurement_net_price = 14;
   // Is it divisible? Only if SKU or Derived Product and is divisible
-  bool is_divisible = 11;
+  bool is_divisible = 15;
   // Divisible amount; if divisible; otherwise 0
-  uint32 divisible_amount = 12;
+  uint32 divisible_amount = 16;
   // If there any applied lock
-  bool is_locked = 13;
+  bool is_locked = 17;
   // If locked; lock kind
-  string lock_kind = 14;
+  LockKind lock_kind = 18;
   // If locked; lock id
-  uint32 lock_id = 15;
+  uint32 lock_id = 19;
   // Location kind
-  string location_kind = 16;
+  LocationKind location_kind = 20;
   // Location ID
-  uint32 location_id = 17;
+  uint32 location_id = 21;
   // UPL kind
-  string upl_kind = 18;
+  UplKind upl_kind = 22;
   // If upl_kind is BULK ? true : false
-  bool is_kind_bulk = 19;
+  bool is_kind_bulk = 23;
   // If upl_kind is OpenedSku ? true : false
-  bool is_kind_opened = 20;
+  bool is_kind_opened = 24;
   // If upl_kind is Sku ? true : false
-  bool is_kind_original = 21;
+  bool is_kind_original = 25;
   // If upl_kind is DerivedProduct ? true : false
-  bool is_kind_derived = 22;
+  bool is_kind_derived = 26;
   // If upl is archived ? true : false
-  bool is_archived = 23;
+  bool is_archived = 27;
   // History vector
-  repeated string history = 24;
+  repeated string history = 28;
   // Created by user
-  string created_by = 25;
+  string created_by = 29;
   // Created at RFC3339
-  string created_at = 26;
+  string created_at = 30;
 }
