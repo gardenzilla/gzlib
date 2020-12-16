@@ -1,30 +1,17 @@
 syntax = "proto3";
 package user;
 import "google/protobuf/empty.proto";
+
 service User {
-  /*
-   * CreateNewUser
-   * CreateNewRequest -> CreateNewResponse
-   */
-  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
-  /*
-   * Get all users
-   * AllUserRequest -> GerAllResponse
-   */
+  // Create new user
+  rpc CreateUser(NewUserObj) returns (UserObj);
+  // Get all user (as stream)
   rpc GetAll(google.protobuf.Empty) returns (stream UserObj);
-  /*
-   * Get User By Id
-   * GetByIdRequest -> UserByIdResponse
-   */
-  rpc GetById(GetByIdRequest) returns (GetByIdResponse);
-  /*
-   * Update User By ID
-   * UpdateByIdRequest -> UpdateUserReply
-   */
-  rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
-  // rpc CheckUserExist(google.protobuf.Empty) returns (google.protobuf.Empty);
-  rpc IsUser(IsUserRequest) returns (IsUserResponse);
-  // ResetPassword -> Email::send(!)
+  // Get user by id
+  rpc GetById(GetByIdRequest) returns (UserObj);
+  // Update user by id
+  rpc UpdateById(UserObj) returns (UserObj);
+  // Reset user password
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
   // Set new password
   rpc SetNewPassword(NewPasswordRequest) returns (NewPasswordResponse);
@@ -53,9 +40,6 @@ message ResetPasswordRequest { string email = 1; }
 
 message ResetPasswordResponse {}
 
-message IsUserRequest { string userid = 1; }
-message IsUserResponse { bool user_exist = 1; }
-
 message AllUserRequest {}
 
 message UserObj {
@@ -68,7 +52,7 @@ message UserObj {
   string created_at = 7; // maybe datetime type?
 }
 
-message CreateNewRequest {
+message NewUserObj {
   string id = 1;
   string email = 2;
   string name = 3;
@@ -76,14 +60,4 @@ message CreateNewRequest {
   string created_by = 5;
 }
 
-message CreateNewResponse { UserObj user = 1; }
-
-message GetAllResponse { repeated UserObj users = 1; }
-
 message GetByIdRequest { string userid = 1; }
-
-message GetByIdResponse { UserObj user = 1; }
-
-message UpdateByIdRequest { UserObj user = 1; }
-
-message UpdateByIdResponse { UserObj user = 1; }

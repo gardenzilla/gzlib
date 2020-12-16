@@ -2,36 +2,55 @@ syntax = "proto3";
 package pricing;
 
 service PricingService {
-  rpc SetPrice(SetPriceRequest) returns (PriceResponse);
-  rpc GetPrice(GetPriceRequest) returns (PriceResponse);
-  rpc GetPriceBulk(GetPriceRequestBulk) returns (GetPriceResponse);
+  // Set price data to a given SKU
+  rpc SetPrice(SetPriceRequest) returns (PriceObject);
+  // Get price data about a given SKU
+  rpc GetPrice(GetPriceRequest) returns (PriceObject);
+  // Get bulk price date (stream)
+  rpc GetPriceBulk(GetPriceBulkRequest) returns (stream GetPriceBulkResponse);
 }
 
 message SetPriceRequest {
+  // Set price to this SKU
   string sku = 1;
+  // Set price as a net retail price of this value
   int32 price_net_retail = 2;
+  // Set VAT as a String, should use a common seralization
   string vat = 3;
+  // Set price as as gross retail price of this value
   int32 price_gross_retail = 4;
+  // Created by a userid
   string created_by = 5;
 }
 
-message PriceResponse {
+message PriceObject {
+  // Price details related to this SKU
   string sku = 1;
+  // Net retail price
   int32 price_net_retail = 2;
+  // VAT as String
   string vat = 3;
+  // Gross retail price
   int32 price_gross_retail = 4;
 }
 
-message PriceResponseBulk {
+message GetPriceBulkResponse {
   string sku = 1;
-  int32 price_net_retail = 2;
-  string vat = 3;
-  int32 price_gross_retail = 4;
-  int32 status_code = 5;
+  PriceObject price_object = 2;
+  int32 error_code = 3;
 }
 
 message GetPriceRequest { string sku = 1; }
 
-message GetPriceRequestBulk { repeated string skus = 1; }
+message GetPriceBulkRequest { repeated string skus = 1; }
 
-message GetPriceResponse { map<string, PriceResponseBulk> result = 1; }
+message GetPriceResponse {
+  // Price details related to this SKU
+  string sku = 1;
+  // Net retail price
+  int32 price_net_retail = 2;
+  // VAT as String
+  string vat = 3;
+  // Gross retail price
+  int32 price_gross_retail = 4;
+}

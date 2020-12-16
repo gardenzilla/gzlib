@@ -4,9 +4,12 @@ package cash;
 message e {}
 
 service CashService {
-  rpc Transaction(TransactionRequest) returns (TransactionResponse);
-  rpc GetBalance(BalanceRequest) returns (Balance);
-  rpc Log(LogRequest) returns (LogResponse);
+  // Create new transaction
+  rpc CreateTransaction(TransactionRequest) returns (TransactionObject);
+  // Get current balance
+  rpc GetBalance(BalanceRequest) returns (BalanceObject);
+  // Get transaction log by filter
+  rpc TransactionLog(LogRequest) returns (stream TransactionObject);
 }
 
 message TransactionRequest {
@@ -21,7 +24,7 @@ message TransactionRequest {
   // 5
 }
 
-message TransactionResponse {
+message TransactionObject {
   uint32 transaction_id = 1;
   string kind = 2;
   int32 amount = 3;
@@ -34,7 +37,7 @@ message TransactionResponse {
 // Empty
 message BalanceRequest {}
 
-message Balance {
+message BalanceObject {
   int32 balance = 1;
   // 3
 }
@@ -45,10 +48,5 @@ message LogRequest {
   // rfc3339
   string till = 2;
   string kind = 3;
-  // 4
-}
-
-message LogResponse {
-  repeated TransactionResponse transaction_details = 3;
   // 4
 }

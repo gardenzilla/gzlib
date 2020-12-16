@@ -3,16 +3,19 @@ package customer;
 import "google/protobuf/empty.proto";
 
 service CustomerService {
-  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
-  rpc GetAll(google.protobuf.Empty) returns (GetAllResponse);
-  rpc GetById(GetByIdRequest) returns (GetByIdResponse);
-  rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
-  rpc AddUser(AddUserRequest) returns (AddUserResponse);
-  rpc RemoveUser(RemoveUserRequest) returns (RemoveUserResponse);
-  rpc LookupByCard(Empty) returns (Empty); //?
+  // Create new customer
+  rpc CreateNew(CreateNewRequest) returns (CustomerObj);
+  // Get all customers (as stream)
+  rpc GetAll(google.protobuf.Empty) returns (stream CustomerObj);
+  // Get customer by id
+  rpc GetById(GetByIdRequest) returns (CustomerObj);
+  // Update customer by id
+  rpc UpdateById(UpdateByIdRequest) returns (CustomerObj);
+  // Add related user to the customer
+  rpc AddUser(AddUserRequest) returns (CustomerObj);
+  // Remove related user from the customer
+  rpc RemoveUser(RemoveUserRequest) returns (CustomerObj);
 }
-
-message Empty {}
 
 message Address {
   string zip = 1;
@@ -54,31 +57,19 @@ message CreateNewRequest {
   string created_by = 8;
 }
 
-message CreateNewResponse { CustomerObj customer = 1; }
-
-message GetAllResponse { repeated CustomerObj customers = 1; }
-
 message GetByIdRequest { string customer_id = 1; }
-
-message GetByIdResponse { CustomerObj customer = 1; }
 
 message UpdateByIdRequest {
   string customer_id = 1;
   CustomerUpdateObj customer = 2;
 }
 
-message UpdateByIdResponse { CustomerObj customer = 1; }
-
 message AddUserRequest {
   string customer_id = 1;
   string user_id = 2;
 }
 
-message AddUserResponse { CustomerObj customer = 1; }
-
 message RemoveUserRequest {
   string customer_id = 1;
   string user_id = 2;
 }
-
-message RemoveUserResponse { CustomerObj customer = 1; }
