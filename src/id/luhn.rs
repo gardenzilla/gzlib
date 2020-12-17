@@ -48,13 +48,6 @@ pub fn is_valid(n: u64, id_kind: IdKind) -> bool {
     }
 }
 
-// fn main() {
-//     (14_000..15_000)
-//         .into_iter()
-//         .for_each(|i| println!("{} => {} => {:x}", i, make_id(i), make_id(i)));
-//     println!("OK");
-// }
-
 #[cfg(test)]
 mod tests {
     use std::{collections::HashSet, hash::Hash};

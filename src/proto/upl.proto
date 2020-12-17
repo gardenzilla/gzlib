@@ -3,65 +3,94 @@ package upl;
 import "prelude.proto";
 import "google/protobuf/empty.proto";
 
-service Reservation {
-  rpc SetReservation(ReservationRequest) returns (ReservationResponse);
-}
+// service Reservation {
+//   // Set reservation for a Cart/Sku
+//   // It can be LOCAL or GLOBAL
+//   // and its subject can be a SKU or a DIVIDED_PRODUCT
+//   rpc SetReservation(ReservationRequest) returns (ReservationResponse);
+//   // Get reservations by Cart(ID)
+//   rpc GetReservationsByCart(e) returns (e);
+//   // Clear all reservation for a Cart
+//   // If we delete a whole cart in quick
+//   rpc ClearReservation(r) returns (e);
+// }
 
 service Upl {
   // Create new UPL
   // Just from a procurement or inventory service!
   // No public API should be implemented!
-  rpc CreateNew(e) returns (UplObj);
+  rpc CreateNew(UplNew) returns (UplObj);
   // Get UPL by ID
-  rpc GetById(e) returns (UplObj);
+  rpc GetById(ByIdRequest) returns (UplObj);
   // Get UPLs by Sku
-  rpc GetBySku(e) returns (stream UplObj);
+  rpc GetBySku(BySkuRequest) returns (stream UplObj);
   // Get UPLs by Sku and Location
-  rpc GetBySkuAndLocation(e) returns (stream UplObj);
+  rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (stream UplObj);
   // Get UPLs by Location
-  rpc GetByLocation(e) returns (stream UplObj);
+  rpc GetByLocation(ByLocationRequest) returns (stream UplObj);
+
   // Restore archived UPL to a given Stock
   // Should be two reason:
   //   1) Sold UPL is back for any reason
   //   2) Discarded(Missing) product is back
-  rpc RestoreToStock(e) returns (UplObj);
+  // rpc RestoreToStock(e) returns (UplObj);
+
   // Modify best before date
   // This should not use at all
   // As this info should be correctly provided by
   // the procurement process
   // The only possible usage to correct a bestbefore date
   // error during inventory check.
-  rpc SetBestBefore(e) returns (UplObj);
+  rpc SetBestBefore(SetBestBeforeRequest) returns (UplObj);
   // Split one UPL from BulkUpl
-  rpc Split(e) returns (UplObj);
+  rpc Split(SplitRequest) returns (UplObj);
   // Divide divisible Upl or OpenedUpl into a smaller Upl
-  rpc Divide(e) returns (UplObj);
+  rpc Divide(DivideRequest) returns (UplObj);
 
   // TODO! Implement this
   // Merge an ancestor and a successor UPL into the ancestor
   // rpc Merge(e) returns (UplObj);
 
+  // Set depreciation
+  // ID and comment
+  rpc SetDepreciation(DepreciationRequest) returns (UplObj);
+  // Remove depreciation
+  // Remove the depreciated net retail price as well
+  rpc RemoveDepreciation(DepreciationRemovePriceRequest) returns (UplObj);
+  // Set depreciation net retail price
+  // Only if there is depceriation ID already set
+  rpc SetDepreciationPrice(DepreciationPriceRequest) returns (UplObj);
+
   // Put UPL to a Cart (Apply lock)
-  rpc LockToCart(e) returns (UplObj);
+  rpc LockToCart(CartLockRequest) returns (UplObj);
+
   // Put UPL to a Delivery (Apply lock)
-  rpc LockToDelivery(e) returns (UplObj);
+  // rpc LockToDelivery(e) returns (UplObj);
+
   // Put UPL to an Inventory (Apply lock)
-  rpc LockToInventory(e) returns (UplObj);
+  rpc LockToInventory(InventoryLockRequest) returns (UplObj);
+  // Remove UPL from a Cart (Release lock)
+  rpc ReleaseLockFromCart(CartUnlockRequest) returns (UplObj);
+
+  // Remove UPL from a Delivery (Release lock)
+  // rpc ReleaseLockFromDelivery(e) returns (UplObj);
+
+  // Remove UPL from an Inventory (Release lock)
+  rpc ReleaseLockFromInventory(InventoryUnlockRequest) returns (UplObj);
   // Checkout delivery UPLs to a given Stock(ID)
   // Close a cart (transform lock to location)
-  rpc CloseCart(e) returns (e);
+  rpc CloseCart(CloseCartRequest) returns (e);
+
   // Close a delivery (transform lock to location)
-  rpc CloseDelivery(e) returns (e);
+  // rpc CloseDelivery(e) returns (e);
+
   // Close an inventory (transform lock to location)
-  rpc CloseInventory(e) returns (e);
+  rpc CloseInventory(CloseInventoryRequest) returns (e);
+
   // Put UPLs from Delivery to a given Stock (MOVE)
-  rpc CheckoutDelivery(e) returns (e);
+  // rpc CheckoutDelivery(e) returns (e);
+
   // Remove UPL from a Cart (Release lock)
-  rpc ReleaseLockFromCart(e) returns (UplObj);
-  // Remove UPL from a Delivery (Release lock)
-  rpc ReleaseLockFromDelivery(e) returns (UplObj);
-  // Remove UPL from an Inventory (Release lock)
-  rpc ReleaseLockFromInventory(e) returns (UplObj);
   // Return a UPL history
   // todo! Implement history!
   // rpc GetHistory(e) returns (stream HistoryItem);
@@ -69,54 +98,173 @@ service Upl {
 
 message e {}
 
-message ReservationRequest {
-  message Local {
-    string cart_id = 1;
-    string stock_id = 2;
-    oneof Subject {
-      uint32 sku = 3;
-      uint32 divided_product = 4;
-    }
-    uint32 reserved_amount = 5;
-  }
-  message Global {
-    string cart_id = 1;
-    oneof Subject {
-      uint32 sku = 2;
-      uint32 divided_product = 3;
-    }
-    uint32 reserved_amount = 4;
-  }
-  oneof reservation {
-    Local local = 1;
-    Global global = 2;
-  }
+// message ReservationRequest {
+//   message Local {
+//     string cart_id = 1;
+//     string stock_id = 2;
+//     oneof Subject {
+//       uint32 sku = 3;
+//       uint32 divided_product = 4;
+//     }
+//     uint32 reserved_amount = 5;
+//   }
+//   message Global {
+//     string cart_id = 1;
+//     oneof Subject {
+//       uint32 sku = 2;
+//       uint32 divided_product = 3;
+//     }
+//     uint32 reserved_amount = 4;
+//   }
+//   oneof reservation {
+//     Local local = 1;
+//     Global global = 2;
+//   }
+// }
+
+// message ReservationResponse {
+//   message Local {
+//     string cart_id = 1;
+//     string stock_id = 2;
+//     oneof Subject {
+//       uint32 sku = 3;
+//       uint32 divided_product = 4;
+//     }
+//     uint32 reserved_amount = 5;
+//     uint32 taken_amount = 6;
+//   }
+//   message Global {
+//     string cart_id = 1;
+//     oneof Subject {
+//       uint32 sku = 2;
+//       uint32 divided_product = 3;
+//     }
+//     uint32 reserved_amount = 4;
+//     uint32 taken_amount = 5;
+//   }
+//   oneof reservation {
+//     Local local = 1;
+//     Global global = 2;
+//   }
+// }
+
+// New UPL object
+message UplNew {
+  // UPL ID
+  string upl_id = 1;
+  // Related product ID
+  uint32 product_id = 1;
+  // Related SKU
+  uint32 sku = 1;
+  // UPL piece; if bulk, than bigger then 1
+  uint32 upl_piece = 1;
+  // Best before, if there is any
+  string best_before = 1;
+  // Location will be Stock(ID)
+  uint32 stock_id = 1;
+  // Related procurement ID
+  uint32 procurement_id = 1;
+  // Related procurement net price
+  uint32 procurement_net_price = 1;
+  // 0 if its not divisible, otherwise the contained amount
+  uint32 divisible_amount = 1;
+  // User who registered the UPL init data
+  string created_by = 1;
 }
 
-message ReservationResponse {
-  message Local {
-    string cart_id = 1;
-    string stock_id = 2;
-    oneof Subject {
-      uint32 sku = 3;
-      uint32 divided_product = 4;
-    }
-    uint32 reserved_amount = 5;
-    uint32 taken_amount = 6;
-  }
-  message Global {
-    string cart_id = 1;
-    oneof Subject {
-      uint32 sku = 2;
-      uint32 divided_product = 3;
-    }
-    uint32 reserved_amount = 4;
-    uint32 taken_amount = 5;
-  }
-  oneof reservation {
-    Local local = 1;
-    Global global = 2;
-  }
+message ByIdRequest { string upl_id = 1; }
+
+message BySkuRequest { uint32 sku = 1; }
+
+enum Location {
+  Stock = 0;
+  Cart = 1;
+  Delivery = 2;
+  Discard = 3;
+}
+
+message ByLocationRequest {
+  Location location = 1;
+  uint32 location_id = 2;
+}
+
+message BySkuAndLocationRequest {
+  Location location = 1;
+  uint32 location_id = 2;
+  uint32 sku = 3;
+}
+
+message SetBestBeforeRequest {
+  string upl = 1;
+  string best_before = 2;
+  string created_by = 3;
+}
+
+message SplitRequest {
+  string upl = 1;
+  string new_upl = 2;
+  string created_by = 3;
+}
+
+message DivideRequest {
+  string upl = 1;
+  string new_upl = 2;
+  uint32 requested_amount = 3;
+  string created_by = 4;
+}
+
+message DepreciationRequest {
+  string upl = 1;
+  uint32 depreciation_id = 2;
+  string depreciation_comment = 3;
+  string created_by = 4;
+}
+
+// This should be allowed only from the inventory modul
+message DepreciationRemovePriceRequest {
+  string upl = 1;
+  // We need to know to be able to remove the depreciation
+  uint32 depreciation_id = 2;
+}
+
+message DepreciationPriceRequest {
+  string upl = 1;
+  uint32 depreciation_net_price = 2;
+  string created_by = 3;
+}
+
+message CartLockRequest {
+  string upl = 1;
+  uint32 cart_id = 2;
+  string created_by = 3;
+}
+
+message InventoryLockRequest {
+  string upl = 1;
+  uint32 inventory_id = 2;
+  string created_by = 3;
+}
+
+message CartUnlockRequest {
+  string upl = 1;
+  uint32 cart_id = 2;
+  string created_by = 3;
+}
+
+message InventoryUnlockRequest {
+  string upl = 1;
+  uint32 inventory_id = 2;
+  string created_by = 3;
+}
+
+message CloseCartRequest {
+  uint32 cart_id = 1;
+  string created_by = 2;
+}
+
+message CloseInventoryRequest {
+  uint32 inventory_id = 1;
+  string created_by = 2;
 }
 
 message UplObj {
