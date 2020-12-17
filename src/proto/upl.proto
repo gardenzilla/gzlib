@@ -84,7 +84,7 @@ service Upl {
   // Close a delivery (transform lock to location)
   // rpc CloseDelivery(e) returns (e);
 
-  // Close an inventory (transform lock to location)
+  // Close an inventory (remove lock, but no location change)
   rpc CloseInventory(CloseInventoryRequest) returns (e);
 
   // Put UPLs from Delivery to a given Stock (MOVE)
@@ -153,29 +153,30 @@ message UplNew {
   // UPL ID
   string upl_id = 1;
   // Related product ID
-  uint32 product_id = 1;
+  uint32 product_id = 2;
   // Related SKU
-  uint32 sku = 1;
+  uint32 sku = 3;
   // UPL piece; if bulk, than bigger then 1
-  uint32 upl_piece = 1;
+  uint32 upl_piece = 4;
   // Best before, if there is any
-  string best_before = 1;
+  string best_before = 5;
   // Location will be Stock(ID)
-  uint32 stock_id = 1;
+  uint32 stock_id = 6;
   // Related procurement ID
-  uint32 procurement_id = 1;
+  uint32 procurement_id = 7;
   // Related procurement net price
-  uint32 procurement_net_price = 1;
+  uint32 procurement_net_price = 8;
   // 0 if its not divisible, otherwise the contained amount
-  uint32 divisible_amount = 1;
+  uint32 divisible_amount = 9;
   // User who registered the UPL init data
-  string created_by = 1;
+  string created_by = 10;
 }
 
 message ByIdRequest { string upl_id = 1; }
 
 message BySkuRequest { uint32 sku = 1; }
 
+// Possible UPL locations
 enum Location {
   Stock = 0;
   Cart = 1;
@@ -268,78 +269,65 @@ message CloseInventoryRequest {
 }
 
 message UplObj {
-  enum UplKind {
-    Sku = 0;
-    BulkSku = 1;
-    OpenedSku = 2;
-    DerivedProduct = 3;
+  message KindSku { uint32 sku = 1; }
+  message KindBulkSku {
+    uint32 sku = 1;
+    uint32 upl_pieces = 2;
   }
-  enum LockKind {
-    CartLock = 0;
-    DeliveryLock = 1;
-    InventoryLock = 2;
-    None = 3;
+  message KindOpenedSku {
+    uint32 sku = 1;
+    uint32 amount = 2;
+    repeated string successors = 3;
   }
-  enum LocationKind {
-    StockLocation = 0;
-    CartLocation = 1;
-    DeliveryLocation = 2;
-    DiscardLocation = 3;
+  message KindDerivedProduct {
+    string derived_from = 1;
+    uint32 amount = 2;
+  }
+  message Depreciation {
+    uint32 depreciation_id = 1;
+    string depreciation_comment = 2;
+    uint32 depreciation_net_price = 3;
   }
   // UPL ID
   string id = 1;
   // Related product id
   uint32 product_id = 2;
-  // Related SKU if there is any, otherwise 0
-  uint32 sku = 3;
+  oneof kind {
+    KindSku sku = 3;
+    KindBulkSku bulk_sku = 4;
+    KindOpenedSku opened_sku = 5;
+    KindDerivedProduct derived_product = 6;
+  }
   // Represents how many UPL this unit contains
   // Can bigger then 1 if UplKind is Bulk
   // Otherwise always 1
-  uint32 upl_piece = 4;
+  uint32 upl_piece = 7;
   // If UPL is healty: no depreciation, no best_before issue
-  bool is_healty = 5;
-  // If UplKind is DerivedProduct; this shows its ancestor
-  uint32 derived_from = 6;
-  // If UplKind is OpenedSku and there are successors (derived products from it)
-  repeated uint32 upl_successors = 7;
+  bool is_healty = 8;
   // Best before date (NaiveDate YYYY-MM-DD) if there is any
-  string best_before = 8;
-  // If there is any deprecation data
-  bool is_depreciated = 9;
-  // Deprecation id; only if depreciated
-  uint32 depreciation_id = 10;
-  // Deprecation comment; only if depreciated
-  string depreciation_comment = 11;
-  // Deprecation net price; only if depreciated
-  uint32 depreciation_net_price = 12;
+  string best_before = 9;
+  // Depreciation object
+  Depreciation depreciation = 10;
   // Procurement id
-  uint32 procurement_id = 13;
+  uint32 procurement_id = 11;
   // Procurement net price
-  uint32 procurement_net_price = 14;
+  uint32 procurement_net_price = 12;
   // Is it divisible? Only if SKU or Derived Product and is divisible
-  bool is_divisible = 15;
+  bool is_divisible = 13;
   // Divisible amount; if divisible; otherwise 0
-  uint32 divisible_amount = 16;
-  // If there any applied lock
-  bool is_locked = 17;
-  // If locked; lock kind
-  LockKind lock_kind = 18;
-  // If locked; lock id
-  uint32 lock_id = 19;
-  // Location kind
-  LocationKind location_kind = 20;
-  // Location ID
-  uint32 location_id = 21;
-  // UPL kind
-  UplKind upl_kind = 22;
-  // If upl_kind is BULK ? true : false
-  bool is_kind_bulk = 23;
-  // If upl_kind is OpenedSku ? true : false
-  bool is_kind_opened = 24;
-  // If upl_kind is Sku ? true : false
-  bool is_kind_original = 25;
-  // If upl_kind is DerivedProduct ? true : false
-  bool is_kind_derived = 26;
+  uint32 divisible_amount = 14;
+  oneof lock {
+    uint32 CartLock = 15;
+    uint32 DeliveryLock = 16;
+    uint32 InventoryLock = 17;
+    google.protobuf.Empty None = 18;
+  }
+  oneof location {
+    uint32 Stock = 19;
+    uint32 Delivery = 20;
+    uint32 Cart = 21;
+    uint32 Discard = 22;
+  }
   // If upl is archived ? true : false
   bool is_archived = 27;
   // Created by user
