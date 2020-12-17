@@ -292,6 +292,7 @@ message UplObj {
   string id = 1;
   // Related product id
   uint32 product_id = 2;
+  // UPL kind
   oneof kind {
     KindSku sku = 3;
     KindBulkSku bulk_sku = 4;
@@ -316,12 +317,14 @@ message UplObj {
   bool is_divisible = 13;
   // Divisible amount; if divisible; otherwise 0
   uint32 divisible_amount = 14;
+  // Applied lock
   oneof lock {
     uint32 CartLock = 15;
     uint32 DeliveryLock = 16;
     uint32 InventoryLock = 17;
     google.protobuf.Empty None = 18;
   }
+  // Current location
   oneof location {
     uint32 Stock = 19;
     uint32 Delivery = 20;
