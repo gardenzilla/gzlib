@@ -7,7 +7,36 @@ service PricingService {
   // Get price data about a given SKU
   rpc GetPrice(GetPriceRequest) returns (PriceObject);
   // Get bulk price date (stream)
-  rpc GetPriceBulk(GetPriceBulkRequest) returns (stream GetPriceBulkResponse);
+  rpc GetPriceBulk(GetPriceBulkRequest) returns (stream PriceObject);
+  // 1. Notify to re-price when new UPL arrives
+  // 2. Get Price history by SKU
+  // 3. Get latest changes
+  // 4. Auto pricing (First price,  Min margin, Average margin)
+  //                  --            --          --
+
+  // Get latest price changes for a given period of time
+  rpc GetLatestPriceChanges(PriceChangesRequest)
+      returns (stream PriceHistoryObject);
+}
+
+message PriceChangesRequest {
+  string date_from = 1;
+  string date_till = 2;
+}
+
+message PriceHistoryObject {
+  // Price details related to this SKU
+  string sku = 1;
+  // Net retail price
+  int32 price_net_retail = 2;
+  // VAT as String
+  string vat = 3;
+  // Gross retail price
+  int32 price_gross_retail = 4;
+  // UserID who created this price entry
+  string created_by = 5;
+  // Date when this price entry was created
+  string created_at = 6;
 }
 
 message SetPriceRequest {
@@ -32,25 +61,10 @@ message PriceObject {
   string vat = 3;
   // Gross retail price
   int32 price_gross_retail = 4;
-}
-
-message GetPriceBulkResponse {
-  string sku = 1;
-  PriceObject price_object = 2;
-  int32 error_code = 3;
+  // true if has price, false if has no price found
+  bool has_price = 5;
 }
 
 message GetPriceRequest { string sku = 1; }
 
 message GetPriceBulkRequest { repeated string skus = 1; }
-
-message GetPriceResponse {
-  // Price details related to this SKU
-  string sku = 1;
-  // Net retail price
-  int32 price_net_retail = 2;
-  // VAT as String
-  string vat = 3;
-  // Gross retail price
-  int32 price_gross_retail = 4;
-}

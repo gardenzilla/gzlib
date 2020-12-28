@@ -5,6 +5,7 @@ pub mod email;
 pub mod invoice;
 pub mod prelude;
 pub mod pricing;
+pub mod procurement;
 pub mod product;
 pub mod source;
 pub mod upl;

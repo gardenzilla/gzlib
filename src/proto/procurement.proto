@@ -1,0 +1,130 @@
+syntax = "proto3";
+package procurement;
+// import "prelude.proto";
+import "google/protobuf/empty.proto";
+
+service Procurement {
+  // Create new Procurement
+  rpc CreateNew(CreateNewRequest) returns (ProcurementObject);
+  // Update estimated delivery date
+  rpc SetDeliveryDate(SetDeliveryDateRequest) returns (ProcurementObject);
+  // Set reference
+  rpc SetReference(SetReferenceRequest) returns (ProcurementObject);
+  // Add new SKU, update SKU, remove SKU
+  rpc AddSku(AddSkuRequest) returns (ProcurementObject);
+  // Remove SKU
+  rpc RemoveSku(RemoveSkuRequest) returns (ProcurementObject);
+  // Set piece
+  rpc SetSkuPiece(SetSkuPieceRequest) returns (ProcurementObject);
+  // Add UPL candidate to procurement
+  // Here we need to check if UPL is not already in use!
+  rpc AddUpl(AddUplRequest) returns (ProcurementObject);
+  // Update UPL candidate
+  // e.g. correct bulk piece or best_before date
+  rpc UpdateUpl(UpdateUplRequest) returns (ProcurementObject);
+  // Remove UPL candidate from procurement
+  // e.g. upl ID has scanned into a wrong SKU
+  rpc RemoveUpl(RemoveUplRequest) returns (ProcurementObject);
+  // Close procurement and transfer UPLs into Stock
+  rpc Close(CloseRequest) returns (ProcurementObject);
+  // Get procurement statistics by SKU
+  // returns [date, piece, net_wholesale_price]
+  rpc GetStatBySku(GetStatBySkuRequest) returns (stream e);
+}
+
+message e {}
+
+message GetStatBySkuRequest { uint32 sku = 1; }
+
+message StatResponse {
+  string date_rfc3339 = 1;
+  uint32 piece = 2;
+  uint32 net_wholesale_price = 3;
+}
+
+message SetDeliveryDateRequest {
+  uint32 procurement_id = 1;
+  string delivery_date = 2;
+}
+
+message SetReferenceRequest {
+  uint32 procurement_id = 1;
+  string reference = 2;
+}
+
+message ProcurementItem {
+  uint32 sku = 1;
+  uint32 ordered_amount = 2;
+  uint32 expected_net_price = 3;
+}
+
+message UplCandidate {
+  // UPL ID
+  string upl_id = 1;
+  // Related SKU
+  uint32 sku = 2;
+  // UPL piece; if bulk, than bigger then 1
+  uint32 upl_piece = 3;
+  // Best before, if there is any
+  string best_before = 4;
+}
+
+message AddSkuRequest {
+  uint32 procurement_id = 1;
+  ProcurementItem sku = 2;
+}
+
+message RemoveSkuRequest {
+  uint32 procurement_id = 1;
+  uint32 sku = 2;
+}
+
+message SetSkuPieceRequest {
+  uint32 procurement_id = 1;
+  uint32 sku = 2;
+  uint32 piece = 3;
+}
+
+message AddUplRequest {
+  uint32 procurement_id = 1;
+  UplCandidate upl_candidate = 2;
+}
+
+message UpdateUplRequest {
+  uint32 procurement_id = 1;
+  string upl_id = 2;
+  uint32 piece = 3;
+  string best_before = 4;
+}
+
+message RemoveUplRequest {
+  uint32 procurement_id = 1;
+  string upl_id = 2;
+}
+
+message CloseRequest {
+  uint32 procurement_id = 1;
+  string created_by = 2;
+}
+
+message CreateNewRequest {
+  // This source should be verified
+  uint32 source_id = 1;
+  string created_by = 3;
+}
+
+message ProcurementObject {
+  // Procurement ID
+  uint32 id = 1;
+  // Source ID; only one source per procurement allowes
+  uint32 source_id = 2;
+  // Related document reference ID
+  string reference = 3;
+  string estimated_delivery_date = 10;
+  repeated ProcurementItem items = 4;
+  repeated UplCandidate upls = 5;
+  string created_at = 6;
+  string created_by = 7;
+  string closed_at = 8;
+  string closed_by = 9;
+}

@@ -13,6 +13,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "src/proto/document.proto",
             "src/proto/pricing.proto",
             "src/proto/upl.proto",
+            "src/proto/procurement.proto",
         ],
         &["src/proto"],
     )?;
