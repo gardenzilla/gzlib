@@ -26,7 +26,7 @@ message PriceChangesRequest {
 
 message PriceHistoryObject {
   // Price details related to this SKU
-  string sku = 1;
+  uint32 sku = 1;
   // Net retail price
   int32 price_net_retail = 2;
   // VAT as String
@@ -41,7 +41,7 @@ message PriceHistoryObject {
 
 message SetPriceRequest {
   // Set price to this SKU
-  string sku = 1;
+  uint32 sku = 1;
   // Set price as a net retail price of this value
   int32 price_net_retail = 2;
   // Set VAT as a String, should use a common seralization
@@ -54,7 +54,7 @@ message SetPriceRequest {
 
 message PriceObject {
   // Price details related to this SKU
-  string sku = 1;
+  uint32 sku = 1;
   // Net retail price
   int32 price_net_retail = 2;
   // VAT as String
@@ -65,6 +65,6 @@ message PriceObject {
   bool has_price = 5;
 }
 
-message GetPriceRequest { string sku = 1; }
+message GetPriceRequest { uint32 sku = 1; }
 
-message GetPriceBulkRequest { repeated string skus = 1; }
+message GetPriceBulkRequest { repeated uint32 skus = 1; }
