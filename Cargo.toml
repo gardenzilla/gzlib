@@ -6,19 +6,20 @@ homepage = "https://github.com/gardenzilla/gzlib"
 license = "GPL-2.0"
 name = "gzlib"
 repository = "https://github.com/gardenzilla/gzlib"
-version = "0.1.24"
+version = "0.1.25"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
 default = ["proto", "id"]
 id = []
-proto = []
+proto = ["futures", "prost", "tokio", "tonic"]
 
-# [dev-dependencies]
-# prost = {version = "0.6", optional = true}
-# tokio = {version = "0.2", features = ["macros"], optional = true}
-# tonic = {version = "0.3.1", optional = true}
+[dependencies]
+futures = {version = "0.3.5", optional = true}
+prost = {version = "0.6", optional = true}
+tokio = {version = "0.2", features = ["macros"], optional = true}
+tonic = {version = "0.3.1", optional = true}
 
 [build-dependencies]
 tonic-build = "0.3.1"
