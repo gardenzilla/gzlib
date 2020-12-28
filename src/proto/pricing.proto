@@ -61,8 +61,6 @@ message PriceObject {
   string vat = 3;
   // Gross retail price
   int32 price_gross_retail = 4;
-  // true if has price, false if has no price found
-  bool has_price = 5;
 }
 
 message GetPriceRequest { uint32 sku = 1; }
