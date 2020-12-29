@@ -41,7 +41,10 @@ message GetPricesRequest { uint32 source_id = 1; }
 message GetPriceInfoRequest { uint32 sku = 1; }
 
 // Get PriceInfoHistoryResponse by sku
-message GetPriceInfoHistoryRequest { uint32 sku = 1; }
+message GetPriceInfoHistoryRequest {
+  uint32 source = 1;
+  uint32 sku = 2;
+}
 
 // Add PriceInfo item to a source_id/SKU
 message AddPriceInfoRequest {
