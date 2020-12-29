@@ -12,6 +12,8 @@ service Source {
   rpc UpdateSource(SourceObject) returns (SourceObject);
   // Get all sources (SourceObject)
   rpc GetAllSources(google.protobuf.Empty) returns (stream SourceObject);
+  // Get all sku prices per source
+  rpc GetPrices(GetPricesRequest) returns (stream e);
   // Add price info to a source/sku
   rpc AddPriceInfo(AddPriceInfoRequest) returns (GetPriceInfoHistoryResponse);
   // Get price info from a source/sku
@@ -31,6 +33,9 @@ message CreateSourceRequest {
 
 // Get SourceObject by source_id
 message GetSourceRequest { uint32 source_id = 1; }
+
+// Get all sku prices by source
+message GetPricesRequest { uint32 source_id = 1; }
 
 // Get PriceInforResponse by sku
 message GetPriceInfoRequest { uint32 sku = 1; }
