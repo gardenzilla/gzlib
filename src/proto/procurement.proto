@@ -6,6 +6,8 @@ import "google/protobuf/empty.proto";
 service Procurement {
   // Create new Procurement
   rpc CreateNew(CreateNewRequest) returns (ProcurementObject);
+  // Try removes a procurement (if its status is New)
+  rpc Remove(RemoveRequest) returns (google.protobuf.Empty);
   // Update estimated delivery date
   rpc SetDeliveryDate(SetDeliveryDateRequest) returns (ProcurementObject);
   // Set reference
@@ -16,6 +18,8 @@ service Procurement {
   rpc RemoveSku(RemoveSkuRequest) returns (ProcurementObject);
   // Set piece
   rpc SetSkuPiece(SetSkuPieceRequest) returns (ProcurementObject);
+  // Set price
+  rpc SetSkuPrice(SetSkuPriceRequest) returns (ProcurementObject);
   // Add UPL candidate to procurement
   // Here we need to check if UPL is not already in use!
   rpc AddUpl(AddUplRequest) returns (ProcurementObject);
@@ -25,14 +29,13 @@ service Procurement {
   // Remove UPL candidate from procurement
   // e.g. upl ID has scanned into a wrong SKU
   rpc RemoveUpl(RemoveUplRequest) returns (ProcurementObject);
-  // Close procurement and transfer UPLs into Stock
-  rpc Close(CloseRequest) returns (ProcurementObject);
-  // Get procurement statistics by SKU
-  // returns [date, piece, net_wholesale_price]
-  rpc GetStatBySku(GetStatBySkuRequest) returns (stream e);
+  // Set Status
+  rpc SetStatus(SetStatusRequest) returns (ProcurementObject);
 }
 
 message e {}
+
+message RemoveRequest { uint32 procurement_id = 1; }
 
 message GetStatBySkuRequest { uint32 sku = 1; }
 
@@ -44,6 +47,7 @@ message StatResponse {
 
 message SetDeliveryDateRequest {
   uint32 procurement_id = 1;
+  // RFC3339
   string delivery_date = 2;
 }
 
@@ -66,6 +70,7 @@ message UplCandidate {
   // UPL piece; if bulk, than bigger then 1
   uint32 upl_piece = 3;
   // Best before, if there is any
+  // RFC3339
   string best_before = 4;
 }
 
@@ -85,6 +90,12 @@ message SetSkuPieceRequest {
   uint32 piece = 3;
 }
 
+message SetSkuPriceRequest {
+  uint32 procurement_id = 1;
+  uint32 sku = 2;
+  uint32 expected_net_price = 3;
+}
+
 message AddUplRequest {
   uint32 procurement_id = 1;
   UplCandidate upl_candidate = 2;
@@ -102,9 +113,15 @@ message RemoveUplRequest {
   string upl_id = 2;
 }
 
-message CloseRequest {
+message SetStatusRequest {
+  enum Status {
+    Ordered = 0;
+    Arrived = 1;
+    Processing = 2;
+    Closed = 3;
+  }
   uint32 procurement_id = 1;
-  string created_by = 2;
+  Status status = 2;
 }
 
 message CreateNewRequest {
@@ -116,15 +133,14 @@ message CreateNewRequest {
 message ProcurementObject {
   // Procurement ID
   uint32 id = 1;
-  // Source ID; only one source per procurement allowes
+  // Source ID; only one source per procurement allowed
   uint32 source_id = 2;
   // Related document reference ID
   string reference = 3;
+  // RFC3339
   string estimated_delivery_date = 10;
   repeated ProcurementItem items = 4;
   repeated UplCandidate upls = 5;
   string created_at = 6;
   string created_by = 7;
-  string closed_at = 8;
-  string closed_by = 9;
 }
