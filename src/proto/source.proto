@@ -15,12 +15,12 @@ service Source {
   // Get all sku prices per source
   rpc GetPrices(GetPricesRequest) returns (stream GetPriceInfoResponse);
   // Add price info to a source/sku
-  rpc AddPriceInfo(AddPriceInfoRequest) returns (GetPriceInfoHistoryResponse);
+  rpc AddPriceInfo(AddPriceInfoRequest) returns (stream PriceObject);
   // Get price info from a source/sku
   rpc GetPriceInfo(GetPriceInfoRequest) returns (stream GetPriceInfoResponse);
   // Get price info history from a source/sku
   rpc GetPriceInfoHistory(GetPriceInfoHistoryRequest)
-      returns (stream GetPriceInfoHistoryResponse);
+      returns (stream PriceObject);
 }
 
 message CreateSourceRequest {
