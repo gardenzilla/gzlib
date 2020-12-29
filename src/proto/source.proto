@@ -13,7 +13,7 @@ service Source {
   // Get all sources (SourceObject)
   rpc GetAllSources(google.protobuf.Empty) returns (stream SourceObject);
   // Get all sku prices per source
-  rpc GetPrices(GetPricesRequest) returns (stream e);
+  rpc GetPrices(GetPricesRequest) returns (stream GetPriceInfoResponse);
   // Add price info to a source/sku
   rpc AddPriceInfo(AddPriceInfoRequest) returns (GetPriceInfoHistoryResponse);
   // Get price info from a source/sku
