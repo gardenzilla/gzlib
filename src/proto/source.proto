@@ -1,81 +1,89 @@
 syntax = "proto3";
 package source;
 import "google/protobuf/empty.proto";
-
 // import "prelude.proto";
-
-// Source
-//  |
-//  |          Prices []
-//   \       /
-//    |- SKU
-//    |
-//    |- SKU - Prices []
 
 service Source {
   // Create new source
-  rpc NewSource(NewSourceRequest) returns (SourceObject);
-  // Get source by id
-  rpc GetSourceById(GetSourceByIdRequest) returns (SourceObject);
-  // Get list of sources
+  rpc CreateSource(CreateSourceRequest) returns (SourceObject);
+  // Get source data (no SKUs and prices)
+  rpc GetSource(GetSourceRequest) returns (SourceObject);
+  // Update source data (just source business data)
+  rpc UpdateSource(SourceObject) returns (SourceObject);
+  // Get all sources (SourceObject)
   rpc GetAllSources(google.protobuf.Empty) returns (stream SourceObject);
-  // Update source by id
-  rpc UpdateSourceById(SourceObject) returns (SourceObject);
-  // Get SKU prices by source id
-  // to generate virtual price list
-  rpc GetPricesBySource(GetPricesBySourceRequest)
-      returns (stream SkuPriceObject);
-  // Add new sku to source
-  rpc AddNewPriceEntry(NewPriceEntryRequest) returns (SkuPriceObject);
-  // Get price by SKU
-  rpc GetSkuPrice(GetSkuPriceRequest) returns (SkuPriceObject);
+  // Add price info to a source/sku
+  rpc AddPriceInfo(AddPriceInfoRequest) returns (GetPriceInfoHistoryResponse);
+  // Get price info from a source/sku
+  rpc GetPriceInfo(GetPriceInfoRequest) returns (stream GetPriceInfoResponse);
+  // Get price info history from a source/sku
+  rpc GetPriceInfoHistory(GetPriceInfoHistoryRequest)
+      returns (stream GetPriceInfoHistoryResponse);
 }
 
-message NewSourceRequest {
+message CreateSourceRequest {
   string name = 1;
-  string comment = 2;
-  string phone = 3;
-  string email = 4;
-  string address = 5;
-  string created_by = 6;
+  string address = 2;
+  repeated string email = 3;
+  repeated string phone = 4;
+  string created_by = 5;
 }
 
-message GetPricesBySourceRequest { uint32 source_id = 1; }
+// Get SourceObject by source_id
+message GetSourceRequest { uint32 source_id = 1; }
 
-message GetSourceByIdRequest { uint32 source_id = 1; }
+// Get PriceInforResponse by sku
+message GetPriceInfoRequest { uint32 sku = 1; }
 
+// Get PriceInfoHistoryResponse by sku
+message GetPriceInfoHistoryRequest { uint32 sku = 1; }
+
+// Add PriceInfo item to a source_id/SKU
+message AddPriceInfoRequest {
+  uint32 source_id = 1;
+  uint32 sku = 2;
+  uint32 net_price = 3;
+  string comment = 4;
+  string created_by = 5;
+}
+
+// Represents source data object (business data)
 message SourceObject {
   uint32 id = 1;
   string name = 2;
-  string comment = 3;
-  string phone = 4;
-  string email = 5;
-  string address = 6;
+  string address = 3;
+  repeated string email = 4;
+  repeated string phone = 5;
+  string created_at = 6;
   string created_by = 7;
 }
 
-message GetSkuPriceRequest { uint32 sku = 1; }
-
-message SkuPriceObject {
-  message PriceLog {
-    uint32 source_id = 1;
-    uint32 net_price = 2;
-    string comment = 3;
-    string created_by = 4;
-  }
-  uint32 sku = 1;
-  repeated PriceLog prices = 2;
+// Represents a price object
+message PriceObject {
+  // Expected net wholesale price
+  uint32 net_price = 1;
+  // Comment
+  string comment = 2;
+  // Created at
+  string created_at = 3;
+  // Created by userid
+  string created_by = 4;
 }
 
-message NewPriceEntryRequest {
+message GetPriceInfoResponse {
   // Source id
   uint32 source_id = 1;
   // SKU
   uint32 sku = 2;
-  // Expected net wholesale price
-  uint32 net_price = 3;
-  // Comment
-  string comment = 4;
-  // Created by userid
-  string created_by = 5;
+  // Latest available price
+  PriceObject latest_price = 3;
+}
+
+message GetPriceInfoHistoryResponse {
+  // Source id
+  uint32 source_id = 1;
+  // SKU
+  uint32 sku = 2;
+  // Latest available prices
+  repeated PriceObject latest_price = 3;
 }
