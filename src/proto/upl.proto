@@ -61,6 +61,10 @@ service Upl {
   // Only if there is depceriation ID already set
   rpc SetDepreciationPrice(DepreciationPriceRequest) returns (UplObj);
 
+  // Try to remove deprecation price
+  // if already depreciated
+  rpc RemoveDeprecationPrice(RemoveDeprecationPriceRequest) returns (UplObj);
+
   // Put UPL to a Cart (Apply lock)
   rpc LockToCart(CartLockRequest) returns (UplObj);
 
@@ -234,6 +238,11 @@ message DepreciationPriceRequest {
   string created_by = 3;
 }
 
+message RemoveDeprecationPriceRequest {
+  string upl = 1;
+  string created_by = 2;
+}
+
 message CartLockRequest {
   string upl = 1;
   uint32 cart_id = 2;
@@ -305,7 +314,7 @@ message UplObj {
   uint32 upl_piece = 7;
   // If UPL is healty: no depreciation, no best_before issue
   bool is_healty = 8;
-  // Best before date (NaiveDate YYYY-MM-DD) if there is any
+  // Best before date (RFC3339) if there is any
   string best_before = 9;
   // Depreciation object
   Depreciation depreciation = 10;
