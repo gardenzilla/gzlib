@@ -104,8 +104,9 @@ message AddUplRequest {
 message UpdateUplRequest {
   uint32 procurement_id = 1;
   string upl_id = 2;
-  uint32 piece = 3;
-  string best_before = 4;
+  uint32 sku = 3;
+  uint32 piece = 4;
+  string best_before = 5;
 }
 
 message RemoveUplRequest {
