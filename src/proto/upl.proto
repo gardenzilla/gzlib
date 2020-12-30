@@ -181,7 +181,7 @@ message ByIdRequest { string upl_id = 1; }
 message BySkuRequest { uint32 sku = 1; }
 
 // Possible UPL locations
-enum Location {
+enum LocationKind {
   Stock = 0;
   Cart = 1;
   Delivery = 2;
@@ -189,18 +189,19 @@ enum Location {
 }
 
 message ByLocationRequest {
-  Location location = 1;
+  LocationKind location_kind = 1;
   uint32 location_id = 2;
 }
 
 message BySkuAndLocationRequest {
-  Location location = 1;
+  LocationKind location_kind = 1;
   uint32 location_id = 2;
   uint32 sku = 3;
 }
 
 message SetBestBeforeRequest {
   string upl = 1;
+  // RFC339 or empty string
   string best_before = 2;
   string created_by = 3;
 }
