@@ -123,6 +123,7 @@ message SetStatusRequest {
   }
   uint32 procurement_id = 1;
   Status status = 2;
+  string created_by = 3;
 }
 
 message CreateNewRequest {
