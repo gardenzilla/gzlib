@@ -5,14 +5,14 @@ message e {}
 
 message Cart {
   message Item {
-    string sku = 1;
+    uint32 sku = 1;
     int32 piece = 2;
     float total_price_net = 3;
     float total_price_gross = 4;
     float toal_price_vat = 5;
   }
   message Customer {
-    string id = 1;
+    uint32 id = 1;
     string name = 2;
     string taxnumber = 3;
     string zip = 4;
@@ -23,8 +23,8 @@ message Cart {
     string key = 1;
     float value = 2;
   }
-  string id = 1;
-  string owner = 2;
+  uint32 id = 1;
+  uint32 owner_uid = 2;
   Customer customer = 8;
   int32 discount_percentage = 9;
   repeated Item cart_item = 3;
@@ -34,7 +34,7 @@ message Cart {
   int32 total_vat = 10;
   float profit_net = 7;
   string created_at = 11;
-  string created_by = 12;
+  uint32 created_by = 12;
   // 13
 }
 

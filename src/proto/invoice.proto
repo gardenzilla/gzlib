@@ -12,7 +12,7 @@ service Invoice {
 
 message InvoiceForm {
   message Customer {
-    string id = 1;
+    uint32 id = 1;
     string name = 2;
     string tax_number = 3;
     string zip = 4;
@@ -32,7 +32,7 @@ message InvoiceForm {
     string comment = 9;
     // 10
   }
-  string purchase_id = 1;
+  uint32 purchase_id = 1;
   Customer customer = 2;
   repeated Item items = 3;
   string payment_kind = 4; // cash, transfer, card
@@ -43,26 +43,26 @@ message InvoiceForm {
   int32 total_net = 8;
   int32 total_vat = 9;
   int32 total_gross = 10;
-  string created_by = 11;
+  uint32 created_by = 11;
   // 11
 }
 
 message InvoiceData {
-  string id = 1;
-  string purchase_id = 2;
+  uint32 id = 1;
+  uint32 purchase_id = 2;
   string invoice_id = 3;
   string related_storno = 4;
-  string created_by = 5;
+  uint32 created_by = 5;
   string created_at = 6;
 }
 
 message NewInvoiceResponse { InvoiceData invoice = 1; }
 
-message ByIdRequest { string id = 1; }
+message ByIdRequest { uint32 id = 1; }
 
 message ByIdResponse { InvoiceData invoice = 1; }
 
-message PurchaseIdBulkRequest { string purchase_id = 1; }
+message PurchaseIdBulkRequest { uint32 purchase_id = 1; }
 
 message PurchaseIdBulkResponse { repeated InvoiceData invoices = 1; }
 

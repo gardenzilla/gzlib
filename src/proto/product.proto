@@ -15,18 +15,18 @@ service Product {
   rpc isSku(IsSkuRequest) returns (IsSkuResponse);
 }
 
-message IsSkuRequest { string sku = 1; }
+message IsSkuRequest { uint32 sku = 1; }
 message IsSkuResponse { bool sku_exist = 1; }
 
-message SKU { string sku = 1; }
+message SKU { uint32 sku = 1; }
 
 message ProductObj {
   message Reservation {
-    string cart_id = 1;
+    uint32 cart_id = 1;
     string amount = 2;
   }
 
-  string sku = 1;
+  uint32 sku = 1;
   string name = 2;
   string description = 3;
   float latest_wholesale_price = 4;
@@ -39,7 +39,7 @@ message ProductObj {
   Reservation reservation = 11;
   bool can_divide = 12;
   bool can_divideh = 13;
-  string created_by = 14; // Maybe UserId? And impl From<..> for it?
+  uint32 created_by = 14; // Maybe UserId? And impl From<..> for it?
   string created_at = 15;
 }
 
@@ -54,14 +54,14 @@ message CreateNewRequest {
   string name = 1;
   string quantity = 2;
   string unit = 3;
-  string created_by = 4;
+  uint32 created_by = 4;
 }
 
 message CreateNewResponse { ProductObj product = 1; }
 
 message GetAllResponse { repeated ProductObj products = 1; }
 
-message GetByIdRequest { string sku = 1; }
+message GetByIdRequest { uint32 sku = 1; }
 
 message GetByIdResponse { ProductObj product = 1; }
 

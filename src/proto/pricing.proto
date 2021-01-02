@@ -34,7 +34,7 @@ message PriceHistoryObject {
   // Gross retail price
   int32 price_gross_retail = 4;
   // UserID who created this price entry
-  string created_by = 5;
+  uint32 created_by = 5;
   // Date when this price entry was created
   string created_at = 6;
 }
@@ -49,7 +49,7 @@ message SetPriceRequest {
   // Set price as as gross retail price of this value
   int32 price_gross_retail = 4;
   // Created by a userid
-  string created_by = 5;
+  uint32 created_by = 5;
 }
 
 message PriceObject {

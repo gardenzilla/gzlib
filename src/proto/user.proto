@@ -30,7 +30,7 @@ message LoginResponse {
 }
 
 message NewPasswordRequest {
-  string userid = 1;
+  uint32 uid = 1;
   string new_password = 2;
 }
 
@@ -43,21 +43,20 @@ message ResetPasswordResponse {}
 message AllUserRequest {}
 
 message UserObj {
-  string id = 1;
+  uint32 uid = 1;
   string name = 2;
   string email = 3;
   string phone = 4;
-  repeated string customers = 5; // This will be Vec<String>
-  string created_by = 6;
-  string created_at = 7; // maybe datetime type?
+  uint32 created_by = 5; // UID
+  string created_at = 6; // RFC3339
 }
 
 message NewUserObj {
-  string id = 1;
+  uint32 uid = 1;
   string email = 2;
   string name = 3;
   string phone = 4;
-  string created_by = 5;
+  uint32 created_by = 5;
 }
 
-message GetByIdRequest { string userid = 1; }
+message GetByIdRequest { uint32 userid = 1; }

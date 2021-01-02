@@ -19,7 +19,7 @@ message TransactionRequest {
   string kind = 1;
   int32 amount = 2;
   string reference = 3;
-  string created_by = 4;
+  uint32 created_by = 4;
   string description = 5;
   // 5
 }
@@ -29,7 +29,7 @@ message TransactionObject {
   string kind = 2;
   int32 amount = 3;
   string reference = 4;
-  string created_by = 5;
+  uint32 created_by = 5;
   string created_at = 6;
   // 7
 }

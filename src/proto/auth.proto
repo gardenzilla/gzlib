@@ -1,0 +1,41 @@
+syntax = "proto3";
+package upl;
+// import "prelude.proto";
+import "google/protobuf/empty.proto";
+
+// token | id | date_created | user_agent | ip | uid
+//  |       |         |           |               |
+//   \ Client token   |            \ HTTP request UserAgent to fingerprint check
+//          |         |                           |
+//           \ ID to identify the token            \ User ID
+//                    |
+//                     \ datetime when the token has created
+
+// let auth = HashMap<(Token, AuthObject)>;
+// type Token = u32;
+// struct AuthObject {
+//   id: u32,
+//   token: String,
+//   user_agent: String,
+//   ip: IpAddress,
+//   created_at: DateTime<Utc>,
+//   created_by: u32,
+// }
+
+service Auth {
+  rpc Authenticate(AuthRequest) returns (AuthObject);
+  rpc CreateToken(e) returns (AuthObject);
+}
+
+message e {}
+
+message AuthRequest {
+  uint32 token = 1;
+  string useragent = 2;
+}
+
+message AuthObject {
+  uint32 token = 1;
+  uint32 uid = 2;
+  string logged_in = 3;
+}

@@ -123,13 +123,13 @@ message SetStatusRequest {
   }
   uint32 procurement_id = 1;
   Status status = 2;
-  string created_by = 3;
+  uint32 created_by = 3;
 }
 
 message CreateNewRequest {
   // This source should be verified
   uint32 source_id = 1;
-  string created_by = 3;
+  uint32 created_by = 3;
 }
 
 message ProcurementObject {
@@ -144,5 +144,5 @@ message ProcurementObject {
   repeated ProcurementItem items = 4;
   repeated UplCandidate upls = 5;
   string created_at = 6;
-  string created_by = 7;
+  uint32 created_by = 7;
 }
