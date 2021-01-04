@@ -1,3 +1,4 @@
+pub mod auth;
 pub mod cash;
 pub mod customer;
 pub mod document;

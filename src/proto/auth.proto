@@ -1,5 +1,6 @@
 syntax = "proto3";
-package upl;
+package auth;
+
 // import "prelude.proto";
 import "google/protobuf/empty.proto";
 
@@ -23,15 +24,23 @@ import "google/protobuf/empty.proto";
 // }
 
 service Auth {
+  // Authenticates a given token
   rpc Authenticate(AuthRequest) returns (AuthObject);
-  rpc CreateToken(e) returns (AuthObject);
+  // Creates a token and stores it
+  rpc CreateToken(CreateTokenRequest) returns (google.protobuf.Empty);
+  // Removes a given token
+  rpc RemoveToken(e) returns (google.protobuf.Empty);
+  // Force logout a given UID
+  rpc ForceLogout(ForceLogoutRequest) returns (google.protobuf.Empty);
 }
 
 message e {}
 
 message AuthRequest {
+  // Check if token exists and signature valid
   uint32 token = 1;
-  string useragent = 2;
+  // Fingerprint validation
+  string user_agent = 2;
 }
 
 message AuthObject {
@@ -39,3 +48,14 @@ message AuthObject {
   uint32 uid = 2;
   string logged_in = 3;
 }
+
+message CreateTokenRequest {
+  uint32 uid = 1;
+  string client_user_agent = 2;
+  string created_ip_address = 3;
+  uint32 created_by = 4;
+}
+
+message RemoveTokenRequest { string token = 1; }
+
+message ForceLogoutRequest { uint32 uid = 1; }

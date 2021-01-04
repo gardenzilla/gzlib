@@ -83,13 +83,13 @@ service Upl {
   rpc ReleaseLockFromInventory(InventoryUnlockRequest) returns (UplObj);
   // Checkout delivery UPLs to a given Stock(ID)
   // Close a cart (transform lock to location)
-  rpc CloseCart(CloseCartRequest) returns (e);
+  rpc CloseCart(CloseCartRequest) returns (UplObj);
 
   // Close a delivery (transform lock to location)
   // rpc CloseDelivery(e) returns (e);
 
   // Close an inventory (remove lock, but no location change)
-  rpc CloseInventory(CloseInventoryRequest) returns (e);
+  rpc CloseInventory(CloseInventoryRequest) returns (UplObj);
 
   // Put UPLs from Delivery to a given Stock (MOVE)
   // rpc CheckoutDelivery(e) returns (e);
@@ -100,7 +100,7 @@ service Upl {
   // rpc GetHistory(e) returns (stream HistoryItem);
 }
 
-message e {}
+// message e {}
 
 // message ReservationRequest {
 //   message Local {
