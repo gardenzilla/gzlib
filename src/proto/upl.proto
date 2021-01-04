@@ -56,7 +56,7 @@ service Upl {
   rpc SetDepreciation(DepreciationRequest) returns (UplObj);
   // Remove depreciation
   // Remove the depreciated net retail price as well
-  rpc RemoveDepreciation(DepreciationRemovePriceRequest) returns (UplObj);
+  rpc RemoveDepreciation(DepreciationRemoveRequest) returns (UplObj);
   // Set depreciation net retail price
   // Only if there is depceriation ID already set
   rpc SetDepreciationPrice(DepreciationPriceRequest) returns (UplObj);
@@ -227,10 +227,9 @@ message DepreciationRequest {
 }
 
 // This should be allowed only from the inventory modul
-message DepreciationRemovePriceRequest {
+message DepreciationRemoveRequest {
   string upl = 1;
-  // We need to know to be able to remove the depreciation
-  uint32 depreciation_id = 2;
+  uint32 created_by = 2;
 }
 
 message DepreciationPriceRequest {
