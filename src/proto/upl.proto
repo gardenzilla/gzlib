@@ -20,6 +20,9 @@ service Upl {
   // Just from a procurement or inventory service!
   // No public API should be implemented!
   rpc CreateNew(UplNew) returns (UplObj);
+  // Create new UPL in bulk
+  // Used during closing a procurement process
+  rpc CreateNewBulk(stream UplNew) returns (stream UplObj);
   // Get UPL by ID
   rpc GetById(ByIdRequest) returns (UplObj);
   // Get UPLs by Sku
