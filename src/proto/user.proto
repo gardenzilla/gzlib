@@ -30,7 +30,7 @@ message LoginResponse {
 }
 
 message NewPasswordRequest {
-  uint32 uid = 1;
+  uint32 username = 1;
   string new_password = 2;
 }
 
@@ -44,17 +44,18 @@ message AllUserRequest {}
 
 message UserObj {
   uint32 uid = 1;
-  string name = 2;
-  string email = 3;
-  string phone = 4;
-  uint32 created_by = 5; // UID
-  string created_at = 6; // RFC3339
+  string username = 2;
+  string name = 3;
+  string email = 4;
+  string phone = 5;
+  uint32 created_by = 6; // UID
+  string created_at = 7; // RFC3339
 }
 
 message NewUserObj {
-  uint32 uid = 1;
-  string email = 2;
+  uint32 username = 1;
   string name = 3;
+  string email = 2;
   string phone = 4;
   uint32 created_by = 5;
 }
