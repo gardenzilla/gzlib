@@ -6,7 +6,7 @@ service CustomerService {
   // Create new customer
   rpc CreateNew(CreateNewRequest) returns (CustomerObj);
   // Get all customers (as stream)
-  rpc GetAll(google.protobuf.Empty) returns (stream CustomerObj);
+  rpc GetAll(google.protobuf.Empty) returns (CustomerIds);
   // Get customer by id
   rpc GetById(GetByIdRequest) returns (CustomerObj);
   // Update customer by id
@@ -15,13 +15,23 @@ service CustomerService {
   rpc AddUser(AddUserRequest) returns (CustomerObj);
   // Remove related user from the customer
   rpc RemoveUser(RemoveUserRequest) returns (CustomerObj);
+  // Find customer by query
+  rpc FindCustomer(FindCustomerRequest) returns (CustomerIds);
 }
+
+message e {}
 
 message Address {
   string zip = 1;
   string location = 2;
   string address = 3;
 }
+
+message FindCustomerRequest { string query = 1; }
+
+message CustomerId { uint32 customer_id = 1; }
+
+message CustomerIds { repeated uint32 customer_ids = 1; }
 
 message CustomerObj {
   uint32 id = 1;
@@ -31,7 +41,7 @@ message CustomerObj {
   string tax_number = 5;
   Address address = 6;
   bool has_user = 7;
-  repeated string users = 8;
+  repeated uint32 users = 8;
   string date_created = 9;
   uint32 created_by = 10;
   // next = 11;;

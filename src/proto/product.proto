@@ -2,87 +2,91 @@ syntax = "proto3";
 package product;
 import "google/protobuf/empty.proto";
 
+service Product {
+  // Create new product
+  rpc CreateProduct(NewProduct) returns (ProductObj);
+  // Get all product IDs
+  rpc GetProductAll(google.protobuf.Empty) returns (ProductIds);
+  // Get product by ID
+  rpc GetProduct(GetProductRequest) returns (ProductObj);
+  // Get products by IDs
+  rpc GetProductBulk(GetProductBulkRequest) returns (stream ProductObj);
+  // Update product by ID
+  rpc UpdateProduct(ProductObj) returns (ProductObj);
+  // Find products by query
+  rpc FindProduct(FindProductRequest) returns (SkuIds);
+  // Create new SKU
+  rpc CreateSku(NewSku) returns (SkuObj);
+  // Get all SKU IDs
+  rpc GetSkuAll(google.protobuf.Empty) returns (SkuIds);
+  // Get SKU by ID
+  rpc GetSku(GetSkuRequest) returns (SkuObj);
+  // Get SKUs by IDs
+  rpc GetSkuBulk(GetSkuBulkRequest) returns (stream SkuObj);
+  // Update SKU by ID
+  rpc UpdateSku(SkuObj) returns (SkuObj);
+  // Update SKU divide
+  rpc UpdateSkuDivide(UpdateSkuDivideRequest) returns (SkuObj);
+  // Find SKUs by query
+  rpc FindSku(FindSkuRequest) returns (SkuIds);
+}
+
 message e {}
 
-// Product Service
-// All the methods related to manage Product
-service Product {
-  rpc CreateNew(CreateNewRequest) returns (CreateNewResponse);
-  rpc GetAll(google.protobuf.Empty) returns (GetAllResponse);
-  rpc GetById(GetByIdRequest) returns (GetByIdResponse);
-  rpc GetByIds(e) returns (e);
-  rpc UpdateById(UpdateByIdRequest) returns (UpdateByIdResponse);
-  rpc isSku(IsSkuRequest) returns (IsSkuResponse);
-}
-
-message IsSkuRequest { uint32 sku = 1; }
-message IsSkuResponse { bool sku_exist = 1; }
-
-message SKU { uint32 sku = 1; }
-
 message ProductObj {
-  message Reservation {
-    uint32 cart_id = 1;
-    string amount = 2;
-  }
-
-  uint32 sku = 1;
+  uint32 product_id = 1;
   string name = 2;
   string description = 3;
-  float latest_wholesale_price = 4;
-  uint32 price_retail_net = 5;
-  string vat = 6;
-  uint32 price_retail_gross = 7;
-  string quantity = 8;
-  string unit = 9; // impl Into<String> for Unit {} & from_str()
-  float stock = 10;
-  Reservation reservation = 11;
-  bool can_divide = 12;
-  bool can_divideh = 13;
-  uint32 created_by = 14; // Maybe UserId? And impl From<..> for it?
-  string created_at = 15;
-}
-
-message ProductUpdateObj {
-  string sku = 1;
-  string name = 2;
-  string quantity = 3;
   string unit = 4;
+  repeated uint32 skus = 5;
+  uint32 created_by = 6;
+  string created_at = 7;
 }
 
-message CreateNewRequest {
+message NewProduct {
   string name = 1;
-  string quantity = 2;
+  string description = 2;
   string unit = 3;
   uint32 created_by = 4;
 }
 
-message CreateNewResponse { ProductObj product = 1; }
-
-message GetAllResponse { repeated ProductObj products = 1; }
-
-message GetByIdRequest { uint32 sku = 1; }
-
-message GetByIdResponse { ProductObj product = 1; }
-
-message UpdateByIdRequest { ProductUpdateObj product = 1; }
-
-message UpdateByIdResponse {
-  // Product Object
-  // After an update call, it will return
-  // the updated object for validation
-  ProductObj product = 1;
+message SkuObj {
+  uint32 sku = 1;
+  uint32 product_id = 2;
+  string subname = 3;
+  string display_name = 4;
+  string display_packaging = 5;
+  string quantity = 6;
+  string unit = 7;
+  bool can_divide = 8;
+  uint32 created_by = 9;
+  string created_at = 10;
 }
 
-service ProductService {
-  rpc NewProduct(e) returns (e);
-  rpc GetById(e) returns (e);
-  rpc GetByIds(e) returns (e);
-  rpc Update(e) returns (e);
-  rpc SetLatestWhPrice(e) returns (e);
-  rpc SetPriceRetail(e) returns (e);
-  rpc SetVAT(e) returns (e);
-  rpc AddStock(e) returns (e);
-  rpc ReservationAdd(e) returns (e);
-  rpc ReservationRemove(e) returns (e);
+message UpdateSkuDivideRequest {
+  uint32 sku = 1;
+  bool can_divide = 2;
 }
+
+message NewSku {
+  uint32 product_id = 1;
+  string sub_name = 2;
+  string quantity = 3;
+  uint32 created_by = 4;
+}
+
+message ProductIds { repeated uint32 product_ids = 1; }
+
+message GetProductRequest { uint32 product_id = 1; }
+
+message GetProductBulkRequest { repeated uint32 product_ids = 1; }
+
+message SkuIds { repeated uint32 sku_ids = 1; }
+
+message GetSkuRequest { uint32 sku_id = 1; }
+
+message GetSkuBulkRequest { repeated uint32 sku_id = 1; }
+
+message FindProductRequest { string query = 1; }
+
+message FindSkuRequest { string query = 1; }

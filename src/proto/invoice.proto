@@ -11,6 +11,11 @@ service Invoice {
 }
 
 message InvoiceForm {
+  enum PaymentKind {
+    Cash = 0;
+    Transfer = 1;
+    Card = 2;
+  }
   message Customer {
     uint32 id = 1;
     string name = 2;
@@ -35,11 +40,11 @@ message InvoiceForm {
   uint32 purchase_id = 1;
   Customer customer = 2;
   repeated Item items = 3;
-  string payment_kind = 4; // cash, transfer, card
-  string payment_duedate =
-      5; // Duedate if there any NOT RFC3339! e.g.: 2021-01-01 (NaiveDate)
-  string date = 6;            // NaiveDate
-  string completion_date = 7; // NaiveDate
+  PaymentKind payment_kind = 4;
+  // RFC3339
+  string payment_duedate = 5;
+  string date = 6;            // RFC3339
+  string completion_date = 7; // RFC3339
   int32 total_net = 8;
   int32 total_vat = 9;
   int32 total_gross = 10;

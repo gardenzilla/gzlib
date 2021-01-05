@@ -15,14 +15,15 @@ service Pricing {
   //                  --            --          --
 
   // Get latest price changes for a given period of time
-  rpc GetLatestPriceChanges(PriceChangesRequest)
-      returns (stream PriceHistoryObject);
+  rpc GetLatestPriceChanges(PriceChangesRequest) returns (PriceIds);
 }
 
 message PriceChangesRequest {
-  string date_from = 1;
-  string date_till = 2;
+  string date_from = 1; // RFC3339
+  string date_till = 2; // RFC3339
 }
+
+message PriceIds { repeated uint32 price_ids = 1; }
 
 message PriceHistoryObject {
   // Price details related to this SKU
