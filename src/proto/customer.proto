@@ -2,7 +2,7 @@ syntax = "proto3";
 package customer;
 import "google/protobuf/empty.proto";
 
-service CustomerService {
+service Customer {
   // Create new customer
   rpc CreateNew(CreateNewRequest) returns (CustomerObj);
   // Get all customers (as stream)

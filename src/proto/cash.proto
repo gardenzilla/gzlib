@@ -3,7 +3,7 @@ package cash;
 
 message e {}
 
-service CashService {
+service Cash {
   // Create new transaction
   rpc CreateTransaction(TransactionRequest) returns (TransactionObject);
   // Get current balance
