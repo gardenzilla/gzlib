@@ -15,8 +15,8 @@ service User {
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
   // Set new password
   rpc SetNewPassword(NewPasswordRequest) returns (NewPasswordResponse);
-  // Validate login request
-  rpc ValidateLogin(LoginRequest) returns (LoginResponse);
+  // Login
+  rpc Login(LoginRequest) returns (UserObj);
 }
 
 message LoginRequest {
