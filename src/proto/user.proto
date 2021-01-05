@@ -30,7 +30,7 @@ message LoginResponse {
 }
 
 message NewPasswordRequest {
-  uint32 username = 1;
+  uint32 uid = 1;
   string new_password = 2;
 }
 
