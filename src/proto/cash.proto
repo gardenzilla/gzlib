@@ -5,48 +5,44 @@ message e {}
 
 service Cash {
   // Create new transaction
-  rpc CreateTransaction(TransactionRequest) returns (TransactionObject);
+  rpc CreateTransaction(NewTransaction) returns (TransactionObject);
   // Get current balance
   rpc GetBalance(BalanceRequest) returns (BalanceObject);
   // Get transaction log by filter
   rpc TransactionLog(LogRequest) returns (stream TransactionObject);
 }
 
-message TransactionRequest {
-  // purchase to/from customer
-  // cash_in from company
-  // cash_out to company
-  string kind = 1;
+enum TransactionKind {
+  Purchase = 0;
+  CashIn = 1;
+  CashOut = 2;
+}
+
+message NewTransaction {
+  TransactionKind kind = 1;
   int32 amount = 2;
   string reference = 3;
   uint32 created_by = 4;
   string description = 5;
-  // 5
 }
 
 message TransactionObject {
   uint32 transaction_id = 1;
-  string kind = 2;
+  TransactionKind kind = 2;
   int32 amount = 3;
   string reference = 4;
   uint32 created_by = 5;
   string created_at = 6;
-  // 7
 }
 
 // Empty
 message BalanceRequest {}
 
-message BalanceObject {
-  int32 balance = 1;
-  // 3
-}
+message BalanceObject { int32 balance = 1; }
 
 message LogRequest {
   // rfc3339
   string from = 1;
   // rfc3339
   string till = 2;
-  string kind = 3;
-  // 4
 }
