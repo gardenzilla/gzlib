@@ -12,7 +12,7 @@ service Customer {
   // Get customers in bulk
   rpc GetBulk(GetBulkRequest) returns (stream CustomerObj);
   // Update customer by id
-  rpc UpdateById(UpdateByIdRequest) returns (CustomerObj);
+  rpc UpdateById(CustomerObj) returns (CustomerObj);
   // Find customer by query
   rpc FindCustomer(FindCustomerRequest) returns (CustomerIds);
 }
@@ -40,17 +40,6 @@ message CustomerObj {
   uint32 created_by = 10;
 }
 
-message CustomerUpdateObj {
-  uint32 id = 1;
-  string name = 2;
-  string email = 3;
-  string phone = 4;
-  string address_zip = 5;
-  string address_location = 6;
-  string address_street = 7;
-  string tax_number = 8;
-}
-
 message NewCustomerObj {
   string name = 1;
   string email = 2;
@@ -63,18 +52,3 @@ message NewCustomerObj {
 }
 
 message GetByIdRequest { uint32 customer_id = 1; }
-
-message UpdateByIdRequest {
-  uint32 customer_id = 1;
-  CustomerUpdateObj customer = 2;
-}
-
-message AddUserRequest {
-  uint32 customer_id = 1;
-  uint32 user_id = 2;
-}
-
-message RemoveUserRequest {
-  uint32 customer_id = 1;
-  uint32 user_id = 2;
-}
