@@ -42,10 +42,12 @@ message CustomerObj {
 
 message CustomerUpdateObj {
   uint32 id = 1;
-  string name = 4;
-  Address address = 5;
-  string email = 6;
-  string phone = 7;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  string address_zip = 5;
+  string address_location = 6;
+  string address_street = 7;
   string tax_number = 8;
 }
 
