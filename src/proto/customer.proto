@@ -4,28 +4,22 @@ import "google/protobuf/empty.proto";
 
 service Customer {
   // Create new customer
-  rpc CreateNew(CreateNewRequest) returns (CustomerObj);
+  rpc CreateNew(NewCustomerObj) returns (CustomerObj);
   // Get all customers (as stream)
   rpc GetAll(google.protobuf.Empty) returns (CustomerIds);
   // Get customer by id
   rpc GetById(GetByIdRequest) returns (CustomerObj);
+  // Get customers in bulk
+  rpc GetBulk(GetBulkRequest) returns (stream CustomerObj);
   // Update customer by id
   rpc UpdateById(UpdateByIdRequest) returns (CustomerObj);
-  // Add related user to the customer
-  rpc AddUser(AddUserRequest) returns (CustomerObj);
-  // Remove related user from the customer
-  rpc RemoveUser(RemoveUserRequest) returns (CustomerObj);
   // Find customer by query
   rpc FindCustomer(FindCustomerRequest) returns (CustomerIds);
 }
 
 message e {}
 
-message Address {
-  string zip = 1;
-  string location = 2;
-  string address = 3;
-}
+message GetBulkRequest { repeated uint32 customer_ids = 1; }
 
 message FindCustomerRequest { string query = 1; }
 
@@ -39,12 +33,11 @@ message CustomerObj {
   string email = 3;
   string phone = 4;
   string tax_number = 5;
-  Address address = 6;
-  bool has_user = 7;
-  repeated uint32 users = 8;
+  string address_zip = 6;
+  string address_location = 7;
+  string address_street = 8;
   string date_created = 9;
   uint32 created_by = 10;
-  // next = 11;;
 }
 
 message CustomerUpdateObj {
@@ -56,7 +49,7 @@ message CustomerUpdateObj {
   string tax_number = 8;
 }
 
-message CreateNewRequest {
+message NewCustomerObj {
   string name = 1;
   string email = 2;
   string phone = 3;
