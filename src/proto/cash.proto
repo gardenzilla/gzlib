@@ -30,11 +30,11 @@ message TransactionObject {
     uint32 cart = 2;
     google.protobuf.Empty none = 3;
   }
-  int32 amount = 3;
-  string reference = 4;
-  string comment = 5;
-  uint32 created_by = 6;
-  string created_at = 7;
+  int32 amount = 4;
+  string reference = 5;
+  string comment = 6;
+  uint32 created_by = 7;
+  string created_at = 8;
 }
 
 message BalanceObject { int32 balance = 1; }
