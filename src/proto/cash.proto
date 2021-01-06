@@ -25,7 +25,7 @@ message NewTransaction {
 }
 
 message TransactionObject {
-  uint32 transaction_id = 1;
+  string transaction_id = 1;
   oneof cart_id {
     uint32 cart = 2;
     google.protobuf.Empty none = 3;
