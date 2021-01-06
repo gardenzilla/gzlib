@@ -38,7 +38,11 @@ message NewPasswordResponse {}
 
 message ResetPasswordRequest { string email = 1; }
 
-message ResetPasswordResponse {}
+message ResetPasswordResponse {
+  uint32 uid = 1;
+  string email = 1;
+  string new_password = 1;
+}
 
 message AllUserRequest {}
 
