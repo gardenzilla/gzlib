@@ -22,15 +22,17 @@ service Upl {
   rpc CreateNew(UplNew) returns (UplObj);
   // Create new UPL in bulk
   // Used during closing a procurement process
-  rpc CreateNewBulk(stream UplNew) returns (google.protobuf.Empty);
+  rpc CreateNewBulk(stream UplNew) returns (UplIds);
+  // Get UPLs in bulk
+  rpc GetBulk(BulkRequest) returns (stream UplObj);
   // Get UPL by ID
   rpc GetById(ByIdRequest) returns (UplObj);
   // Get UPLs by Sku
-  rpc GetBySku(BySkuRequest) returns (stream UplObj);
+  rpc GetBySku(BySkuRequest) returns (UplIds);
   // Get UPLs by Sku and Location
-  rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (stream UplObj);
+  rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (UplIds);
   // Get UPLs by Location
-  rpc GetByLocation(ByLocationRequest) returns (stream UplObj);
+  rpc GetByLocation(ByLocationRequest) returns (UplIds);
 
   // Restore archived UPL to a given Stock
   // Should be two reason:
@@ -154,6 +156,10 @@ service Upl {
 //     Global global = 2;
 //   }
 // }
+
+message BulkRequest { repeated string upl_ids = 1; }
+
+message UplIds { repeated string upl_ids = 1; }
 
 // New UPL object
 message UplNew {
