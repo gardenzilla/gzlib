@@ -40,8 +40,8 @@ message ResetPasswordRequest { string email = 1; }
 
 message ResetPasswordResponse {
   uint32 uid = 1;
-  string email = 1;
-  string new_password = 1;
+  string email = 2;
+  string new_password = 3;
 }
 
 message AllUserRequest {}
