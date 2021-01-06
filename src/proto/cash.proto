@@ -1,5 +1,6 @@
 syntax = "proto3";
 package cash;
+import "google/protobuf/empty.proto";
 
 message e {}
 
@@ -7,36 +8,34 @@ service Cash {
   // Create new transaction
   rpc CreateTransaction(NewTransaction) returns (TransactionObject);
   // Get current balance
-  rpc GetBalance(BalanceRequest) returns (BalanceObject);
+  rpc GetBalance(google.protobuf.Empty) returns (BalanceObject);
   // Get transaction log by filter
   rpc TransactionLog(LogRequest) returns (stream TransactionObject);
 }
 
-enum TransactionKind {
-  Purchase = 0;
-  CashIn = 1;
-  CashOut = 2;
-}
-
 message NewTransaction {
-  TransactionKind kind = 1;
-  int32 amount = 2;
-  string reference = 3;
-  uint32 created_by = 4;
-  string description = 5;
+  oneof cart_id {
+    uint32 cart = 1;
+    google.protobuf.Empty none = 2;
+  }
+  int32 amount = 3;
+  string reference = 4;
+  string comment = 5;
+  uint32 created_by = 6;
 }
 
 message TransactionObject {
   uint32 transaction_id = 1;
-  TransactionKind kind = 2;
+  oneof cart_id {
+    uint32 cart = 2;
+    google.protobuf.Empty none = 3;
+  }
   int32 amount = 3;
   string reference = 4;
-  uint32 created_by = 5;
-  string created_at = 6;
+  string comment = 5;
+  uint32 created_by = 6;
+  string created_at = 7;
 }
-
-// Empty
-message BalanceRequest {}
 
 message BalanceObject { int32 balance = 1; }
 
