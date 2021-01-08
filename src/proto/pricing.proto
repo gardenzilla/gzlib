@@ -8,6 +8,8 @@ service Pricing {
   rpc GetPrice(GetPriceRequest) returns (PriceObject);
   // Get bulk price date (stream)
   rpc GetPriceBulk(GetPriceBulkRequest) returns (stream PriceObject);
+  // Get price history by SKU
+  rpc GetPriceHistory(GetPriceRequest) returns (stream PriceHistoryObject);
   // 1. Notify to re-price when new UPL arrives
   // 2. Get Price history by SKU
   // 3. Get latest changes
@@ -62,6 +64,14 @@ message PriceObject {
   string vat = 3;
   // Gross retail price
   int32 price_gross_retail = 4;
+}
+
+message PriceHistoryObject {
+  int32 price_net_retail = 1;
+  string vat = 2;
+  int32 price_gross_retail = 3;
+  string created_at = 4;
+  uint32 created_by = 5;
 }
 
 message GetPriceRequest { uint32 sku = 1; }
