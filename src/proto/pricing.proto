@@ -31,11 +31,11 @@ message SetPriceRequest {
   // Set price to this SKU
   uint32 sku = 1;
   // Set price as a net retail price of this value
-  int32 price_net_retail = 2;
+  uint32 price_net_retail = 2;
   // Set VAT as a String, should use a common seralization
   string vat = 3;
   // Set price as as gross retail price of this value
-  int32 price_gross_retail = 4;
+  uint32 price_gross_retail = 4;
   // Created by a userid
   uint32 created_by = 5;
 }
@@ -44,17 +44,17 @@ message PriceObject {
   // Price details related to this SKU
   uint32 sku = 1;
   // Net retail price
-  int32 price_net_retail = 2;
+  uint32 price_net_retail = 2;
   // VAT as String
   string vat = 3;
   // Gross retail price
-  int32 price_gross_retail = 4;
+  uint32 price_gross_retail = 4;
 }
 
 message PriceHistoryObject {
-  int32 price_net_retail = 1;
+  uint32 price_net_retail = 1;
   string vat = 2;
-  int32 price_gross_retail = 3;
+  uint32 price_gross_retail = 3;
   string created_at = 4;
   uint32 created_by = 5;
 }
