@@ -27,21 +27,6 @@ message PriceChangesRequest {
 
 message PriceIds { repeated uint32 price_ids = 1; }
 
-message PriceHistoryObject {
-  // Price details related to this SKU
-  uint32 sku = 1;
-  // Net retail price
-  int32 price_net_retail = 2;
-  // VAT as String
-  string vat = 3;
-  // Gross retail price
-  int32 price_gross_retail = 4;
-  // UserID who created this price entry
-  uint32 created_by = 5;
-  // Date when this price entry was created
-  string created_at = 6;
-}
-
 message SetPriceRequest {
   // Set price to this SKU
   uint32 sku = 1;
