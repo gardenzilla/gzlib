@@ -7,11 +7,17 @@ message e {}
 service Cash {
   // Create new transaction
   rpc CreateTransaction(NewTransaction) returns (TransactionObject);
+  // Get transaction by id
+  rpc GetById(e) returns (TransactionObject);
+  // Get transacions bulk
+  rpc GetBulk(e) returns (stream TransactionObject);
   // Get current balance
   rpc GetBalance(google.protobuf.Empty) returns (BalanceObject);
   // Get transaction log by filter
-  rpc TransactionLog(LogRequest) returns (stream TransactionObject);
+  rpc GetByDateRange(DateRangeRequest) returns (TransactionIds);
 }
+
+message TransactionIds { repeated string transaction_ids = 1; }
 
 message NewTransaction {
   oneof cart_id {
@@ -39,9 +45,9 @@ message TransactionObject {
 
 message BalanceObject { int32 balance = 1; }
 
-message LogRequest {
+message DateRangeRequest {
   // rfc3339
-  string from = 1;
+  string date_from = 1;
   // rfc3339
-  string till = 2;
+  string date_till = 2;
 }
