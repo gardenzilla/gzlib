@@ -6,7 +6,7 @@ homepage = "https://github.com/gardenzilla/gzlib"
 license = "GPL-2.0"
 name = "gzlib"
 repository = "https://github.com/gardenzilla/gzlib"
-version = "0.2.24"
+version = "0.2.25"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
