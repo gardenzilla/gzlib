@@ -6,6 +6,10 @@ import "google/protobuf/empty.proto";
 service Procurement {
   // Create new Procurement
   rpc CreateNew(CreateNewRequest) returns (ProcurementObject);
+  rpc GetById(e) returns (ProcurementObject);
+  // Get all procurement IDs
+  rpc GetAll(e) returns (ProcurementIds);
+  rpc GetInfoBulk(e) returns (e);
   // Try removes a procurement (if its status is New)
   rpc Remove(RemoveRequest) returns (google.protobuf.Empty);
   // Update estimated delivery date
@@ -34,6 +38,8 @@ service Procurement {
 }
 
 message e {}
+
+message ProcurementIds { repeated uint32 procurement_ids = 1; }
 
 message RemoveRequest { uint32 procurement_id = 1; }
 
@@ -143,6 +149,17 @@ message ProcurementObject {
   string estimated_delivery_date = 10;
   repeated ProcurementItem items = 4;
   repeated UplCandidate upls = 5;
+  string created_at = 6;
+  uint32 created_by = 7;
+}
+
+message ProcurementInfoObject {
+  // Procurement ID
+  uint32 id = 1;
+  uint32 source_id = 2;
+  uint32 sku_count = 3;
+  uint32 upl_count = 4;
+  string estimated_delivery_date = 5;
   string created_at = 6;
   uint32 created_by = 7;
 }

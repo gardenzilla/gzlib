@@ -1,0 +1,29 @@
+syntax = "proto3";
+package stock;
+// import "prelude.proto";
+import "google/protobuf/empty.proto";
+
+service Stock {
+  rpc CreateNew(CreateNewRequest) returns (StockObject);
+  rpc UpdateById(StockObject) returns (StockObject);
+  rpc GetById(GetByIdRequest) returns (StockObject);
+  rpc GetAll(google.protobuf.Empty) returns (stream StockObject);
+}
+
+message e {}
+
+message StockObject {
+  uint32 stock_id = 1;
+  string name = 2;
+  string description = 3;
+  uint32 created_by = 6;
+  string created_at = 7;
+}
+
+message CreateNewRequest {
+  string name = 1;
+  string description = 2;
+  uint32 created_by = 3;
+}
+
+message GetByIdRequest { uint32 stock_id = 1; }

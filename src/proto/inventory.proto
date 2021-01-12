@@ -1,0 +1,57 @@
+// Temporary implementation
+// Complete refact will be soon
+
+syntax = "proto3";
+package inventory;
+import "google/protobuf/empty.proto";
+
+service Inventory {
+  // Create new inventory
+  rpc CreateNew(e) returns (InventoryObject);
+  // Update inventory object
+  rpc UpdateInventory(e) returns (InventoryObject);
+  // Add SKU to an inventory log
+  rpc AddSku(e) returns (InventoryObject);
+  // Remove SKU
+  rpc RemoveSku(e) returns (InventoryObject);
+  // Set SKU piece
+  rpc SetSkuPiece(e) returns (InventoryObject);
+  // Add UPL candidate
+  rpc AddUpl(e) returns (InventoryObject);
+  // Update UPL candidate
+  rpc UpdateUpl(e) returns (InventoryObject);
+  // Close inventory
+  // This should create UPLs via UPL service
+  rpc Close(e) returns (InventoryObject);
+  // Try to remove inventory log
+  rpc Remove(e) returns (InventoryObject);
+  rpc GetById(e) returns (InventoryObject);
+  rpc GetInventoryHeadById(e) returns (e);
+  rpc GetAll(google.protobuf.Empty) returns (stream InventoryInfoObject);
+}
+
+message e {}
+
+message InventoryObject {
+  // UPL ID
+  string upl_id = 1;
+  // Related SKU
+  uint32 sku = 2;
+  // UPL piece; if bulk, than bigger then 1
+  uint32 upl_piece = 3;
+  // Best before, if there is any
+  // RFC3339
+  string best_before = 4;
+}
+
+message InventoryInfoObject {
+  uint32 inventory_id = 1;
+  bool is_closed = 2;
+  uint32 created_by = 3;
+  string created_at = 4;
+}
+
+message AddUplRequest {
+  uint32 inventory_id = 1;
+  uint32 created_by = 2;
+}
