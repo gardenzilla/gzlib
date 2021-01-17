@@ -127,10 +127,11 @@ message RemoveUplRequest {
 }
 
 enum Status {
-  Ordered = 0;
-  Arrived = 1;
-  Processing = 2;
-  Closed = 3;
+  New = 0;
+  Ordered = 1;
+  Arrived = 2;
+  Processing = 3;
+  Closed = 4;
 }
 
 message SetStatusRequest {
