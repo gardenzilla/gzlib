@@ -126,13 +126,14 @@ message RemoveUplRequest {
   string upl_id = 2;
 }
 
+enum Status {
+  Ordered = 0;
+  Arrived = 1;
+  Processing = 2;
+  Closed = 3;
+}
+
 message SetStatusRequest {
-  enum Status {
-    Ordered = 0;
-    Arrived = 1;
-    Processing = 2;
-    Closed = 3;
-  }
   uint32 procurement_id = 1;
   Status status = 2;
   uint32 created_by = 3;
@@ -155,8 +156,9 @@ message ProcurementObject {
   string estimated_delivery_date = 10;
   repeated ProcurementItem items = 4;
   repeated UplCandidate upls = 5;
-  string created_at = 6;
-  uint32 created_by = 7;
+  Status status = 6;
+  string created_at = 7;
+  uint32 created_by = 8;
 }
 
 message ProcurementInfoObject {
@@ -164,8 +166,10 @@ message ProcurementInfoObject {
   uint32 id = 1;
   uint32 source_id = 2;
   uint32 sku_count = 3;
-  uint32 upl_count = 4;
-  string estimated_delivery_date = 5;
-  string created_at = 6;
-  uint32 created_by = 7;
+  uint32 sku_piece_count = 4;
+  uint32 upl_count = 5;
+  string estimated_delivery_date = 6;
+  Status status = 7;
+  string created_at = 8;
+  uint32 created_by = 9;
 }
