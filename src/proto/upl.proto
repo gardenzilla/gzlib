@@ -70,6 +70,9 @@ service Upl {
   // if already depreciated
   rpc RemoveDeprecationPrice(RemoveDeprecationPriceRequest) returns (UplObj);
 
+  // Try to set divisible amount
+  rpc SetDivisibleAmount(SetDivisibleAmountRequest) returns (UplObj);
+
   // Put UPL to a Cart (Apply lock)
   rpc LockToCart(CartLockRequest) returns (UplObj);
 
@@ -171,18 +174,21 @@ message UplNew {
   uint32 sku = 3;
   // UPL piece; if bulk, than bigger then 1
   uint32 upl_piece = 4;
+  // True if SKU or bulk SKU
+  // False if opened SKU
+  bool is_opened = 5;
   // Best before, if there is any
-  string best_before = 5;
+  string best_before = 6;
   // Location will be Stock(ID)
-  uint32 stock_id = 6;
+  uint32 stock_id = 7;
   // Related procurement ID
-  uint32 procurement_id = 7;
+  uint32 procurement_id = 8;
   // Related procurement net price
-  uint32 procurement_net_price = 8;
+  uint32 procurement_net_price = 9;
   // 0 if its not divisible, otherwise the contained amount
-  uint32 divisible_amount = 9;
+  uint32 divisible_amount = 10;
   // User who registered the UPL init data
-  uint32 created_by = 10;
+  uint32 created_by = 11;
 }
 
 message ByIdRequest { string upl_id = 1; }
@@ -206,6 +212,12 @@ message BySkuAndLocationRequest {
   LocationKind location_kind = 1;
   uint32 location_id = 2;
   uint32 sku = 3;
+}
+
+message SetDivisibleAmountRequest {
+  string upl = 1;
+  uint32 divisible_amount = 2;
+  uint32 created_by = 3;
 }
 
 message SetBestBeforeRequest {

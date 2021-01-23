@@ -13,6 +13,12 @@ service Product {
   rpc GetProductBulk(GetProductBulkRequest) returns (stream ProductObj);
   // Update product by ID
   rpc UpdateProduct(ProductObj) returns (ProductObj);
+  // Update Product discontinued
+  rpc UpdateProductDiscontinued(UpdateProductDiscontinuedRequest)
+      returns (ProductObj);
+  // Update Product perishable
+  rpc UpdateProductPerishable(UpdateProductPerishableRequest)
+      returns (ProductObj);
   // Find products by query
   rpc FindProduct(FindProductRequest) returns (SkuIds);
   // Create new SKU
@@ -27,6 +33,8 @@ service Product {
   rpc UpdateSku(SkuObj) returns (SkuObj);
   // Update SKU divide
   rpc UpdateSkuDivide(UpdateSkuDivideRequest) returns (SkuObj);
+  // Update SKU discontinued
+  rpc UpdateSkuDiscontinued(UpdateSkuDiscontinuedRequest) returns (SkuObj);
   // Find SKUs by query
   rpc FindSku(FindSkuRequest) returns (SkuIds);
 }
@@ -38,9 +46,11 @@ message ProductObj {
   string name = 2;
   string description = 3;
   string unit = 4;
-  repeated uint32 skus = 5;
-  uint32 created_by = 6;
-  string created_at = 7;
+  bool discontinued = 5;
+  bool perishable = 6;
+  repeated uint32 skus = 7;
+  uint32 created_by = 8;
+  string created_at = 9;
 }
 
 message NewProduct {
@@ -50,6 +60,16 @@ message NewProduct {
   uint32 created_by = 4;
 }
 
+message UpdateProductDiscontinuedRequest {
+  uint32 sku = 1;
+  bool discontinued = 2;
+}
+
+message UpdateProductPerishableRequest {
+  uint32 sku = 1;
+  bool perishable = 2;
+}
+
 message SkuObj {
   uint32 sku = 1;
   uint32 product_id = 2;
@@ -57,15 +77,23 @@ message SkuObj {
   string display_name = 4;
   string display_packaging = 5;
   string quantity = 6;
-  string unit = 7;
-  bool can_divide = 8;
-  uint32 created_by = 9;
-  string created_at = 10;
+  uint32 divisible_amount = 7;
+  string unit = 8;
+  bool can_divide = 9;
+  bool discontinued = 10;
+  bool perishable = 11;
+  uint32 created_by = 12;
+  string created_at = 13;
 }
 
 message UpdateSkuDivideRequest {
   uint32 sku = 1;
   bool can_divide = 2;
+}
+
+message UpdateSkuDiscontinuedRequest {
+  uint32 sku = 1;
+  bool discontinued = 2;
 }
 
 message NewSku {

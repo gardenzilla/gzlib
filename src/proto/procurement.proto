@@ -81,9 +81,12 @@ message UplCandidate {
   uint32 sku = 2;
   // UPL piece; if bulk, than bigger then 1
   uint32 upl_piece = 3;
+  // False if SKU or Bulk SKU
+  // True if opened SKU
+  bool opened_sku = 4;
   // Best before, if there is any
   // RFC3339
-  string best_before = 4;
+  string best_before = 5;
 }
 
 message AddSkuRequest {
