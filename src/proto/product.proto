@@ -61,12 +61,12 @@ message NewProduct {
 }
 
 message UpdateProductDiscontinuedRequest {
-  uint32 sku = 1;
+  uint32 product_id = 1;
   bool discontinued = 2;
 }
 
 message UpdateProductPerishableRequest {
-  uint32 sku = 1;
+  uint32 product_id = 1;
   bool perishable = 2;
 }
 
