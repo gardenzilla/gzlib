@@ -11,6 +11,7 @@ service Purchase {
   rpc CartRemoveCustomer(CartRemoveCustomerRequest) returns (CartObject);
   rpc CartAddSku(CartAddSkuRequest) returns (CartObject);
   rpc CartRemoveSku(CartRemoveSkuRequest) returns (CartObject);
+  rpc CartSetSkuPiece(CartSetSkuPieceRequest) returns (CartObject);
   rpc CartAddUpl(CartAddUplRequest) returns (CartObject);
   rpc CartRemoveUpl(CartRemoveUplRequest) returns (CartObject);
   rpc CartSetDocument(CartSetDocumentRequest) returns (CartObject);
@@ -44,6 +45,12 @@ message CartInfoObject {
   uint32 owner = 5;
   uint32 created_by = 6;
   string created_at = 7;
+}
+
+message CartSetSkuPieceRequest {
+  string cart_id = 1;
+  uint32 sku = 2;
+  uint32 piece = 3;
 }
 
 message CartNewRequest {
@@ -135,8 +142,10 @@ message CartRemoveRequest { string cart_id = 1; }
 message Customer {
   uint32 customer_id = 1;
   string name = 2;
-  string address = 3;
-  string tax_number = 4;
+  string zip = 3;
+  string location = 4;
+  string street = 5;
+  string tax_number = 6;
 }
 
 message Payment {
@@ -154,29 +163,33 @@ message CartObject {
     ItemKind kind = 1;
     string name = 2;
     uint32 piece = 3;
-    uint32 quantity = 4;
-    string unit = 5;
     uint32 retail_price_net = 6;
     string vat = 7;
     uint32 retail_price_gross = 8;
     uint32 total_retail_price_net = 9;
     uint32 total_retail_price_gross = 10;
-    repeated string upl_ids = 11;
   }
   string ancestor = 1;
   string id = 2;
   Customer customer = 3;
-  repeated Item items = 4;
-  repeated UplInfoObject upl_info_objects = 5;
-  bool need_invoice = 6;
-  PaymentKind payment_kind = 7;
-  repeated Payment payments = 8;
-  int32 payment_balance = 9;
-  int32 profit_net = 10;
-  uint32 owner_uid = 11;
-  uint32 store_id = 12;
-  uint32 created_by = 13;
-  string created_at = 14;
+  uint32 discount_percentage = 4;
+  repeated Item shopping_list = 5;
+  repeated UplInfoObject upls_sku = 6;
+  repeated UplInfoObject upls_unique = 7;
+  uint32 total_net = 8;
+  uint32 total_vat = 9;
+  uint32 total_gross = 10;
+  bool need_invoice = 11;
+  PaymentKind payment_kind = 12;
+  repeated Payment payments = 13;
+  int32 payment_balance = 14;
+  int32 profit_net = 15;
+  uint32 owner_uid = 16;
+  uint32 store_id = 17;
+  string date_completion = 18;
+  string payment_duedate = 19;
+  uint32 created_by = 20;
+  string created_at = 21;
 }
 
 message UplInfoObject {
@@ -195,13 +208,12 @@ message UplInfoObject {
     UplKindOpenedSku opened_sku = 3;
   }
   string name = 4;
-  string unit = 5;
-  uint32 retail_net_price = 6;
-  string vat = 7;
-  uint32 retail_gross_price = 8;
-  uint32 procurement_net_price = 9;
-  string best_before = 10;
-  bool depreciated = 11;
+  uint32 retail_net_price = 5;
+  string vat = 6;
+  uint32 retail_gross_price = 7;
+  uint32 procurement_net_price = 8;
+  string best_before = 9;
+  bool depreciated = 10;
 }
 
 // PURCHASE
@@ -215,10 +227,11 @@ message PurchaseInfoObject {
   uint32 total_gross_price = 6;
   int32 balance = 7;
   bool document_invoice = 8;
-  string payment_duedate = 9;
-  bool payment_expired = 10;
-  int32 profit_net = 11;
-  bool restored = 12;
+  string date_completion = 9;
+  string payment_duedate = 10;
+  bool payment_expired = 11;
+  int32 profit_net = 12;
+  bool restored = 13;
   uint32 created_by = 14;
   string created_at = 15;
 }
@@ -231,31 +244,36 @@ message PurchaseObject {
   }
   message Item {
     ItemKind kind = 1;
-    string name = 2;
-    uint32 piece = 3;
-    uint32 quantity = 4;
-    string unit = 5;
-    uint32 retail_price_net = 6;
-    string vat = 7;
-    uint32 retail_price_gross = 8;
-    uint32 total_retail_price_net = 9;
-    uint32 total_retail_price_gross = 10;
-    repeated string upl_ids = 11;
+    uint32 product_id = 2;
+    string name = 3;
+    uint32 piece = 4;
+    uint32 retail_price_net = 5;
+    string vat = 6;
+    uint32 retail_price_gross = 7;
+    uint32 total_retail_price_net = 8;
+    uint32 total_retail_price_gross = 9;
+    repeated string upl_ids = 10;
   }
   string id = 1;
   Customer customer = 2;
-  repeated Item items = 3;
-  repeated UplInfoObject upl_info_objects = 4;
-  bool need_invoice = 5;
-  PaymentKind payment_kind = 6;
-  repeated Payment payments = 7;
-  int32 payment_balance = 8;
-  int32 profit_net = 9;
-  uint32 owner_uid = 10;
-  uint32 store_id = 11;
-  bool restored = 12;
-  uint32 created_by = 13;
-  string created_at = 14;
+  uint32 discount_percentage = 3;
+  repeated Item items = 4;
+  repeated UplInfoObject upl_info_objects = 5;
+  bool need_invoice = 6;
+  uint32 total_net = 7;
+  uint32 total_vat = 8;
+  uint32 total_gross = 9;
+  PaymentKind payment_kind = 10;
+  repeated Payment payments = 11;
+  int32 payment_balance = 12;
+  int32 profit_net = 13;
+  uint32 owner_uid = 14;
+  uint32 store_id = 15;
+  string date_completion = 16;
+  string payment_duedate = 17;
+  bool restored = 18;
+  uint32 created_by = 19;
+  string created_at = 20;
 }
 
 message PurchaseIds { repeated string purchase_ids = 1; }
