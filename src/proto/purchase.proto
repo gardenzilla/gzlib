@@ -1,71 +1,90 @@
 syntax = "proto3";
 package purchase;
 
+service Purchase {
+  rpc NewCart(e) returns (CartObject);
+  rpc GetCartAll(e) returns (CartIds);
+  rpc GetCartById(e) returns (CartObject);
+  rpc GetCartInfoBulk(e) returns (stream CartObject);
+  rpc CartAddCustomer(e) returns (CartObject);
+  rpc CartAddSku(e) returns (e);
+  rpc CartRemoveSku(e) returns (e);
+  rpc CartAddUpl(e) returns (CartObject);
+  rpc CartRemoveUpl(e) returns (CartObject);
+  rpc CartSetDocument(e) returns (CartObject);
+  rpc CartSetPayment(e) returns (CartObject);
+  rpc CartAddPayment(e) returns (CartObject);
+  rpc CloseCart(e) returns (PurchaseObject);
+
+  rpc GetPurchaseById(e) returns (PurchaseObject);
+  rpc GetPurchaseInfoBulk(e) returns (stream PurchaseInfoObject);
+  rpc PurchaseGetAll(e) returns (e);
+  rpc PurchaseAddPayment(e) returns (e);
+  rpc PurchaseRestore(e) returns (e);
+}
+
+message PurchaseObject {}
+
+message PurchaseInfoObject {}
+
 message e {}
 
-message Cart {
-  message Item {
-    uint32 sku = 1;
-    int32 piece = 2;
-    float total_price_net = 3;
-    float total_price_gross = 4;
-    float toal_price_vat = 5;
-  }
-  message Customer {
-    uint32 id = 1;
-    string name = 2;
-    string taxnumber = 3;
-    string zip = 4;
-    string location = 5;
-    string street = 6;
-  }
-  message VatItem {
-    string key = 1;
-    float value = 2;
-  }
-  uint32 id = 1;
-  uint32 owner_uid = 2;
-  Customer customer = 8;
-  int32 discount_percentage = 9;
-  repeated Item cart_item = 3;
-  int32 total_net = 4;
-  int32 total_gross = 5;
-  repeated VatItem total_vats = 6;
-  int32 total_vat = 10;
-  float profit_net = 7;
-  string created_at = 11;
-  uint32 created_by = 12;
-  // 13
+message CartIds { repeated string cart_ids = 1; }
+
+message Customer {
+  uint32 customer_id = 1;
+  string name = 2;
+  string address = 3;
+  string tax_number = 4;
 }
 
-service CartService {
-  rpc CreateNew(e) returns (e);
-  rpc GetAllByOwner(e) returns (e);
-  rpc GetById(e) returns (e);
-  rpc GetByCustomer(e) returns (e);
-  rpc AddCustomer(e) returns (e);
-  rpc AddUpl(e) returns (e);
-  rpc AddSku(e) returns (e);
-  rpc RemoveUpl(e) returns (e);
-  rpc RemoveSku(e) returns (e);
-  rpc UpdateSku(e) returns (e);
-  rpc SetDiscount(e) returns (e);
-  rpc RemoveCustomer(e) returns (e);
-  rpc ValidateCart(e) returns (e);
-  rpc SetDocument(e) returns (e);
-  rpc SetPayment(e) returns (e);
-  rpc Purchase(e) returns (e);
-  rpc Remove(e) returns (e);
-  rpc SetDescription(e) returns (e);
-  rpc AssignOwner(e) returns (e);
+message Payment {
+  string payment_id = 1;
+  int32 amount = 2;
 }
-service PurchaseService {
-  rpc CreateNew(e) returns (e);
-  rpc GetAllByOwner(e) returns (e);
-  rpc GetById(e) returns (e);
-  rpc GetRecentByOwner(e) returns (e);
-  rpc GetByFilter(e) returns (e);
-  rpc CreateInvoice(e) returns (e);
-  rpc AddPayment(e) returns (e);
-  rpc RemovePayment(e) returns (e);
+
+message UplInfoObject {
+  message UplKindSku {
+    uint32 sku = 1;
+    uint32 piece = 2;
+  }
+  message UplKindDerivedProduct {
+    uint32 product_id = 1;
+    uint32 amount = 2;
+  }
+  string upl_id = 1;
+  oneof upl_kind {
+    UplKindSku sku = 2;
+    UplKindDerivedProduct derived_product = 3;
+  }
+  string name = 4;
+  uint32 retail_net_price = 5;
+  string vat = 6;
+  uint32 retail_gross_price = 7;
+  bool depreciated = 8;
+}
+
+message CartObject {
+  message Item {
+    string name = 1;
+    uint32 piece = 2;
+    uint32 unit_retail_price_net = 3;
+    string vat = 4;
+    uint32 unit_retail_price_gross = 5;
+    uint32 total_retail_price_net = 6;
+    uint32 total_retail_price_gross = 7;
+  }
+  string id = 1;
+  Customer customer = 2;
+  repeated Item items = 3;
+  bool need_invoice = 4;
+  string payment_kind = 5; // cash | transfer | card
+  repeated Payment payments = 6;
+  int32 payment_balance = 7;
+  repeated UplInfoObject upls = 8;
+  uint32 owner_uid = 9;
+  uint32 store_id = 10;
+  bool closed = 11;
+  uint32 created_by = 15;
+  string created_at = 16;
 }

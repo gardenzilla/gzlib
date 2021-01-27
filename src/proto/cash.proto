@@ -23,15 +23,22 @@ message BulkRequest { repeated string transaction_ids = 1; }
 
 message TransactionIds { repeated string transaction_ids = 1; }
 
+enum TransactionKind {
+  KindCash = 0;
+  KindCard = 1;
+  KindTransfer = 2;
+}
+
 message NewTransaction {
   oneof cart_id {
     uint32 cart = 1;
     google.protobuf.Empty none = 2;
   }
-  int32 amount = 3;
-  string reference = 4;
-  string comment = 5;
-  uint32 created_by = 6;
+  TransactionKind kind = 3;
+  int32 amount = 4;
+  string reference = 5;
+  string comment = 6;
+  uint32 created_by = 7;
 }
 
 message TransactionObject {
@@ -40,14 +47,19 @@ message TransactionObject {
     uint32 cart = 2;
     google.protobuf.Empty none = 3;
   }
-  int32 amount = 4;
-  string reference = 5;
-  string comment = 6;
-  uint32 created_by = 7;
-  string created_at = 8;
+  TransactionKind kind = 4;
+  int32 amount = 5;
+  string reference = 6;
+  string comment = 7;
+  uint32 created_by = 8;
+  string created_at = 9;
 }
 
-message BalanceObject { int32 balance = 1; }
+message BalanceObject {
+  int32 balance_cash = 1;
+  int32 balance_card = 2;
+  int32 balance_transfer = 3;
+}
 
 message DateRangeRequest {
   // rfc3339

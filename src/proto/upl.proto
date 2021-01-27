@@ -33,6 +33,8 @@ service Upl {
   rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (UplIds);
   // Get UPLs by Location
   rpc GetByLocation(ByLocationRequest) returns (UplIds);
+  // Get stock info
+  // rpc GetStockInfo(StockInfoRequest) returns (stream StockInfo);
 
   // Restore archived UPL to a given Stock
   // Should be two reason:
@@ -158,6 +160,18 @@ service Upl {
 //     Local local = 1;
 //     Global global = 2;
 //   }
+// }
+
+// message StockInfoRequest {
+//   uint32 stock_id = 1;
+//   repeated uint32 sku_ids = 2;
+// }
+
+// message StockInfo {
+//   uint32 sku = 1;
+//   uint32 stock_id = 2;
+//   uint32 count_healthy = 3;
+//   uint32 count_unhealthy = 4;
 // }
 
 message BulkRequest { repeated string upl_ids = 1; }
