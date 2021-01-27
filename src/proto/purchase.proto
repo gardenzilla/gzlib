@@ -34,7 +34,15 @@ message e {}
 
 message CartIds { repeated string cart_ids = 1; }
 
-message CartInfoObject {}
+message CartInfoObject {
+  string cart_id = 1;
+  string customer_name = 2;
+  uint32 upl_count = 3;
+  repeated string item_names = 4;
+  uint32 owner = 5;
+  uint32 created_by = 6;
+  string created_at = 7;
+}
 
 message CartNewRequest {
   uint32 store_id = 1;
