@@ -77,8 +77,10 @@ message CartAddCustomerReuqest {
   string cart_id = 1;
   uint32 customer_id = 2;
   string customer_name = 3;
-  string customer_address = 4;
-  string tax_number = 5;
+  string customer_zip = 4;
+  string customer_location = 5;
+  string customer_street = 6;
+  string tax_number = 7;
 }
 
 message CartRemoveCustomerRequest { string cart_id = 1; }
