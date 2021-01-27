@@ -233,12 +233,14 @@ message PurchaseObject {
     ItemKind kind = 1;
     string name = 2;
     uint32 piece = 3;
-    uint32 retail_price_net = 4;
-    string vat = 5;
-    uint32 retail_price_gross = 6;
-    uint32 total_retail_price_net = 7;
-    uint32 total_retail_price_gross = 8;
-    repeated string upl_ids = 9;
+    uint32 quantity = 4;
+    string unit = 5;
+    uint32 retail_price_net = 6;
+    string vat = 7;
+    uint32 retail_price_gross = 8;
+    uint32 total_retail_price_net = 9;
+    uint32 total_retail_price_gross = 10;
+    repeated string upl_ids = 11;
   }
   string id = 1;
   Customer customer = 2;
