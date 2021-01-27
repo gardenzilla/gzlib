@@ -55,11 +55,7 @@ message TransactionObject {
   string created_at = 9;
 }
 
-message BalanceObject {
-  int32 balance_cash = 1;
-  int32 balance_card = 2;
-  int32 balance_transfer = 3;
-}
+message BalanceObject { int32 balance = 1; }
 
 message DateRangeRequest {
   // rfc3339
