@@ -1,35 +1,111 @@
 syntax = "proto3";
 package purchase;
+import "google/protobuf/empty.proto";
 
 service Purchase {
-  rpc NewCart(e) returns (CartObject);
-  rpc GetCartAll(e) returns (CartIds);
-  rpc GetCartById(e) returns (CartObject);
-  rpc GetCartInfoBulk(e) returns (stream CartObject);
-  rpc CartAddCustomer(e) returns (CartObject);
-  rpc CartAddSku(e) returns (e);
-  rpc CartRemoveSku(e) returns (e);
-  rpc CartAddUpl(e) returns (CartObject);
-  rpc CartRemoveUpl(e) returns (CartObject);
-  rpc CartSetDocument(e) returns (CartObject);
-  rpc CartSetPayment(e) returns (CartObject);
-  rpc CartAddPayment(e) returns (CartObject);
-  rpc CloseCart(e) returns (PurchaseObject);
+  rpc CartNew(CartNewRequest) returns (CartObject);
+  rpc CartGetAll(google.protobuf.Empty) returns (CartIds);
+  rpc CartGetById(CartByIdRequest) returns (CartObject);
+  rpc CartGetInfoBulk(CartBulkRequest) returns (stream CartInfoObject);
+  rpc CartAddCustomer(CartAddCustomerReuqest) returns (CartObject);
+  rpc CartRemoveCustomer(CartRemoveCustomerRequest) returns (CartObject);
+  rpc CartAddSku(CartAddSkuRequest) returns (CartObject);
+  rpc CartRemoveSku(CartRemoveSkuRequest) returns (CartObject);
+  rpc CartAddUpl(CartAddUplRequest) returns (CartObject);
+  rpc CartRemoveUpl(CartRemoveUplRequest) returns (CartObject);
+  rpc CartSetDocument(CartSetDocumentRequest) returns (CartObject);
+  rpc CartSetPayment(CartSetPaymentRequest) returns (CartObject);
+  rpc CartAddPayment(CartAddPaymentRequest) returns (CartObject);
+  rpc CartClose(CartCloseRequest) returns (CartObject);
 
-  rpc GetPurchaseById(e) returns (PurchaseObject);
-  rpc GetPurchaseInfoBulk(e) returns (stream PurchaseInfoObject);
-  rpc PurchaseGetAll(e) returns (e);
-  rpc PurchaseAddPayment(e) returns (e);
-  rpc PurchaseRestore(e) returns (e);
+  rpc PurchaseGetById(e) returns (PurchaseObject);
+  rpc PurchaseGetAll(google.protobuf.Empty) returns (PurchaseIds);
+  rpc PurchaseGetInfoBulk(e) returns (stream PurchaseInfoObject);
+  rpc PuchaseCreateInvoice(e) returns (PurchaseObject);
+  rpc PurchaseAddPayment(e) returns (PurchaseObject);
+  rpc PurchaseRestore(e) returns (PurchaseObject);
+  rpc PurchaseGetStatByInterval(e) returns (e);
 }
-
-message PurchaseObject {}
-
-message PurchaseInfoObject {}
 
 message e {}
 
 message CartIds { repeated string cart_ids = 1; }
+
+message CartInfoObject {}
+
+message CartNewRequest {
+  uint32 store_id = 1;
+  uint32 owner_id = 2;
+  uint32 created_by = 3;
+}
+
+message CartByIdRequest { string cart_id = 1; }
+
+message CartBulkRequest { repeated string cart_ids = 1; }
+
+message CartAddCustomerReuqest {
+  string cart_id = 1;
+  uint32 customer_id = 2;
+  string customer_name = 3;
+  string customer_address = 4;
+  string tax_number = 5;
+}
+
+message CartRemoveCustomerRequest { string cart_id = 1; }
+
+enum DocumentKind {
+  Receipt = 0;
+  Invoice = 1;
+}
+
+enum PaymentKind {
+  Cash = 0;
+  Card = 1;
+  Transfer = 2;
+}
+
+message CartAddSkuRequest {
+  string cart_id = 1;
+  uint32 sku_id = 2;
+  uint32 piece = 3;
+  string name = 4;
+  string vat = 5;
+  uint32 retail_price_net = 6;
+  uint32 retail_price_gross = 7;
+}
+
+message CartRemoveSkuRequest {
+  string cart_id = 1;
+  uint32 sku_id = 2;
+}
+
+message CartAddUplRequest {
+  string cart_id = 1;
+  UplInfoObject upl = 2;
+}
+
+message CartRemoveUplRequest {
+  string cart_id = 1;
+  string upl_id = 2;
+}
+
+message CartSetDocumentRequest {
+  string cart_id = 1;
+  DocumentKind document_kind = 2;
+}
+
+message CartSetPaymentRequest {
+  string cart_id = 1;
+  PaymentKind payment_kind = 2;
+}
+
+message CartAddPaymentRequest {
+  string cart_id = 1;
+  string payment_id = 2;
+  int32 amount = 3;
+}
+
+message CartCloseRequest { string cart_id = 1; }
 
 message Customer {
   uint32 customer_id = 1;
@@ -43,42 +119,28 @@ message Payment {
   int32 amount = 2;
 }
 
-message UplInfoObject {
-  message UplKindSku {
-    uint32 sku = 1;
-    uint32 piece = 2;
-  }
-  message UplKindDerivedProduct {
-    uint32 product_id = 1;
-    uint32 amount = 2;
-  }
-  string upl_id = 1;
-  oneof upl_kind {
-    UplKindSku sku = 2;
-    UplKindDerivedProduct derived_product = 3;
-  }
-  string name = 4;
-  uint32 retail_net_price = 5;
-  string vat = 6;
-  uint32 retail_gross_price = 7;
-  bool depreciated = 8;
-}
-
 message CartObject {
+  enum ItemKind {
+    Sku = 0;
+    DerivedProduct = 1;
+    DepreciatedSku = 2;
+  }
   message Item {
-    string name = 1;
-    uint32 piece = 2;
-    uint32 unit_retail_price_net = 3;
-    string vat = 4;
-    uint32 unit_retail_price_gross = 5;
-    uint32 total_retail_price_net = 6;
-    uint32 total_retail_price_gross = 7;
+    ItemKind kind = 1;
+    string name = 2;
+    uint32 piece = 3;
+    uint32 retail_price_net = 4;
+    string vat = 5;
+    uint32 retail_price_gross = 6;
+    uint32 total_retail_price_net = 7;
+    uint32 total_retail_price_gross = 8;
+    repeated upl_ids = 9;
   }
   string id = 1;
   Customer customer = 2;
   repeated Item items = 3;
   bool need_invoice = 4;
-  string payment_kind = 5; // cash | transfer | card
+  PaymentKind payment_kind = 5;
   repeated Payment payments = 6;
   int32 payment_balance = 7;
   repeated UplInfoObject upls = 8;
@@ -88,3 +150,34 @@ message CartObject {
   uint32 created_by = 15;
   string created_at = 16;
 }
+
+message UplInfoObject {
+  message UplKindSku {
+    uint32 sku = 1;
+    uint32 piece = 2;
+  }
+  message UplKindOpenedSku {
+    uint32 product_id = 1;
+    uint32 amount = 2;
+  }
+
+  string upl_id = 1;
+  oneof upl_kind {
+    UplKindSku sku = 2;
+    UplKindOpenedSku opened_sku = 3;
+  }
+  string name = 4;
+  string unit = 5;
+  uint32 retail_net_price = 6;
+  string vat = 7;
+  uint32 retail_gross_price = 8;
+  uint32 procurement_net_price = 9;
+  string best_before = 10;
+  bool depreciated = 11;
+}
+
+// PURCHASE
+
+message PurchaseIds { repeated string purchase_ids = 1; }
+message PurchaseInfoObject {}
+message PurchaseObject {}
