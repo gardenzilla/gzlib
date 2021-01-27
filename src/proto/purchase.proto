@@ -16,6 +16,8 @@ service Purchase {
   rpc CartSetDocument(CartSetDocumentRequest) returns (CartObject);
   rpc CartSetPayment(CartSetPaymentRequest) returns (CartObject);
   rpc CartAddPayment(CartAddPaymentRequest) returns (CartObject);
+  rpc CartSetOwner(CartSetOwnerRequest) returns (CartObject);
+  rpc CartSetStore(CartSetStoreRequest) returns (CartObject);
   rpc CartClose(CartCloseRequest) returns (CartObject);
   rpc CartRemove(CartRemoveRequest) returns (google.protobuf.Empty);
 
@@ -48,6 +50,16 @@ message CartNewRequest {
   uint32 store_id = 1;
   uint32 owner_id = 2;
   uint32 created_by = 3;
+}
+
+message CartSetOwnerRequest {
+  string cart_id = 1;
+  uint32 owner_uid = 2;
+}
+
+message CartSetStoreRequest {
+  string cart_id = 1;
+  uint32 store_id = 2;
 }
 
 message CartByIdRequest { string cart_id = 1; }
