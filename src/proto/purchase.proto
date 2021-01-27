@@ -17,14 +17,17 @@ service Purchase {
   rpc CartSetPayment(CartSetPaymentRequest) returns (CartObject);
   rpc CartAddPayment(CartAddPaymentRequest) returns (CartObject);
   rpc CartClose(CartCloseRequest) returns (CartObject);
+  rpc CartRemove(CartRemoveRequest) returns (google.protobuf.Empty);
 
-  rpc PurchaseGetById(e) returns (PurchaseObject);
+  rpc PurchaseGetById(PurchaseByIdRequest) returns (PurchaseObject);
   rpc PurchaseGetAll(google.protobuf.Empty) returns (PurchaseIds);
-  rpc PurchaseGetInfoBulk(e) returns (stream PurchaseInfoObject);
-  rpc PuchaseCreateInvoice(e) returns (PurchaseObject);
-  rpc PurchaseAddPayment(e) returns (PurchaseObject);
-  rpc PurchaseRestore(e) returns (PurchaseObject);
-  rpc PurchaseGetStatByInterval(e) returns (e);
+  rpc PurchaseGetInfoBulk(PurchaseBulkRequest)
+      returns (stream PurchaseInfoObject);
+  rpc PuchaseCreateInvoice(PurchaseCreateInvoiceRequest)
+      returns (PurchaseObject);
+  rpc PurchaseAddPayment(PurchaseAddPaymentRequest) returns (PurchaseObject);
+  rpc PurchaseRestore(PurchaseRestoreRequest) returns (PurchaseObject);
+  rpc PurchaseGetStatByInterval(e) returns (PurchaseStatResponse);
 }
 
 message e {}
@@ -107,6 +110,8 @@ message CartAddPaymentRequest {
 
 message CartCloseRequest { string cart_id = 1; }
 
+message CartRemoveRequest { string cart_id = 1; }
+
 message Customer {
   uint32 customer_id = 1;
   string name = 2;
@@ -134,21 +139,23 @@ message CartObject {
     uint32 retail_price_gross = 6;
     uint32 total_retail_price_net = 7;
     uint32 total_retail_price_gross = 8;
-    repeated upl_ids = 9;
+    repeated string upl_ids = 9;
   }
-  string id = 1;
-  Customer customer = 2;
-  repeated Item items = 3;
-  bool need_invoice = 4;
-  PaymentKind payment_kind = 5;
-  repeated Payment payments = 6;
-  int32 payment_balance = 7;
-  repeated UplInfoObject upls = 8;
-  uint32 owner_uid = 9;
-  uint32 store_id = 10;
-  bool closed = 11;
-  uint32 created_by = 15;
-  string created_at = 16;
+  string ancestor = 1;
+  string id = 2;
+  Customer customer = 3;
+  repeated Item items = 4;
+  repeated UplInfoObject upl_info_objects = 5;
+  bool need_invoice = 6;
+  PaymentKind payment_kind = 7;
+  repeated Payment payments = 8;
+  int32 payment_balance = 9;
+  repeated UplInfoObject upls = 10;
+  uint32 profit_net = 11;
+  uint32 owner_uid = 12;
+  uint32 store_id = 13;
+  uint32 created_by = 14;
+  string created_at = 15;
 }
 
 message UplInfoObject {
@@ -178,6 +185,82 @@ message UplInfoObject {
 
 // PURCHASE
 
+message PurchaseInfoObject {
+  string purchase_id = 1;
+  Customer customer = 2;
+  uint32 upl_count = 3;
+  uint32 total_net_price = 4;
+  uint32 total_vat = 5;
+  uint32 total_gross_price = 6;
+  uint32 balance = 7;
+  bool document_invoice = 8;
+  string payment_duedate = 9;
+  bool payment_expired = 10;
+  uint32 profit_net = 11;
+  bool restored = 12;
+  uint32 created_by = 14;
+  string created_at = 15;
+}
+
+message PurchaseObject {
+  enum ItemKind {
+    Sku = 0;
+    DerivedProduct = 1;
+    DepreciatedSku = 2;
+  }
+  message Item {
+    ItemKind kind = 1;
+    string name = 2;
+    uint32 piece = 3;
+    uint32 retail_price_net = 4;
+    string vat = 5;
+    uint32 retail_price_gross = 6;
+    uint32 total_retail_price_net = 7;
+    uint32 total_retail_price_gross = 8;
+    repeated string upl_ids = 9;
+  }
+  string id = 1;
+  Customer customer = 2;
+  repeated Item items = 3;
+  repeated UplInfoObject upl_info_objects = 4;
+  bool need_invoice = 5;
+  PaymentKind payment_kind = 6;
+  repeated Payment payments = 7;
+  int32 payment_balance = 8;
+  repeated UplInfoObject upls = 9;
+  uint32 profit_net = 10;
+  uint32 owner_uid = 12;
+  uint32 store_id = 13;
+  bool closed = 14;
+  uint32 created_by = 15;
+  string created_at = 16;
+}
+
 message PurchaseIds { repeated string purchase_ids = 1; }
-message PurchaseInfoObject {}
-message PurchaseObject {}
+
+message PurchaseByIdRequest { string purchase_id = 1; }
+
+message PurchaseBulkRequest { repeated string purchase_ids = 1; }
+
+message PurchaseCreateInvoiceRequest { string purchase_id = 1; }
+
+message PurchaseAddPaymentRequest {
+  string purchase_id = 1;
+  Payment payment = 2;
+}
+
+message PurchaseRestoreRequest { string purchase_id = 1; }
+
+message PurchaseStatIntervalRequest {
+  string from_rfc3339 = 1;
+  string till_rfc3339 = 2;
+}
+
+message PurchaseStatResponse {
+  message PurchaseStat {
+    string date = 1;
+    uint32 total_purchase_value_huf = 2;
+    uint32 total_purchase_count = 3;
+  }
+  repeated PurchaseStat stats = 1;
+}
