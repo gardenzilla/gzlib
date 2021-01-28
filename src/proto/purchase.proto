@@ -156,13 +156,8 @@ message Payment {
 }
 
 message CartObject {
-  enum ItemKind {
-    Sku = 0;
-    DerivedProduct = 1;
-    DepreciatedSku = 2;
-  }
   message Item {
-    ItemKind kind = 1;
+    uint32 sku = 1;
     string name = 2;
     uint32 piece = 3;
     uint32 retail_price_net = 6;
