@@ -233,7 +233,7 @@ message BySkuAndLocationRequest {
     uint32 delivery = 3;
     uint32 discard = 4;
   }
-  uint32 sku = 3;
+  uint32 sku = 5;
 }
 
 message SetDivisibleAmountRequest {
