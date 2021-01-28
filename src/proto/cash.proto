@@ -31,7 +31,7 @@ enum TransactionKind {
 
 message NewTransaction {
   oneof cart_id {
-    uint32 cart = 1;
+    string cart = 1;
     google.protobuf.Empty none = 2;
   }
   TransactionKind kind = 3;
@@ -44,7 +44,7 @@ message NewTransaction {
 message TransactionObject {
   string transaction_id = 1;
   oneof cart_id {
-    uint32 cart = 2;
+    string cart = 2;
     google.protobuf.Empty none = 3;
   }
   TransactionKind kind = 4;
