@@ -218,13 +218,21 @@ enum LocationKind {
 }
 
 message ByLocationRequest {
-  LocationKind location_kind = 1;
-  uint32 location_id = 2;
+  oneof location {
+    uint32 stock = 1;
+    string cart = 2;
+    uint32 delivery = 3;
+    uint32 discard = 4;
+  }
 }
 
 message BySkuAndLocationRequest {
-  LocationKind location_kind = 1;
-  uint32 location_id = 2;
+  oneof location {
+    uint32 stock = 1;
+    string cart = 2;
+    uint32 delivery = 3;
+    uint32 discard = 4;
+  }
   uint32 sku = 3;
 }
 
@@ -278,21 +286,9 @@ message RemoveDeprecationPriceRequest {
   uint32 created_by = 2;
 }
 
-message CartLockRequest {
-  string upl = 1;
-  uint32 cart_id = 2;
-  uint32 created_by = 3;
-}
-
 message InventoryLockRequest {
   string upl = 1;
   uint32 inventory_id = 2;
-  uint32 created_by = 3;
-}
-
-message CartUnlockRequest {
-  string upl = 1;
-  uint32 cart_id = 2;
   uint32 created_by = 3;
 }
 
@@ -302,8 +298,20 @@ message InventoryUnlockRequest {
   uint32 created_by = 3;
 }
 
+message CartLockRequest {
+  string upl = 1;
+  string cart_id = 2;
+  uint32 created_by = 3;
+}
+
+message CartUnlockRequest {
+  string upl = 1;
+  string cart_id = 2;
+  uint32 created_by = 3;
+}
+
 message CloseCartRequest {
-  uint32 cart_id = 1;
+  string cart_id = 1;
   uint32 created_by = 2;
 }
 
@@ -363,7 +371,7 @@ message UplObj {
   uint32 divisible_amount = 14;
   // Applied lock
   oneof lock {
-    uint32 CartLock = 15;
+    string CartLock = 15;
     uint32 DeliveryLock = 16;
     uint32 InventoryLock = 17;
     google.protobuf.Empty None = 18;
@@ -372,7 +380,7 @@ message UplObj {
   oneof location {
     uint32 Stock = 19;
     uint32 Delivery = 20;
-    uint32 Cart = 21;
+    string Cart = 21;
     uint32 Discard = 22;
   }
   // If upl is archived ? true : false
