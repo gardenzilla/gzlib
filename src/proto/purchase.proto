@@ -224,14 +224,15 @@ message PurchaseInfoObject {
   uint32 total_vat = 5;
   uint32 total_gross_price = 6;
   int32 balance = 7;
-  bool document_invoice = 8;
-  string date_completion = 9;
-  string payment_duedate = 10;
-  bool payment_expired = 11;
-  int32 profit_net = 12;
-  bool restored = 13;
-  uint32 created_by = 14;
-  string created_at = 15;
+  int32 payable = 8;
+  bool document_invoice = 9;
+  string date_completion = 10;
+  string payment_duedate = 11;
+  bool payment_expired = 12;
+  int32 profit_net = 13;
+  bool restored = 14;
+  uint32 created_by = 15;
+  string created_at = 16;
 }
 
 message PurchaseObject {
