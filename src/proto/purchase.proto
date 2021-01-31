@@ -179,14 +179,15 @@ message CartObject {
   bool need_invoice = 11;
   PaymentKind payment_kind = 12;
   repeated Payment payments = 13;
-  int32 payment_balance = 14;
-  int32 profit_net = 15;
-  uint32 owner_uid = 16;
-  uint32 store_id = 17;
-  string date_completion = 18;
-  string payment_duedate = 19;
-  uint32 created_by = 20;
-  string created_at = 21;
+  int32 payable = 14;
+  int32 payment_balance = 15;
+  int32 profit_net = 16;
+  uint32 owner_uid = 17;
+  uint32 store_id = 18;
+  string date_completion = 19;
+  string payment_duedate = 20;
+  uint32 created_by = 21;
+  string created_at = 22;
 }
 
 message UplInfoObject {
@@ -262,15 +263,16 @@ message PurchaseObject {
   uint32 total_gross = 9;
   PaymentKind payment_kind = 10;
   repeated Payment payments = 11;
-  int32 payment_balance = 12;
-  int32 profit_net = 13;
-  uint32 owner_uid = 14;
-  uint32 store_id = 15;
-  string date_completion = 16;
-  string payment_duedate = 17;
-  bool restored = 18;
-  uint32 created_by = 19;
-  string created_at = 20;
+  int32 payable = 12;
+  int32 payment_balance = 13;
+  int32 profit_net = 14;
+  uint32 owner_uid = 15;
+  uint32 store_id = 16;
+  string date_completion = 17;
+  string payment_duedate = 18;
+  bool restored = 19;
+  uint32 created_by = 20;
+  string created_at = 21;
 }
 
 message PurchaseIds { repeated string purchase_ids = 1; }
