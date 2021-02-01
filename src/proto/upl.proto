@@ -174,6 +174,15 @@ service Upl {
 //   uint32 count_unhealthy = 4;
 // }
 
+// message LocationStat {
+//   uint32 total = 1;
+//   uint32 healthy = 2;
+// }
+
+// message LocationResponse {
+
+// }
+
 message BulkRequest { repeated string upl_ids = 1; }
 
 message UplIds { repeated string upl_ids = 1; }
@@ -252,7 +261,8 @@ message SetBestBeforeRequest {
 message SplitRequest {
   string upl = 1;
   string new_upl = 2;
-  uint32 created_by = 3;
+  uint32 piece = 3;
+  uint32 created_by = 4;
 }
 
 message DivideRequest {
