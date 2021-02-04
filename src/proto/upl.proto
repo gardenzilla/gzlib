@@ -1,38 +1,32 @@
 syntax = "proto3";
 package upl;
-// import "prelude.proto";
 import "google/protobuf/empty.proto";
-
-// service Reservation {
-//   // Set reservation for a Cart/Sku
-//   // It can be LOCAL or GLOBAL
-//   // and its subject can be a SKU or a DIVIDED_PRODUCT
-//   rpc SetReservation(ReservationRequest) returns (ReservationResponse);
-//   // Get reservations by Cart(ID)
-//   rpc GetReservationsByCart(e) returns (e);
-//   // Clear all reservation for a Cart
-//   // If we delete a whole cart in quick
-//   rpc ClearReservation(r) returns (e);
-// }
 
 service Upl {
   // Create new UPL
   // Just from a procurement or inventory service!
   // No public API should be implemented!
   rpc CreateNew(UplNew) returns (UplObj);
+
   // Create new UPL in bulk
   // Used during closing a procurement process
   rpc CreateNewBulk(stream UplNew) returns (UplIds);
+
   // Get UPLs in bulk
   rpc GetBulk(BulkRequest) returns (stream UplObj);
+
   // Get UPL by ID
   rpc GetById(ByIdRequest) returns (UplObj);
+
   // Get UPLs by Sku
   rpc GetBySku(BySkuRequest) returns (UplIds);
+
   // Get UPLs by Sku and Location
   rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (UplIds);
+
   // Get UPLs by Location
   rpc GetByLocation(ByLocationRequest) returns (UplIds);
+
   // Get stock info
   // rpc GetStockInfo(StockInfoRequest) returns (stream StockInfo);
 
@@ -49,14 +43,12 @@ service Upl {
   // The only possible usage to correct a bestbefore date
   // error during inventory check.
   rpc SetBestBefore(SetBestBeforeRequest) returns (UplObj);
+
   // Split one UPL from BulkUpl
   rpc Split(SplitRequest) returns (UplObj);
+
   // Divide divisible Upl or OpenedUpl into a smaller Upl
   rpc Divide(DivideRequest) returns (UplObj);
-
-  // TODO! Implement this
-  // Merge an ancestor and a successor UPL into the ancestor
-  // rpc Merge(e) returns (UplObj);
 
   // Set depreciation
   // ID and comment
@@ -72,116 +64,94 @@ service Upl {
   // if already depreciated
   rpc RemoveDeprecationPrice(RemoveDeprecationPriceRequest) returns (UplObj);
 
-  // Try to set divisible amount
-  rpc SetDivisibleAmount(SetDivisibleAmountRequest) returns (UplObj);
-
   // Put UPL to a Cart (Apply lock)
   rpc LockToCart(CartLockRequest) returns (UplObj);
+
+  // Remove UPL from a Cart (Release lock)
+  rpc ReleaseLockFromCart(CartUnlockRequest) returns (UplObj);
+
+  // Checkout delivery UPLs to a given Stock(ID)
+  // Close a cart (transform lock to location)
+  rpc CloseCart(CloseCartRequest) returns (google.protobuf.Empty);
 
   // Put UPL to a Delivery (Apply lock)
   // rpc LockToDelivery(e) returns (UplObj);
 
   // Put UPL to an Inventory (Apply lock)
-  rpc LockToInventory(InventoryLockRequest) returns (UplObj);
-  // Remove UPL from a Cart (Release lock)
-  rpc ReleaseLockFromCart(CartUnlockRequest) returns (UplObj);
+  // rpc LockToInventory(InventoryLockRequest) returns (UplObj);
+
+  // Remove UPL from an Inventory (Release lock)
+  // rpc ReleaseLockFromInventory(InventoryUnlockRequest) returns (UplObj);
+
+  // Close an inventory (remove lock, but no location change)
+  // rpc CloseInventory(CloseInventoryRequest) returns (google.protobuf.Empty);
 
   // Remove UPL from a Delivery (Release lock)
   // rpc ReleaseLockFromDelivery(e) returns (UplObj);
 
-  // Remove UPL from an Inventory (Release lock)
-  rpc ReleaseLockFromInventory(InventoryUnlockRequest) returns (UplObj);
-  // Checkout delivery UPLs to a given Stock(ID)
-  // Close a cart (transform lock to location)
-  rpc CloseCart(CloseCartRequest) returns (google.protobuf.Empty);
-
   // Close a delivery (transform lock to location)
   // rpc CloseDelivery(e) returns (e);
 
-  // Close an inventory (remove lock, but no location change)
-  rpc CloseInventory(CloseInventoryRequest) returns (google.protobuf.Empty);
+  // Set new price to UPLs by SKU
+  //   set new price to Sku, BulkSku, OpenedSku and DerivedProduct
+  //   if their location is not Cart(Y)
+  rpc SetSkuPrice(SetSkuPriceRequest) returns (google.protobuf.Empty);
 
-  // Put UPLs from Delivery to a given Stock (MOVE)
-  // rpc CheckoutDelivery(e) returns (e);
+  // Set UPL to be divisible by SKU
+  rpc SetSkuDivisible(SetSkuDivisibleRequest) returns (google.protobuf.Empty);
 
-  // Remove UPL from a Cart (Release lock)
-  // Return a UPL history
-  // todo! Implement history!
-  // rpc GetHistory(e) returns (stream HistoryItem);
+  // Open single SKU(x) -> OpenedSku(x)
+  //   where x is the related amount
+  rpc OpenUpl(OpenUplRequest) returns (UplObj);
+
+  // Try to close opened SKU
+  // only if amount == sku_amount
+  // OpenedSku -> Sku
+  rpc CloseUpl(CloseUplRequest) returns (UplObj);
+
+  // Merge DerivedProduct back to its ancestor
+  rpc MergeBack(MergeRequest) returns (google.protobuf.Empty);
+
+  // Get UPL location info by SKU
+  rpc GetLocationInfo(LocationInfoRequest) returns (LocationInfoResponse);
+
+  // Get UPL location info by SKU bulk
+  rpc GetLocationInfoBulk(stream LocationInfoRequest)
+      returns (stream LocationInfoResponse);
 }
 
-// message e {}
+message StockInfo {
+  uint32 total = 1;
+  uint32 healthy = 2;
+}
 
-// message ReservationRequest {
-//   message Local {
-//     string cart_id = 1;
-//     string stock_id = 2;
-//     oneof Subject {
-//       uint32 sku = 3;
-//       uint32 divided_product = 4;
-//     }
-//     uint32 reserved_amount = 5;
-//   }
-//   message Global {
-//     string cart_id = 1;
-//     oneof Subject {
-//       uint32 sku = 2;
-//       uint32 divided_product = 3;
-//     }
-//     uint32 reserved_amount = 4;
-//   }
-//   oneof reservation {
-//     Local local = 1;
-//     Global global = 2;
-//   }
-// }
+message LocationInfoResponse {
+  uint32 sku = 1;
+  map<uint32, StockInfo> stocks = 2;
+}
 
-// message ReservationResponse {
-//   message Local {
-//     string cart_id = 1;
-//     string stock_id = 2;
-//     oneof Subject {
-//       uint32 sku = 3;
-//       uint32 divided_product = 4;
-//     }
-//     uint32 reserved_amount = 5;
-//     uint32 taken_amount = 6;
-//   }
-//   message Global {
-//     string cart_id = 1;
-//     oneof Subject {
-//       uint32 sku = 2;
-//       uint32 divided_product = 3;
-//     }
-//     uint32 reserved_amount = 4;
-//     uint32 taken_amount = 5;
-//   }
-//   oneof reservation {
-//     Local local = 1;
-//     Global global = 2;
-//   }
-// }
+message LocationInfoRequest { uint32 sku = 1; }
 
-// message StockInfoRequest {
-//   uint32 stock_id = 1;
-//   repeated uint32 sku_ids = 2;
-// }
+message SetSkuPriceRequest {
+  uint32 sku = 1;
+  uint32 net_price = 2;
+  string vat = 3;
+  uint32 gross_price = 4;
+}
 
-// message StockInfo {
-//   uint32 sku = 1;
-//   uint32 stock_id = 2;
-//   uint32 count_healthy = 3;
-//   uint32 count_unhealthy = 4;
-// }
+message SetSkuDivisibleRequest {
+  uint32 sku = 1;
+  bool divisible = 2;
+}
 
-// message LocationStat {
-//   uint32 total = 1;
-//   uint32 healthy = 2;
-// }
+message OpenUplRequest { string upl_id = 1; }
 
-// message LocationResponse {
+message CloseUplRequest { string upl_id = 1; }
 
-// }
+message MergeRequest {
+  string upl_to_merge_back = 1;
+  uint32 created_by = 2;
+}
 
 message BulkRequest { repeated string upl_ids = 1; }
 
@@ -196,22 +166,26 @@ message UplNew {
   // Related SKU
   uint32 sku = 3;
   // UPL piece; if bulk, than bigger then 1
-  uint32 upl_piece = 4;
-  // True if SKU or bulk SKU
-  // False if opened SKU
-  bool is_opened = 5;
-  // Best before, if there is any
-  string best_before = 6;
+  uint32 piece = 4;
+  // Related SKU divisible amount
+  uint32 sku_divisible_amount = 5;
+  bool sku_divisible = 6;
+  uint32 sku_net_price = 7;
+  string sku_vat = 8;
+  uint32 sku_gross_price = 9;
+  uint32 procurement_id = 10;
+  // Related procurement net price for Sku (unopened)
+  uint32 procurement_net_price_sku = 11;
   // Location will be Stock(ID)
-  uint32 stock_id = 7;
-  // Related procurement ID
-  uint32 procurement_id = 8;
-  // Related procurement net price
-  uint32 procurement_net_price = 9;
-  // 0 if its not divisible, otherwise the contained amount
-  uint32 divisible_amount = 10;
+  uint32 stock_id = 12;
+  // Best before, if there is any
+  string best_before = 13;
+  // True if opened SKU
+  // False if SKU or bulk SKU
+  bool is_opened = 14;
+  // UPL total net price for package
   // User who registered the UPL init data
-  uint32 created_by = 11;
+  uint32 created_by = 15;
 }
 
 message ByIdRequest { string upl_id = 1; }
@@ -348,55 +322,65 @@ message UplObj {
   message Depreciation {
     uint32 depreciation_id = 1;
     string depreciation_comment = 2;
-    uint32 depreciation_net_price = 3;
   }
   // UPL ID
   string id = 1;
   // Related product id
   uint32 product_id = 2;
+  string product_unit = 3;
   // UPL kind
   oneof kind {
-    KindSku sku = 3;
-    KindBulkSku bulk_sku = 4;
-    KindOpenedSku opened_sku = 5;
-    KindDerivedProduct derived_product = 6;
+    KindSku sku = 4;
+    KindBulkSku bulk_sku = 5;
+    KindOpenedSku opened_sku = 6;
+    KindDerivedProduct derived_product = 7;
   }
   // Represents how many UPL this unit contains
   // Can bigger then 1 if UplKind is Bulk
   // Otherwise always 1
-  uint32 upl_piece = 7;
+  uint32 upl_piece = 8;
+  uint32 sku_divisible_amount = 9;
+  // If has deprecation net price
+  bool has_special_price = 10;
   // If UPL is healty: no depreciation, no best_before issue
-  bool is_healty = 8;
+  bool is_healty = 11;
   // Best before date (RFC3339) if there is any
-  string best_before = 9;
+  string best_before = 12;
   // Depreciation object
-  Depreciation depreciation = 10;
+  Depreciation depreciation = 13;
   // Procurement id
-  uint32 procurement_id = 11;
+  uint32 procurement_id = 14;
   // Procurement net price
-  uint32 procurement_net_price = 12;
+  uint32 procurement_net_price = 15;
+  uint32 procurement_net_price_sku = 16;
   // Is it divisible? Only if SKU or Derived Product and is divisible
-  bool is_divisible = 13;
-  // Divisible amount; if divisible; otherwise 0
-  uint32 divisible_amount = 14;
+  bool is_divisible = 17;
+  // SKU VAT
+  string vat = 18;
+  // Related SKU net price
+  uint32 price_net = 19;
+  // Related SKU gross price
+  uint32 price_gross = 20;
+  // UPL net margin
+  uint32 margin_net = 21;
   // Applied lock
   oneof lock {
-    string CartLock = 15;
-    uint32 DeliveryLock = 16;
-    uint32 InventoryLock = 17;
-    google.protobuf.Empty None = 18;
+    string CartLock = 22;
+    uint32 DeliveryLock = 23;
+    uint32 InventoryLock = 24;
+    google.protobuf.Empty None = 25;
   }
   // Current location
   oneof location {
-    uint32 Stock = 19;
-    uint32 Delivery = 20;
-    string Cart = 21;
-    uint32 Discard = 22;
+    uint32 Stock = 26;
+    uint32 Delivery = 27;
+    string Cart = 28;
+    uint32 Discard = 29;
   }
   // If upl is archived ? true : false
-  bool is_archived = 27;
+  bool is_archived = 30;
   // Created by user
-  uint32 created_by = 29;
+  uint32 created_by = 31;
   // Created at RFC3339
-  string created_at = 30;
+  string created_at = 32;
 }
