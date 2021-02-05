@@ -382,7 +382,7 @@ message UplObj {
   // Related SKU gross price
   uint32 price_gross = 21;
   // UPL net margin
-  uint32 margin_net = 22;
+  int32 margin_net = 22;
   // Applied lock
   oneof lock {
     string CartLock = 23;
