@@ -18,6 +18,9 @@ service Upl {
   // Get UPL by ID
   rpc GetById(ByIdRequest) returns (UplObj);
 
+  // Get UPL by ID from archive
+  rpc GetByIdArchive(ByIdRequest) returns (UplObj);
+
   // Get UPLs by Sku
   rpc GetBySku(BySkuRequest) returns (UplIds);
 
