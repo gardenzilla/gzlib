@@ -332,7 +332,7 @@ message UplObj {
   string id = 1;
   // Related product id
   uint32 product_id = 2;
-  uint32 sku = 3;
+  uint32 sku_id = 3;
   string product_unit = 4;
   // UPL kind
   oneof kind {
