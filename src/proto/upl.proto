@@ -24,6 +24,9 @@ service Upl {
   // Get UPLs by Sku
   rpc GetBySku(BySkuRequest) returns (UplIds);
 
+  // Get UPLs by ProductId
+  rpc GetByProduct(ByProductRequest) returns (UplIds);
+
   // Get UPLs by Sku and Location
   rpc GetBySkuAndLocation(BySkuAndLocationRequest) returns (UplIds);
 
@@ -124,6 +127,8 @@ service Upl {
 
   rpc SetProductUnit(SetProductUnitRequest) returns (google.protobuf.Empty);
 }
+
+message ByProductRequest { uint32 product_id = 1; }
 
 message SetProductUnitRequest {
   uint32 product_id = 1;
