@@ -332,60 +332,61 @@ message UplObj {
   string id = 1;
   // Related product id
   uint32 product_id = 2;
-  string product_unit = 3;
+  uint32 sku = 3;
+  string product_unit = 4;
   // UPL kind
   oneof kind {
-    KindSku sku = 4;
-    KindBulkSku bulk_sku = 5;
-    KindOpenedSku opened_sku = 6;
-    KindDerivedProduct derived_product = 7;
+    KindSku sku = 5;
+    KindBulkSku bulk_sku = 6;
+    KindOpenedSku opened_sku = 7;
+    KindDerivedProduct derived_product = 8;
   }
   // Represents how many UPL this unit contains
   // Can bigger then 1 if UplKind is Bulk
   // Otherwise always 1
-  uint32 upl_piece = 8;
-  uint32 sku_divisible_amount = 9;
+  uint32 upl_piece = 9;
+  uint32 sku_divisible_amount = 10;
   // If has deprecation net price
-  bool has_special_price = 10;
+  bool has_special_price = 11;
   // If UPL is healty: no depreciation, no best_before issue
-  bool is_healty = 11;
+  bool is_healty = 12;
   // Best before date (RFC3339) if there is any
-  string best_before = 12;
+  string best_before = 13;
   // Depreciation object
-  Depreciation depreciation = 13;
+  Depreciation depreciation = 14;
   // Procurement id
-  uint32 procurement_id = 14;
+  uint32 procurement_id = 15;
   // Procurement net price
-  uint32 procurement_net_price = 15;
-  uint32 procurement_net_price_sku = 16;
+  uint32 procurement_net_price = 16;
+  uint32 procurement_net_price_sku = 17;
   // Is it divisible? Only if SKU or Derived Product and is divisible
-  bool is_divisible = 17;
+  bool is_divisible = 18;
   // SKU VAT
-  string vat = 18;
+  string vat = 19;
   // Related SKU net price
-  uint32 price_net = 19;
+  uint32 price_net = 20;
   // Related SKU gross price
-  uint32 price_gross = 20;
+  uint32 price_gross = 21;
   // UPL net margin
-  uint32 margin_net = 21;
+  uint32 margin_net = 22;
   // Applied lock
   oneof lock {
-    string CartLock = 22;
-    uint32 DeliveryLock = 23;
-    uint32 InventoryLock = 24;
-    google.protobuf.Empty None = 25;
+    string CartLock = 23;
+    uint32 DeliveryLock = 24;
+    uint32 InventoryLock = 25;
+    google.protobuf.Empty None = 26;
   }
   // Current location
   oneof location {
-    uint32 Stock = 26;
-    uint32 Delivery = 27;
-    string Cart = 28;
-    uint32 Discard = 29;
+    uint32 Stock = 27;
+    uint32 Delivery = 28;
+    string Cart = 29;
+    uint32 Discard = 30;
   }
   // If upl is archived ? true : false
-  bool is_archived = 30;
+  bool is_archived = 31;
   // Created by user
-  uint32 created_by = 31;
+  uint32 created_by = 32;
   // Created at RFC3339
-  string created_at = 32;
+  string created_at = 33;
 }
