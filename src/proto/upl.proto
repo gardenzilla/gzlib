@@ -121,6 +121,13 @@ service Upl {
   // Get UPL location info by SKU bulk
   rpc GetLocationInfoBulk(LocationInfoBulkRequest)
       returns (stream LocationInfoResponse);
+
+  rpc SetProductUnit(SetProductUnitRequest) returns (google.protobuf.Empty);
+}
+
+message SetProductUnitRequest {
+  uint32 product_id = 1;
+  string unit = 2;
 }
 
 message StockInfo {
