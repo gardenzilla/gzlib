@@ -138,6 +138,8 @@ message SetProductUnitRequest {
 message StockInfo {
   uint32 total = 1;
   uint32 healthy = 2;
+  uint32 bulk = 3;
+  uint32 opened = 4;
 }
 
 message LocationInfoResponse {
