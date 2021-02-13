@@ -52,7 +52,7 @@ message InvoiceForm {
 }
 
 message InvoiceData {
-  uint32 id = 1;
+  string id = 1;
   string purchase_id = 2;
   string invoice_id = 3;
   bool has_error = 4;
@@ -60,7 +60,7 @@ message InvoiceData {
   string created_at = 6;
 }
 
-message ByIdRequest { uint32 id = 1; }
+message ByIdRequest { string id = 1; }
 
 message PurchaseIdBulkRequest { string purchase_id = 1; }
 
