@@ -4,9 +4,8 @@ package invoice;
 message e {}
 
 service Invoice {
-  rpc CreateNew(InvoiceForm) returns (NewInvoiceResponse);
-  rpc GetById(ByIdRequest) returns (ByIdResponse);
-  rpc GetByPurchaseId(PurchaseIdBulkRequest) returns (PurchaseIdBulkResponse);
+  rpc CreateNew(InvoiceForm) returns (InvoiceData);
+  rpc GetById(ByIdRequest) returns (InvoiceData);
   rpc Download(DownloadRequest) returns (DownloadResponse);
 }
 
@@ -56,20 +55,14 @@ message InvoiceData {
   uint32 id = 1;
   string purchase_id = 2;
   string invoice_id = 3;
-  string related_storno = 4;
+  bool has_error = 4;
   uint32 created_by = 5;
   string created_at = 6;
 }
 
-message NewInvoiceResponse { InvoiceData invoice = 1; }
-
 message ByIdRequest { uint32 id = 1; }
 
-message ByIdResponse { InvoiceData invoice = 1; }
-
 message PurchaseIdBulkRequest { string purchase_id = 1; }
-
-message PurchaseIdBulkResponse { repeated InvoiceData invoices = 1; }
 
 message DownloadRequest { string invoice_id = 1; }
 
