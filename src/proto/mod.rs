@@ -1,10 +1,12 @@
 pub mod auth;
 pub mod cash;
+pub mod commitment;
 pub mod customer;
 pub mod document;
 pub mod email;
 pub mod inventory;
 pub mod invoice;
+pub mod loyalty;
 pub mod prelude;
 pub mod pricing;
 pub mod procurement;
