@@ -4,4 +4,4 @@ import "google/protobuf/empty.proto";
 
 message e {}
 
-service Loyalty {}
+service Loyalty { rpc CreateAccount(e) returns (e); }
