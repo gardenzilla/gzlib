@@ -1,0 +1,86 @@
+syntax = "proto3";
+package commitment;
+import "google/protobuf/empty.proto";
+
+message e {}
+
+service Commitment {
+  rpc GetCustomerIds(google.protobuf.Empty) returns (CustomerIds);
+  rpc AddCommitment(AddCommitmentRequest) returns (CustomerObj);
+  rpc GetCustomer(CustomerRequest) returns (CustomerObj);
+  rpc HasActiveCommitment(CustomerRequest) returns (CommitmentInfoResponse);
+  rpc HasActiveCommitmentBulk(CustomerBulkRequest)
+      returns (stream CommitmentInfo);
+  rpc AddPurchase(AddPurchaseRequest) returns (CommitmentInfo);
+  rpc RemovePurchase(RemovePurchaseRequest) returns (CommitmentInfo);
+}
+
+message CustomerIds { repeated uint32 customer_ids = 1; }
+
+message AddCommitmentRequest {
+  uint32 customer_id = 1;
+  uint32 target = 2;
+  uint32 discount_percentage = 3;
+  uint32 created_by = 4;
+}
+
+message CustomerRequest { uint32 customer_id = 1; }
+
+message CustomerBulkRequest { repeated uint32 customer_ids = 1; }
+
+message CustomerObj {
+  uint32 customer_id = 1;
+  repeated CommitmentObj commitments = 3;
+}
+
+message CommitmentObj {
+  string commitment_id = 1;
+  uint32 customer_id = 2;
+  uint32 target = 3;
+  uint32 discount_percentage = 4;
+  string valid_till = 5; // RFC3339
+  uint32 balance = 6;
+  repeated PurchaseInfo purchase_log = 7;
+  bool is_withdrawn = 8;
+  bool is_active = 9;
+  string created_at = 10;
+  uint32 created_by = 11;
+}
+
+message PurchaseInfo {
+  string purchase_id = 1;
+  uint32 total_net = 4;
+  uint32 total_gross = 5;
+  uint32 applied_discount = 6;
+  bool removed = 7;
+  string created_at = 8;
+}
+
+message CommitmentInfoResponse {
+  CommitmentInfo active_commitment = 1;
+  bool has_active_commitment = 2;
+}
+
+message CommitmentInfo {
+  string commitment_id = 1;
+  uint32 customer_id = 2;
+  uint32 target = 3;
+  uint32 discount_percentage = 4;
+  uint32 balance = 5;
+  bool is_active = 6;
+}
+
+message AddPurchaseRequest {
+  uint32 customer_id = 1;
+  string commitment_id = 2;
+  string purchase_id = 3;
+  uint32 total_net = 4;
+  uint32 total_gross = 5;
+  uint32 applied_discount = 6;
+}
+
+message RemovePurchaseRequest {
+  uint32 customer_id = 1;
+  string commitment_id = 2;
+  string purchase_id = 3;
+}

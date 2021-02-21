@@ -1,0 +1,7 @@
+syntax = "proto3";
+package loyalty;
+import "google/protobuf/empty.proto";
+
+message e {}
+
+service Loyalty {}
