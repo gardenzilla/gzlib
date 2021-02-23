@@ -5,13 +5,93 @@ import "google/protobuf/empty.proto";
 message e {}
 
 service Loyalty {
-  rpc CreateAccount(e) returns (e);
-  rpc HasAccount(e) returns (e);
-  rpc ChangeCard(e) returns (e);
-  rpc AddPurchase(e) returns (e);
-  rpc PayWithPoints(e) returns (e);
-  rpc GetBalance(e) returns (e);
-  rpc GetBalanceBulk(e) returns (e);
-  rpc SetLoyaltyLevel(e) returns (e);
-  rpc GetCardId(e) returns (e);
+  rpc CreateAccount(NewAccount) returns (Account);
+  rpc GetAccountByCustomerId(CustomerRequest) returns (Account);
+  rpc GetAccountByCardId(CardRequest) returns (Account);
+  rpc GetAccountByQuery(QueryRequest) returns (Account);
+  rpc GetPurchase(GetPurchaseRequest) returns (Purchase);
+  rpc GetPurchaseAll(GetPurchaseAllRequest) returns (stream Purchase);
+  rpc SetCard(Card) returns (Account);
+  rpc SetLoyaltyLevel(LoyaltyLevelRequest) returns (Account);
+  rpc SetBirthdate(SetBirthdateRequest) returns (Account);
+  rpc AddPurchase(PurchaseRequest) returns (Purchase);
+  rpc RemovePurchase(RemovePurchaseRequest) returns (Purchase);
+}
+
+message NewAccount {
+  uint32 customer_id = 1;
+  string birthdate = 2;
+  uint32 created_by = 3;
+}
+
+message Account {
+  string account_id = 1;            // Account ID
+  uint32 customer_id = 2;           // Owner
+  string customer_birthdate = 3;    // Customer birthdate for validation purpose
+  string card_id = 4;               // Related active card id
+  uint32 loyalty_level = 5;         // Discount percentage
+  uint32 yearly_purchase_value = 6; // Yearly purchase value (gross)
+  uint32 balance_points = 7;        // Balance in points
+  string created_at = 8;            // RFC3339
+  uint32 created_by = 9;            // User ID
+}
+
+message Transaction {}
+
+message CustomerRequest { uint32 customer_id = 1; }
+
+message CardRequest { string card_id = 1; }
+
+message QueryRequest {
+  uint32 customer_id = 1;
+  string birthdate = 2;
+}
+
+message GetPurchaseRequest {
+  string account_id = 1;
+  string purchase_id = 2;
+}
+
+message GetPurchaseAllRequest { string account_id = 1; }
+
+message Purchase {
+  string purchase_id = 1;
+  string account_id = 2;
+  int32 payable_total_gross = 3;
+  int32 balance_opening = 4;
+  int32 burned_points = 5;
+  int32 earned_points = 6;
+  int32 balance_closing = 7;
+}
+
+message LoyaltyLevelRequest {
+  string account_id = 1;
+  uint32 discount_percentage = 2;
+  uint32 created_by = 3;
+}
+
+message SetBirthdateRequest {
+  string account_id = 1;
+  string birthdate = 2; // Naivedate YYYY-mm-dd, eg.: 1988-10-15
+  uint32 created_by = 3;
+}
+
+message Card {
+  string set_to_account_id = 1;
+  string card_id = 2;
+  uint32 created_by = 3;
+}
+
+message PurchaseRequest {
+  string account_id = 1;
+  string purchase_id = 2;
+  uint32 total_gross = 3;
+  uint32 points_to_burn = 4;
+  uint32 created_by = 5;
+}
+
+message RemovePurchaseRequest {
+  string account_id = 1;
+  string purchase_id = 2;
+  uint32 created_by = 3;
 }
