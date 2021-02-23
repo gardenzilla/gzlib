@@ -6,6 +6,7 @@ pub mod document;
 pub mod email;
 pub mod inventory;
 pub mod invoice;
+pub mod latex;
 pub mod loyalty;
 pub mod prelude;
 pub mod pricing;

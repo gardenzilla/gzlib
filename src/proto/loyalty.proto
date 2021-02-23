@@ -4,4 +4,14 @@ import "google/protobuf/empty.proto";
 
 message e {}
 
-service Loyalty { rpc CreateAccount(e) returns (e); }
+service Loyalty {
+  rpc CreateAccount(e) returns (e);
+  rpc HasAccount(e) returns (e);
+  rpc ChangeCard(e) returns (e);
+  rpc AddPurchase(e) returns (e);
+  rpc PayWithPoints(e) returns (e);
+  rpc GetBalance(e) returns (e);
+  rpc GetBalanceBulk(e) returns (e);
+  rpc SetLoyaltyLevel(e) returns (e);
+  rpc GetCardId(e) returns (e);
+}

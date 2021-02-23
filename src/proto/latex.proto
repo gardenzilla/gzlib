@@ -1,0 +1,15 @@
+syntax = "proto3";
+package latex;
+
+service Latex { rpc Process(stream Content) returns (Pdf); }
+
+// Content fields have bytes types
+// their size should be smaller then 2^32, so <~4GB
+message Content {
+  // This file will be called to process
+  bytes main_latex_file = 1;
+  // <FileName, file content in bytes>
+  map<string, bytes> attachments = 2;
+}
+
+message Pdf { bytes content = 1; }
