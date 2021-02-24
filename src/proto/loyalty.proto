@@ -9,14 +9,32 @@ service Loyalty {
   rpc GetAccountByCustomerId(CustomerRequest) returns (Account);
   rpc GetAccountByCardId(CardRequest) returns (Account);
   rpc GetAccountByQuery(QueryRequest) returns (Account);
-  rpc GetPurchase(GetPurchaseRequest) returns (Purchase);
-  rpc GetPurchaseAll(GetPurchaseAllRequest) returns (stream Purchase);
+  rpc GetTransactionsAll(google.protobuf.Empty) returns (TransactionIds);
+  rpc GetTransactionsBulk(BulkRequest) returns (stream Transaction);
   rpc SetCard(Card) returns (Account);
   rpc SetLoyaltyLevel(LoyaltyLevelRequest) returns (Account);
   rpc SetBirthdate(SetBirthdateRequest) returns (Account);
   rpc BurnPoints(BurnRequest) returns (Account);
   rpc ClosePurchase(ClosePurchaseRequest) returns (PurchaseSummary);
 }
+
+message Transaction {
+  enum TransactionKind {
+    Burn = 0;
+    Earn = 1;
+  }
+  string transaction_id = 1;
+  string account_id = 2;
+  string purchase_id = 3;
+  TransactionKind transaction_kind = 4;
+  int32 amount = 5;
+  uint32 created_by = 6;
+  string created_at = 7;
+}
+
+message BulkRequest { repeated string transaction_ids = 1; }
+
+message TransactionIds { repeated string transaction_ids = 1; }
 
 message NewAccount {
   uint32 customer_id = 1;
@@ -34,8 +52,6 @@ message Account {
   string created_at = 7;         // RFC3339
   uint32 created_by = 8;         // User ID
 }
-
-message Transaction {}
 
 message CustomerRequest { uint32 customer_id = 1; }
 
