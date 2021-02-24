@@ -47,7 +47,7 @@ message Account {
   uint32 customer_id = 2;           // Owner
   string customer_birthdate = 3;    // Customer birthdate for validation purpose
   string card_id = 4;               // Related active card id
-  uint32 loyalty_level = 5;         // Discount percentage
+  string loyalty_level = 5;         // Loyalty level
   uint32 balance_points = 6;        // Balance in points
   uint32 yearly_gross_turnover = 7; //
   string created_at = 8;            // RFC3339
@@ -81,7 +81,7 @@ message PurchaseSummary {
 
 message LoyaltyLevelRequest {
   string account_id = 1;
-  uint32 discount_percentage = 2;
+  string loyalty_level = 2;
   uint32 created_by = 3;
 }
 
