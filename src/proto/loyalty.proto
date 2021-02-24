@@ -14,8 +14,8 @@ service Loyalty {
   rpc SetCard(Card) returns (Account);
   rpc SetLoyaltyLevel(LoyaltyLevelRequest) returns (Account);
   rpc SetBirthdate(SetBirthdateRequest) returns (Account);
-  rpc AddPurchase(PurchaseRequest) returns (Purchase);
-  rpc RemovePurchase(RemovePurchaseRequest) returns (Purchase);
+  rpc BurnPoints(BurnRequest) returns (Account);
+  rpc ClosePurchase(ClosePurchaseRequest) returns (PurchaseSummary);
 }
 
 message NewAccount {
@@ -25,15 +25,14 @@ message NewAccount {
 }
 
 message Account {
-  string account_id = 1;            // Account ID
-  uint32 customer_id = 2;           // Owner
-  string customer_birthdate = 3;    // Customer birthdate for validation purpose
-  string card_id = 4;               // Related active card id
-  uint32 loyalty_level = 5;         // Discount percentage
-  uint32 yearly_purchase_value = 6; // Yearly purchase value (gross)
-  uint32 balance_points = 7;        // Balance in points
-  string created_at = 8;            // RFC3339
-  uint32 created_by = 9;            // User ID
+  string account_id = 1;         // Account ID
+  uint32 customer_id = 2;        // Owner
+  string customer_birthdate = 3; // Customer birthdate for validation purpose
+  string card_id = 4;            // Related active card id
+  uint32 loyalty_level = 5;      // Discount percentage
+  uint32 balance_points = 6;     // Balance in points
+  string created_at = 7;         // RFC3339
+  uint32 created_by = 8;         // User ID
 }
 
 message Transaction {}
@@ -54,11 +53,10 @@ message GetPurchaseRequest {
 
 message GetPurchaseAllRequest { string account_id = 1; }
 
-message Purchase {
-  string purchase_id = 1;
-  string account_id = 2;
-  int32 payable_total_gross = 3;
-  int32 balance_opening = 4;
+message PurchaseSummary {
+  string account_id = 1;
+  string purchase_id = 2;
+  int32 balance_opening = 3;
   int32 burned_points = 5;
   int32 earned_points = 6;
   int32 balance_closing = 7;
@@ -82,16 +80,16 @@ message Card {
   uint32 created_by = 3;
 }
 
-message PurchaseRequest {
+message ClosePurchaseRequest {
   string account_id = 1;
   string purchase_id = 2;
   uint32 total_gross = 3;
-  uint32 points_to_burn = 4;
-  uint32 created_by = 5;
+  uint32 created_by = 4;
 }
 
-message RemovePurchaseRequest {
+message BurnRequest {
   string account_id = 1;
   string purchase_id = 2;
-  uint32 created_by = 3;
+  int32 points_to_burn = 3;
+  uint32 created_by = 4;
 }
