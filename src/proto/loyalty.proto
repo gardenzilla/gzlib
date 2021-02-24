@@ -9,8 +9,7 @@ service Loyalty {
   rpc GetAccountByCustomerId(CustomerRequest) returns (Account);
   rpc GetAccountByCardId(CardRequest) returns (Account);
   rpc GetAccountByQuery(QueryRequest) returns (Account);
-  rpc GetTransactionsAll(google.protobuf.Empty) returns (TransactionIds);
-  rpc GetTransactionsBulk(BulkRequest) returns (stream Transaction);
+  rpc GetTransactionsAll(TransactionAllRequest) returns (stream Transaction);
   rpc SetCard(Card) returns (Account);
   rpc SetLoyaltyLevel(LoyaltyLevelRequest) returns (Account);
   rpc SetBirthdate(SetBirthdateRequest) returns (Account);
@@ -32,7 +31,7 @@ message Transaction {
   string created_at = 7;
 }
 
-message BulkRequest { repeated string transaction_ids = 1; }
+message TransactionAllRequest { repeated string transaction_ids = 1; }
 
 message TransactionIds { repeated string transaction_ids = 1; }
 
