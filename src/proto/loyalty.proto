@@ -31,7 +31,7 @@ message Transaction {
   string created_at = 7;
 }
 
-message TransactionAllRequest { repeated string transaction_ids = 1; }
+message TransactionAllRequest { string account_id = 1; }
 
 message TransactionIds { repeated string transaction_ids = 1; }
 
