@@ -43,15 +43,15 @@ message NewAccount {
 }
 
 message Account {
-  string account_id = 1;            // Account ID
-  uint32 customer_id = 2;           // Owner
-  string customer_birthdate = 3;    // Customer birthdate for validation purpose
-  string card_id = 4;               // Related active card id
-  string loyalty_level = 5;         // Loyalty level
-  uint32 balance_points = 6;        // Balance in points
-  uint32 yearly_gross_turnover = 7; //
-  string created_at = 8;            // RFC3339
-  uint32 created_by = 9;            // User ID
+  string account_id = 1;           // Account ID
+  uint32 customer_id = 2;          // Owner
+  string customer_birthdate = 3;   // Customer birthdate for validation purpose
+  string card_id = 4;              // Related active card id
+  string loyalty_level = 5;        // Loyalty level
+  int32 balance_points = 6;        // Balance in points
+  int32 yearly_gross_turnover = 7; //
+  string created_at = 8;           // RFC3339
+  uint32 created_by = 9;           // User ID
 }
 
 message CustomerRequest { uint32 customer_id = 1; }
