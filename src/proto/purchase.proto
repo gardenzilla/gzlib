@@ -22,6 +22,12 @@ service Purchase {
   rpc CartClose(CartCloseRequest) returns (CartObject);
   rpc CartRemove(CartRemoveRequest) returns (google.protobuf.Empty);
 
+  rpc CartLoyaltyCardAdd(e) returns (CartObject);
+  rpc CartLoyaltyCardRemove(e) returns (CartObject);
+  rpc CartBurnPoints(BurnPointsRequest) returns (CartObject);
+  rpc CartCommitmentAdd(AddCommitmentRequest) returns (CartObject);
+  rpc CartCommitmentRemove(RemoveCommitmentRequest) returns (CartObject);
+
   rpc PurchaseGetById(PurchaseByIdRequest) returns (PurchaseObject);
   rpc PurchaseGetAll(google.protobuf.Empty) returns (PurchaseIds);
   rpc PurchaseGetInfoBulk(PurchaseBulkRequest)
@@ -34,6 +40,20 @@ service Purchase {
 }
 
 message e {}
+
+message BurnPointsRequest {
+  string cart_id = 1;
+  string loyalty_account_id = 2;
+  string transaction_id = 3;
+  int32 points_to_burn = 4;
+}
+
+message AddCommitmentRequest {
+  string commitment_id = 1;
+  uint32 discount_percentage = 2;
+}
+
+message RemoveCommitmentRequest { string commitment_id = 1; }
 
 message CartIds { repeated string cart_ids = 1; }
 
@@ -155,6 +175,12 @@ message Payment {
   int32 amount = 2;
 }
 
+message LoyaltyTransaction {
+  string loyalty_account_id = 1;
+  string transaction_id = 2;
+  int32 burned_points = 3;
+}
+
 message CartObject {
   message Item {
     uint32 sku = 1;
@@ -169,25 +195,32 @@ message CartObject {
   string ancestor = 1;
   string id = 2;
   Customer customer = 3;
-  uint32 discount_percentage = 4;
-  repeated Item shopping_list = 5;
-  repeated UplInfoObject upls_sku = 6;
-  repeated UplInfoObject upls_unique = 7;
-  uint32 total_net = 8;
-  uint32 total_vat = 9;
-  uint32 total_gross = 10;
-  bool need_invoice = 11;
-  PaymentKind payment_kind = 12;
-  repeated Payment payments = 13;
-  int32 payable = 14;
-  int32 payment_balance = 15;
-  int32 profit_net = 16;
-  uint32 owner_uid = 17;
-  uint32 store_id = 18;
-  string date_completion = 19;
-  string payment_duedate = 20;
-  uint32 created_by = 21;
-  string created_at = 22;
+  string commitment_id = 4;
+  uint32 commitment_discount_percentage = 5;
+  string loyalty_card_id = 6;
+  string loyalty_account_id = 7;
+  string loyalty_level = 8;
+  repeated Item shopping_list = 9;
+  repeated UplInfoObject upls_sku = 10;
+  repeated UplInfoObject upls_unique = 11;
+  uint32 total_net = 12;
+  uint32 total_vat = 13;
+  uint32 total_gross = 14;
+  uint32 commitment_discount_amount_gross = 15;
+  uint32 burned_loyalty_points = 16;
+  bool need_invoice = 17;
+  PaymentKind payment_kind = 18;
+  repeated Payment payments = 19;
+  repeated LoyaltyTransaction burned_points = 20;
+  int32 payable = 21;
+  int32 payment_balance = 22;
+  int32 profit_net = 23;
+  uint32 owner_uid = 24;
+  uint32 store_id = 25;
+  string date_completion = 26;
+  string payment_duedate = 27;
+  uint32 created_by = 28;
+  string created_at = 29;
 }
 
 message UplInfoObject {
