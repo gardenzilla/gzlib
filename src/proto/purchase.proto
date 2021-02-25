@@ -22,8 +22,8 @@ service Purchase {
   rpc CartClose(CartCloseRequest) returns (CartObject);
   rpc CartRemove(CartRemoveRequest) returns (google.protobuf.Empty);
 
-  rpc CartLoyaltyCardAdd(e) returns (CartObject);
-  rpc CartLoyaltyCardRemove(e) returns (CartObject);
+  rpc CartLoyaltyCardAdd(LoyaltyCardAddRequest) returns (CartObject);
+  rpc CartLoyaltyCardRemove(LoyaltyCardRemoveRequest) returns (CartObject);
   rpc CartBurnPoints(BurnPointsRequest) returns (CartObject);
   rpc CartCommitmentAdd(AddCommitmentRequest) returns (CartObject);
   rpc CartCommitmentRemove(RemoveCommitmentRequest) returns (CartObject);
@@ -42,6 +42,15 @@ service Purchase {
 }
 
 message e {}
+
+message LoyaltyCardAddRequest {
+  string cart_id = 1;
+  string account_id = 2;
+  string card_id = 3;
+  string loyalty_level = 4;
+}
+
+message LoyaltyCardRemoveRequest { string cart_id = 1; }
 
 message PurchaseSetInvoiceIdRequest {
   string purchase_id = 1;
