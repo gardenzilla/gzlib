@@ -65,8 +65,9 @@ message BurnPointsRequest {
 }
 
 message AddCommitmentRequest {
-  string commitment_id = 1;
-  uint32 discount_percentage = 2;
+  string cart_id = 1;
+  string commitment_id = 2;
+  uint32 discount_percentage = 3;
 }
 
 message RemoveCommitmentRequest { string commitment_id = 1; }
