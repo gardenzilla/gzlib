@@ -34,12 +34,19 @@ service Purchase {
       returns (stream PurchaseInfoObject);
   rpc PuchaseCreateInvoice(PurchaseCreateInvoiceRequest)
       returns (PurchaseObject);
+  rpc PurchaseSetInvoiceId(PurchaseSetInvoiceIdRequest)
+      returns (PurchaseObject);
   rpc PurchaseAddPayment(PurchaseAddPaymentRequest) returns (PurchaseObject);
   rpc PurchaseRestore(PurchaseRestoreRequest) returns (PurchaseObject);
   rpc PurchaseGetStatByInterval(e) returns (PurchaseStatResponse);
 }
 
 message e {}
+
+message PurchaseSetInvoiceIdRequest {
+  string purchase_id = 1;
+  string invoice_id = 2;
+}
 
 message BurnPointsRequest {
   string cart_id = 1;
