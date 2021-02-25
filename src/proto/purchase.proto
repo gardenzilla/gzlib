@@ -70,7 +70,10 @@ message AddCommitmentRequest {
   uint32 discount_percentage = 3;
 }
 
-message RemoveCommitmentRequest { string commitment_id = 1; }
+message RemoveCommitmentRequest {
+  string cart_id = 1;
+  string commitment_id = 2;
+}
 
 message CartIds { repeated string cart_ids = 1; }
 
