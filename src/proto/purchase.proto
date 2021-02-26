@@ -279,6 +279,7 @@ message PurchaseInfoObject {
   int32 balance = 7;
   int32 payable = 8;
   bool document_invoice = 9;
+  string invoice_id = 17;
   string date_completion = 10;
   string payment_duedate = 11;
   bool payment_expired = 12;
@@ -286,6 +287,7 @@ message PurchaseInfoObject {
   bool restored = 14;
   uint32 created_by = 15;
   string created_at = 16;
+  // 18
 }
 
 message PurchaseObject {
@@ -318,6 +320,7 @@ message PurchaseObject {
   repeated Item items = 10;
   repeated UplInfoObject upl_info_objects = 11;
   bool need_invoice = 12;
+  string invoice_id = 29;
   uint32 total_net = 13;
   uint32 total_vat = 14;
   uint32 total_gross = 15;
@@ -334,6 +337,7 @@ message PurchaseObject {
   bool restored = 26;
   uint32 created_by = 27;
   string created_at = 28;
+  // 30
 }
 
 message PurchaseIds { repeated string purchase_ids = 1; }
