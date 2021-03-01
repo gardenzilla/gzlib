@@ -1,6 +1,7 @@
 syntax = "proto3";
 package purchase;
 import "google/protobuf/empty.proto";
+import "loyalty.proto";
 
 service Purchase {
   rpc CartNew(CartNewRequest) returns (CartObject);
@@ -39,6 +40,8 @@ service Purchase {
   rpc PurchaseAddPayment(PurchaseAddPaymentRequest) returns (PurchaseObject);
   rpc PurchaseRestore(PurchaseRestoreRequest) returns (PurchaseObject);
   rpc PurchaseGetStatByInterval(e) returns (PurchaseStatResponse);
+  rpc PurchaseSetLoyaltySummary(loyalty.PurchaseSummary)
+      returns (PurchaseObject);
 }
 
 message e {}
@@ -212,35 +215,42 @@ message CartObject {
     uint32 total_retail_price_net = 9;
     uint32 total_retail_price_gross = 10;
   }
+  message LoyaltyCard {
+    string account_id = 1;
+    string card_id = 2;
+    string loyalty_level = 3;
+    int32 balance_opening = 4;
+    int32 burned_points = 5;
+    int32 earned_points = 6;
+    int32 balance_closing = 7;
+  }
   string ancestor = 1;
   string id = 2;
   Customer customer = 3;
   string commitment_id = 4;
   uint32 commitment_discount_percentage = 5;
-  string loyalty_card_id = 6;
-  string loyalty_account_id = 7;
-  string loyalty_level = 8;
-  repeated Item shopping_list = 9;
-  repeated UplInfoObject upls_sku = 10;
-  repeated UplInfoObject upls_unique = 11;
-  uint32 total_net = 12;
-  uint32 total_vat = 13;
-  uint32 total_gross = 14;
-  uint32 commitment_discount_amount_gross = 15;
-  uint32 burned_loyalty_points = 16;
-  bool need_invoice = 17;
-  PaymentKind payment_kind = 18;
-  repeated Payment payments = 19;
-  repeated LoyaltyTransaction burned_points = 20;
-  int32 payable = 21;
-  int32 payment_balance = 22;
-  int32 profit_net = 23;
-  uint32 owner_uid = 24;
-  uint32 store_id = 25;
-  string date_completion = 26;
-  string payment_duedate = 27;
-  uint32 created_by = 28;
-  string created_at = 29;
+  LoyaltyCard loyalty_card = 6;
+  repeated Item shopping_list = 7;
+  repeated UplInfoObject upls_sku = 8;
+  repeated UplInfoObject upls_unique = 9;
+  uint32 total_net = 10;
+  uint32 total_vat = 11;
+  uint32 total_gross = 12;
+  uint32 commitment_discount_amount_gross = 13;
+  uint32 burned_loyalty_points = 14;
+  bool need_invoice = 15;
+  PaymentKind payment_kind = 16;
+  repeated Payment payments = 17;
+  repeated LoyaltyTransaction burned_points = 18;
+  int32 payable = 19;
+  int32 payment_balance = 20;
+  int32 profit_net = 21;
+  uint32 owner_uid = 22;
+  uint32 store_id = 23;
+  string date_completion = 24;
+  string payment_duedate = 25;
+  uint32 created_by = 26;
+  string created_at = 27;
 }
 
 message UplInfoObject {
