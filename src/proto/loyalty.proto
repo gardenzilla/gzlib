@@ -13,7 +13,7 @@ service Loyalty {
   rpc SetCard(Card) returns (Account);
   rpc SetLoyaltyLevel(LoyaltyLevelRequest) returns (Account);
   rpc SetBirthdate(SetBirthdateRequest) returns (Account);
-  rpc BurnPoints(BurnRequest) returns (Account);
+  rpc BurnPoints(BurnRequest) returns (Transaction);
   rpc ClosePurchase(ClosePurchaseRequest) returns (PurchaseSummary);
 }
 
