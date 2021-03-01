@@ -219,10 +219,6 @@ message CartObject {
     string account_id = 1;
     string card_id = 2;
     string loyalty_level = 3;
-    int32 balance_opening = 4;
-    int32 burned_points = 5;
-    int32 earned_points = 6;
-    int32 balance_closing = 7;
   }
   string ancestor = 1;
   string id = 2;
@@ -318,36 +314,43 @@ message PurchaseObject {
     uint32 total_retail_price_gross = 9;
     repeated string upl_ids = 10;
   }
+  message LoyaltyCard {
+    string account_id = 1;
+    string card_id = 2;
+    string loyalty_level = 3;
+    int32 balance_opening = 4;
+    int32 burned_points = 5;
+    int32 earned_points = 6;
+    int32 balance_closing = 7;
+  }
   string id = 1;
   Customer customer = 2;
   string commitment_id = 3;
   uint32 commitment_discount_percentage = 4;
   uint32 commitment_discount_amount_gross = 5;
-  string loyalty_card_id = 6;
-  string loyalty_account_id = 7;
-  string loyalty_level = 8;
-  uint32 burned_loyalty_points = 9;
-  repeated Item items = 10;
-  repeated UplInfoObject upl_info_objects = 11;
-  bool need_invoice = 12;
-  string invoice_id = 29;
-  uint32 total_net = 13;
-  uint32 total_vat = 14;
-  uint32 total_gross = 15;
-  PaymentKind payment_kind = 16;
-  repeated Payment payments = 17;
-  repeated LoyaltyTransaction burned_points = 18;
-  int32 payable = 19;
-  int32 payment_balance = 20;
-  int32 profit_net = 21;
-  uint32 owner_uid = 22;
-  uint32 store_id = 23;
-  string date_completion = 24;
-  string payment_duedate = 25;
-  bool restored = 26;
-  uint32 created_by = 27;
-  string created_at = 28;
-  // 30
+  LoyaltyCard loyalty_card = 6;
+  uint32 burned_loyalty_points = 7;
+  repeated Item items = 8;
+  repeated UplInfoObject upl_info_objects = 9;
+  bool need_invoice = 10;
+  string invoice_id = 11;
+  uint32 total_net = 12;
+  uint32 total_vat = 13;
+  uint32 total_gross = 14;
+  PaymentKind payment_kind = 15;
+  repeated Payment payments = 16;
+  repeated LoyaltyTransaction burned_points = 17;
+  int32 payable = 18;
+  int32 payment_balance = 19;
+  int32 profit_net = 20;
+  uint32 owner_uid = 21;
+  uint32 store_id = 22;
+  string date_completion = 23;
+  string payment_duedate = 24;
+  bool restored = 25;
+  uint32 created_by = 26;
+  string created_at = 27;
+  // 28
 }
 
 message PurchaseIds { repeated string purchase_ids = 1; }
