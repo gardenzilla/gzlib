@@ -20,6 +20,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
       "src/proto/commitment.proto",
       "src/proto/loyalty.proto",
       "src/proto/latex.proto",
+      "src/proto/sku_image.proto",
+      "src/proto/sku_image_processer.proto",
     ],
     &["src/proto"],
   )?;

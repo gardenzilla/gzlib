@@ -1,0 +1,37 @@
+syntax = "proto3";
+package sku_image_processer;
+
+import "google/protobuf/empty.proto";
+
+service SkuImageProcesser {
+  // Add new image to Process
+  // 1. Receive image
+  // 2. Temp store
+  // 3. Process
+  //    A) Resize to required sizes
+  //    B) Reduce quality
+  //    C) Set watermark
+  // 4. Store processed images to Static server
+  //    /sku_images/SKU_ID/size_IMAGE_ID.ext
+  rpc AddImage(AddRequest) returns (google.protobuf.Empty);
+  // Remove image from static
+  rpc RemoveImage(RemoveRequest) returns (google.protobuf.Empty);
+  // Retain the given image IDs
+  // rpc Retain(RetainRequest) returns (google.protobuf.Empty);
+}
+
+message AddRequest {
+  uint32 sku = 1;
+  string image_id = 2;
+  bytes image_bytes = 3;
+}
+
+message RemoveRequest {
+  uint32 sku = 1;
+  string image_id = 2;
+}
+
+// message RetainRequest {
+//   uint32 sku = 1;
+//   repeated string image_ids_to_retain = 2;
+// }

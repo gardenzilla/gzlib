@@ -1,0 +1,57 @@
+syntax = "proto3";
+package sku_image;
+
+import "google/protobuf/empty.proto";
+
+service SkuImage {
+  // Add new image to SKU
+  rpc AddNew(NewRequest) returns (SkuObj);
+  // Set image to be cover image
+  rpc SetCover(SetCoverRequest) returns (SkuObj);
+  // Set image position in list
+  rpc SwapImages(SwapRequest) returns (SkuObj);
+  // Remove image
+  rpc Remove(RemoveRequest) returns (SkuObj);
+  // Get images to SKU
+  rpc GetImages(SkuRequest) returns (SkuObj);
+  // Get cover images bulk
+  rpc GetCoverBulk(CoverBulkRequest) returns (stream CoverObj);
+}
+
+message NewRequest {
+  uint32 sku = 1;
+  string file_name = 2;
+  string file_extension = 3;
+  bytes image_bytes = 4;
+}
+
+message SkuObj {
+  uint32 sku = 1;
+  string cover_image_id = 2;
+  repeated string image_ids = 3;
+}
+
+message SetCoverRequest {
+  uint32 sku = 1;
+  string image_id = 2;
+}
+
+message SwapRequest {
+  uint32 sku = 1;
+  uint32 from_position = 2;
+  uint32 to_position = 3;
+}
+
+message SkuRequest { uint32 sku = 1; }
+
+message CoverBulkRequest { repeated uint32 sku_ids = 1; }
+
+message CoverObj {
+  uint32 sku = 1;
+  string cover_image_id = 2;
+}
+
+message RemoveRequest {
+  uint32 sku = 1;
+  string image_id = 2;
+}
