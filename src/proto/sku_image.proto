@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 
 service SkuImage {
   // Add new image to SKU
-  rpc AddNew(NewRequest) returns (SkuObj);
+  rpc AddNew(NewRequest) returns (NewImageId);
   // Set image to be cover image
   rpc SetCover(SetCoverRequest) returns (SkuObj);
   // Set image position in list
@@ -24,6 +24,8 @@ message NewRequest {
   string file_extension = 3;
   bytes image_bytes = 4;
 }
+
+message NewImageId { string new_image_id = 1; }
 
 message SkuObj {
   uint32 sku = 1;
